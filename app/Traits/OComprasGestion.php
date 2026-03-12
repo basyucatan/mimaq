@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 use App\Models\{Material, Materialscosto, Empresa, Obra};
-trait OcomprasGestion
+trait OComprasGestion
 {
     public function filtroMats()
     {

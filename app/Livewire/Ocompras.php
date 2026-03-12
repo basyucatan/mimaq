@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\{User, Util, Ocompra, Materialscosto, Negocio, Empresa, Empresascuenta};
 class Ocompras extends Component
 {
-    use WithPagination, OcomprasGestion;
+    use WithPagination, OComprasGestion;
     protected $paginationTheme = 'bootstrap';
     public $verModalOcompra = false, $verNuevoMat = false, $verNuevaObra = false;
     public $IdDivision, $IdProveedor, $IdCuentaProv, $IdUser, $IdAprobo, $IdObra,
