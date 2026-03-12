@@ -77,7 +77,7 @@ return new class extends Migration
         });     
         Schema::create('materialscostos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('IdMaterial')->constrained('materials')->onDelete('cascade');
+            $table->foreignId('IdMaterial')->constrained('materials')->onDelete('restrict');
             $table->string('referencia',30)->nullable()->unique();
             $table->json('ubicacion')->nullable();
             $table->foreignId('IdMoneda')->constrained('monedas')->onDelete('cascade')->default(1);

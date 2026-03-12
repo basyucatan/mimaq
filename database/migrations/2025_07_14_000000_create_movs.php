@@ -120,7 +120,7 @@ return new class extends Migration
         Schema::create('ocomprasdets', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('IdOCompra')->constrained('ocompras')->onDelete('cascade');
-            $table->foreignId('IdMatCosto')->constrained('materialscostos')->onDelete('cascade');
+            $table->foreignId('IdMatCosto')->constrained('materialscostos')->onDelete('restrict');
             $table->float('cantidad')->nullable()->default(0);
             $table->float('costoU')->nullable()->default(0);
         });                  
