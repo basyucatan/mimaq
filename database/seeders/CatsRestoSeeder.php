@@ -28,7 +28,7 @@ DB::table('empresas')->insert($empresas);
 $empresasCuentas = array(
   array('id' => '1','IdEmpresa' => '2','banco' => 'Banorte','cuenta' => '0279557443','cuentaClabe' => '072910002795574433'),
 );
-DB::table('empresasCuentas')->insert($empresasCuentas); 
+DB::table('empresascuentas')->insert($empresasCuentas); 
 $obras = array(
   array('id' => '1','IdEmpresa' => '1','obra' => 'Administración'),
   array('id' => '2','IdEmpresa' => '1','obra' => 'Operación')
