@@ -9,15 +9,17 @@
         </select>
         @error('IdDivision') <span class="text-danger">{{ $message }}</span> @enderror
     </div>
-    <div class="col-8">
+    <div class="col-8 position-relative">
         <label class="etiBase">Cliente</label>
-        <select wire:model="IdCliente" wire:change="elegirCliente" class="inpBase">
-            <option value=""></option>
-            @foreach ($clientes as $key => $value)
-            <option value="{{ $key }}">{{ $value }}</option>
-            @endforeach
-        </select>
+        <input type="text" wire:model.live="keyWordCte" onfocus="this.select()" class="inpBase" placeholder="Buscar cliente...">
         @error('IdCliente') <span class="text-danger">{{ $message }}</span> @enderror
+        @if(count($clientes) > 0)
+        <div class="position-absolute bg-white w-100" style="z-index: 2100;">
+            @foreach($clientes as $key)
+            <a href="javascript:void(0)" wire:click="elegirCliente({{ $key->id }}, '{{ $key->empresa }}')" class="d-block p-2 border-bottom text-decoration-none small text-dark">{{ $key->empresa }}</a>
+            @endforeach
+        </div>
+        @endif
     </div>
     <div class="col-6">
         <label class="etiBase">Obra</label>

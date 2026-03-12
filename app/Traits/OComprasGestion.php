@@ -31,9 +31,11 @@ trait OComprasGestion
     }
     public function filtroClientes()
     {
-        if (strlen($this->keyWordCte) < 2) return [];
-        return Empresa::where('tipo', 'cliente')->where('empresa', 'LIKE', '%' . $this->keyWordCte . '%')->limit(5)->get();
-    }
+        if ($this->IdCliente || strlen($this->keyWordCte) < 2) return [];
+        return Empresa::where('tipo', 'cliente')
+            ->where('empresa', 'LIKE', '%' . $this->keyWordCte . '%')
+            ->limit(10)->get();
+    }   
     public function crearEmpresa()
     {
         $this->validate([

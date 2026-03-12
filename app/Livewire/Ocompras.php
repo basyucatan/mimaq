@@ -12,7 +12,7 @@ class Ocompras extends Component
     public $verModalOcompra = false, $verNuevoMat = false, $verNuevaObra = false;
     public $IdDivision, $IdProveedor, $IdCuentaProv, $IdUser, $IdAprobo, $IdObra,
         $IdCliente = 1, $IdCondPago = 1, $IdCondFlete = 1, $selected_id, 
-        $keyWord, $keyWordMat, $keyWordProv, $keyWordCte, 
+        $keyWord, $keyWordMat, $keyWordProv, $keyWordCte,
         $cantidadMat = 1, $IdMarca, $IdLinea, $IdColor, 
         $fechaHSol, $porDescuento = 0, $concepto, $estatus = 'edicion', $adicionales;
     public $divisions = [], $provs = [], $obras = [], $clientes = [], $clases = [], 
@@ -34,14 +34,18 @@ class Ocompras extends Component
 				->pluck('empresa', 'id');
         $this->condsPago = Util::getArrayJS('condicionesPago','condicion');
         $this->condsFlete = Util::getArrayJS('condicionesFlete','condicion');                
-        $this->elegirCliente();
-
+        $this->elegirCliente($this->IdCliente, 'gas');
     }	
-    public function elegirCliente(){
-        $this->obras = DB::table('obras')->where('IdEmpresa', $this->IdCliente)
-            ->where('estatus', 'vigente')->pluck('obra', 'id');
+
+    public function elegirCliente($id, $cliente)
+    {
+        $this->IdCliente = $id;
+        $this->keyWordCte = $cliente;
+        $this->clientes = [];
         $this->IdObra = null;
-    }
+        $this->obras = DB::table('obras')->where('IdEmpresa', $this->IdCliente)
+            ->where('estatus', 'vigente')->pluck('obra', 'id'); 
+    }    
 	public function elegirProv($id, $empresa)
 	{
 		$this->IdProveedor = $id;
@@ -87,6 +91,12 @@ class Ocompras extends Component
 		$this->IdProveedor = null;
 		$this->provs = $this->filtroProvs();
 	}	
+    public function updatedKeyWordCte($valor)
+    {
+        $this->IdCliente = null;
+        $this->clientes = $this->filtroClientes();
+    }
+
     public function toggleNuevoMaterial()
     {
         $this->verNuevoMat = !$this->verNuevoMat;
