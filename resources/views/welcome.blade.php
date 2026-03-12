@@ -49,8 +49,8 @@
         <h1>Emerita</h1>
 
         <p>
-            Sistema de integral de gestión para proyectos
-            de fabricación y presupuestos.
+            Sistema de gestión de proyectos
+            de fabricación.
         </p>
         @auth
             <div class="mt-4">
