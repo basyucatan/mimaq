@@ -1,72 +1,51 @@
 @section('title', __('Precios'))
-<div>
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="cardPrin">
-                    <div class="cardPrin-header">
-                        <div>Ficha del Material</div>
-                        <div style="font-size: 14px;">
-                        <button wire:click="costosPDF('sin')" class="bot botMenu" title="Sin costos">🖨️❌💲</button>
-                        <button wire:click="costosPDF('con')" class="bot botVerde" title="Con costos">🖨️✅💲</button>
+<div class="container-fluid p-2" style="height: 100vh; overflow: hidden;">
+    <div class="cardPrin d-flex flex-column" style="height: 85vh; max-height: 88vh; overflow: hidden;">
+        
+        <div class="cardPrin-header flex-shrink-0">
+            <div>Ficha de Material</div>
+        </div>
+
+        <div class="alert alert-primary p-1 m-1 flex-shrink-0 small">
+            <div class="col-md-10">
+                {{ $material->linea->linea ?? '' }}
+                {{ $material?->referencia ? ', Cod-'.$material->referencia : '' }}
+                {{ $material?->material ? ', '.$material->material : '' }}
+            </div>
+        </div>
+
+        <div class="cardPrin-body flex-grow-1" style="overflow-y: auto; overflow-x: hidden;">
+            <div class="row g-2 m-0 h-md-100"> <div class="col-12 col-md-3 h-md-100">
+                    <livewire:arbolclasesmats />
+                </div>
+
+                <div class="col-12 col-md-9 d-flex flex-column h-md-100">
+                    <div class="tab-container d-flex flex-column h-100">
+                        <div class="tab-headers flex-shrink-0">
+                            <button wire:click="$set('tabActivo', 'tab1')"
+                                class="tab-button {{ $tabActivo === 'tab1' ? 'active' : '' }}">Generales</button>             
+                            <button wire:click="$set('tabActivo', 'tab2')"
+                                class="tab-button {{ $tabActivo === 'tab2' ? 'active' : '' }}">Costos</button>
+                            <button wire:click="$set('tabActivo', 'tab3')"
+                                class="tab-button {{ $tabActivo === 'tab3' ? 'active' : '' }}">Dependencias</button>
                         </div>
-                    </div>
-                    <div class="cardPrin-body">
-                        <div class="row">
-                            <div class="col-12 col-lg-3">
-                                <livewire:arbolclasesmats />
-                            </div>
-                            <div class="col-12 col-lg-9">
-                                <div class="inpSolo mb-2">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-10">
-                                            <h5 class="mb-0">
-                                                {{ $material->Linea->linea ?? '' }}
-                                                - {{ $material->referencia ?? '' }}
-                                                | {{ $material->material ?? '' }}
-                                            </h5>
-                                        </div>
-                                        <div class="col-md-2 imgWrapper text-end">
-                                            @if ($material?->foto)
-                                                @php
-                                                    $marca = rawurlencode($material->Linea->Marca->marca);
-                                                    $foto  = rawurlencode($material->foto);
-                                                    $ruta  = asset("storage/materiales/{$marca}/{$foto}");
-                                                @endphp
-                                                <img src="{{ $ruta }}" class="ImgExpandible" data-src="{{ $ruta }}">
-                                            @else
-                                                <span>-</span>
-                                            @endif
-                                            <div id="ImgModal" class="imgModal" style="display:none;" wire:ignore.self>
-                                                <div class="imgModalContent">
-                                                    <img id="ImgModalImg" src="" alt="Imagen expandida">
-                                                </div>
-                                            </div>                                            
-                                        </div>
+                        <div class="tab-content-wrapper flex-grow-1 bg-white p-2" style="min-height: 0;"> 
+                            <div class="col-10 tab-content h-100 overflow-auto {{ $tabActivo === 'tab1' ? 'active' : 'd-none' }}">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <button wire:click="costosPDF('sin')" class="bot botMenu">🖨️❌💲</button>
+                                        <button wire:click="costosPDF('con')" class="bot botVerde">🖨️✅💲</button>
+                                    </div>
+                                    <div class="col-10">
+                                        @livewire('materials', ['selected_id' => $IdMaterial], key('m-'.$IdMaterial))
                                     </div>
                                 </div>
-                                <div id="catalogo-center" style="width: 100%; height: 70%; overflow-y: hidden;">
-                                    <div class="tab-container">
-                                        <div class="tab-headers">
-                                            <button wire:click="$set('tabActivo', 'tab1')"
-                                                class="tab-button {{ $tabActivo === 'tab1' ? 'active' : '' }}"
-                                                data-tab="tab1">Costos</button>
-                                            <button wire:click="$set('tabActivo', 'tab2')"
-                                                class="tab-button {{ $tabActivo === 'tab2' ? 'active' : '' }}"
-                                                data-tab="tab2">Dependencias</button>
-                                        </div>
-                                        <div style="overflow-y: none; height: 85vh; min-height: 250px; padding-bottom: 3rem;">
-                                            <div class="tab-content-wrapper">
-                                                <div id="tab1" class="tab-content {{ $tabActivo === 'tab1' ? 'active' : '' }}">
-                                                    @livewire('materialscostos', ['IdMaterial' => $IdMaterial], key('materialscostos-' . $IdMaterial))
-                                                </div>
-                                                <div id="tab2" class="tab-content {{ $tabActivo === 'tab2' ? 'active' : '' }}">
-                                                    @include('livewire.fichamats.dependencias')
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>                                
+                            </div>
+                            <div class="tab-content {{ $tabActivo === 'tab2' ? 'active' : 'd-none' }}">
+                                @livewire('materialscostos', ['IdMaterial' => $IdMaterial], key('mc-'.$IdMaterial))
+                            </div>
+                            <div class="tab-content {{ $tabActivo === 'tab3' ? 'active' : 'd-none' }}">
+                                @include('livewire.fichamats.dependencias')
                             </div>
                         </div>
                     </div>
@@ -74,4 +53,4 @@
             </div>
         </div>
     </div>
-</div> 
+</div>

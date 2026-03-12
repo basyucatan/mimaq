@@ -1,20 +1,11 @@
 <nav class="navbar bg-body-tertiary fixed-top">
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-2 flex-shrink-0">
-            <button 
-                class="navbar-toggler" 
-                type="button" 
-                data-bs-toggle="offcanvas" 
-                data-bs-target="#offcanvasNavbar" 
-                aria-controls="offcanvasNavbar">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             @auth
-                @canany(['user','admin','adminMax'])
-                    <a class="bot botNegro" href="{{ url('/home') }}" title="Inicio" style="font-size: 20px;">
-                        🪪
-                    </a>
-                @endcanany
+                <a class="bot botNegro" href="{{ url('/ocompras') }}" title="Inicio" style="font-size: 20px;">🪪</a>
             @endauth
         </div>
         <div class="mx-auto">
@@ -24,11 +15,9 @@
         </div>
         <div class="d-flex align-items-center gap-2 flex-shrink-0">
             @guest
-                <a href="{{ route('login') }}" class="bot botNegro" title="Iniciar sesión">
-                    🟠👤
-                </a>
+                <a href="{{ route('login') }}" class="bot botNegro" title="Iniciar sesión">🟠👤</a>
             @else
-                <span class="small fw-semibold text-truncate d-inline-block" style="font-size: 1.5rem; max-width:120px;">
+                <span class="small fw-semibold text-truncate d-inline-block" style="font-size: 1.1rem; max-width:120px;">
                     {{ explode(' ', Auth::user()->name)[0] }}
                 </span>
                 <form method="POST" action="{{ route('logout') }}" class="d-inline">
@@ -47,28 +36,28 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav pe-3">
                     <li class="nav-item custom-dropdown-item">
-                        <a href="#" class="nav-link menu-trigger">💰 Ventas y Compras</a>
-                        <ul class="submenu d-none list-unstyled ps-3">                          
-                            <li class="nav-item">
-                                <a href="#" class="nav-link menu-trigger">💸 Compras</a>
-                                <ul class="submenu d-none list-unstyled ps-3 border-start">
-                                    <li><a href="{{ url('/empresas') }}" class="nav-link small">🛒 Orden de Compra</a></li>
-                                    <li><a href="{{ url('/clientes') }}" class="nav-link small">👥 Clientes</a></li>
-                                    <li><a href="{{ url('/proveedores') }}" class="nav-link small">🏢 Proveedores</a></li>
-                                </ul>                                
-                            </li>
+                        <a href="#" class="nav-link menu-trigger">💸 Compras</a>
+                        <ul class="submenu d-none list-unstyled ps-3 border-start">
+                            <li><a href="{{ url('/ocompras') }}" class="nav-link small">🛒 Orden de Compra</a></li>
                         </ul>
                     </li>
-                </ul>                
+                </ul>
                 <ul class="navbar-nav pe-3">
                     <li class="nav-item custom-dropdown-item">
                         <a href="#" class="nav-link menu-trigger">🔗 Catálogos</a>
                         <ul class="submenu d-none list-unstyled ps-3">
                             <li class="nav-item">
+                                <a href="#" class="nav-link menu-trigger">🏢 Empresas</a>
+                                <ul class="submenu d-none list-unstyled ps-3 border-start">
+                                    <li><a href="{{ url('/clientes') }}" class="nav-link small">👥 Clientes</a></li>
+                                    <li><a href="{{ url('/proveedores') }}" class="nav-link small">🏭 Proveedores</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
                                 <a href="#" class="nav-link menu-trigger">🧱 Materiales</a>
                                 <ul class="submenu d-none list-unstyled ps-3 border-start">
-                                    <li><a href="{{ url('/fichamats') }}" class="dropdown-item">🗂️ Ficha del Material</a></li>
-                                    <li><a href="{{ url('/tablaherrajes') }}" class="dropdown-item">🛠️ TablaHerrajes</a></li>
+                                    <li><a href="{{ url('/fichamats') }}" class="nav-link small">🗂️ Ficha del Material</a></li>
+                                    <li><a href="{{ url('/tablaherrajes') }}" class="nav-link small">🛠️ TablaHerrajes</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -77,8 +66,10 @@
                                     <li><a href="{{ url('/negocios') }}" class="nav-link small">🏠 Mi Empresa</a></li>
                                     <li><a href="{{ url('/divisions') }}" class="nav-link small">📌 Divisiones</a></li>
                                     <li><a href="{{ url('/catalogos') }}" class="nav-link small">🧩 Básicos</a></li>
-                                    <li><a href="{{ url('/vidrios') }}" class="dropdown-item">🪟 Vidrios</a></li>
-                                    <li><a href="{{ url('/clases') }}" class="dropdown-item">🧩 Clases</a></li>
+                                    <li><a href="{{ url('/colors') }}" class="nav-link small">🌈 Colores</a></li>
+                                    <li><a href="{{ url('/vidrios') }}" class="nav-link small">🪟 Vidrios</a></li>
+                                    <li><a href="{{ url('/clases') }}" class="nav-link small">🧩 Clases</a></li>
+                                    <li><a href="{{ url('/users') }}" class="nav-link small">🧑‍💻 Usuarios</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -88,16 +79,13 @@
         </div>
     </div>
 </nav>
-
 <style>
-    /* Estilos para jerarquía visual */
     .menu-trigger { cursor: pointer; position: relative; }
     .menu-trigger::after { content: ' ▾'; font-size: 0.8em; color: gray; }
     .menu-trigger.active::after { content: ' ▴'; }
     .submenu { background: rgba(0,0,0,0.02); border-radius: 4px; }
     .nav-link:hover { color: #0d6efd; }
 </style>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const menuTriggers = document.querySelectorAll('.menu-trigger');

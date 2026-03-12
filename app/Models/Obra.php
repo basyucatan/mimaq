@@ -15,7 +15,7 @@ class Obra extends Model
 
     protected $fillable = ['IdEmpresa','obra','gmaps','adicionales'];
 	
-    public function empresa()
+    public function Cliente()
     {
         return $this->hasOne('App\Models\Empresa', 'id', 'IdEmpresa');
     }

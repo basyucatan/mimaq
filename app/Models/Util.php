@@ -154,26 +154,20 @@ class Util
         return DB::table($tabla)->orderBy($campo, 'asc')->pluck($campo, 'id')->toArray();
     }
 
-    public static function getArrayJS(string $catalogo, string $campo = 'texto'): array
+    public static function getArrayJS(string $catalogo, ?string $campo = null): array
     {
         $data = config("settings.catalogos.$catalogo", []);
         if (empty($data)) {
             return [];
         }
-        if (!isset($data[0][$campo])) {
-            throw new \InvalidArgumentException("El campo '{$campo}' no existe en el catálogo '{$catalogo}'");
+        $coleccion = collect($data);
+        if ($campo) {
+            if (!isset($data[0][$campo])) {
+                throw new \InvalidArgumentException("El campo '{$campo}' no existe en el catálogo '{$catalogo}'");
+            }
+            return $coleccion->sortBy($campo)->pluck($campo, 'id')->toArray();
         }
-        return collect($data)->sortBy($campo)->pluck($campo, 'id')->toArray();
-    }
-
-    public static function borrarArchivo($carpeta, $nombreArchivo)
-    {
-        if (!$nombreArchivo || !$carpeta) return false;
-        $ruta = "public/{$carpeta}/{$nombreArchivo}";
-        if (Storage::exists($ruta)) {
-            Storage::delete($ruta);
-        }
-        return true;
+        return $coleccion->keyBy('id')->toArray();
     }
 
     public static function guardarArchivo($file, $nombreBase, $carpeta)
@@ -197,7 +191,16 @@ class Util
         Storage::putFileAs("public/{$carpeta}", $file, $nombreArchivo);
         return $nombreArchivo;
     }
-
+    
+    public static function borrarArchivo($carpeta, $nombreArchivo)
+    {
+        if (!$nombreArchivo || !$carpeta) return false;
+        $ruta = "public/{$carpeta}/{$nombreArchivo}";
+        if (Storage::exists($ruta)) {
+            Storage::delete($ruta);
+        }
+        return true;
+    }
     public static function guardarFoto($file, $nombreBase, $carpeta)
     {
         if (!$file || !$carpeta) return null;

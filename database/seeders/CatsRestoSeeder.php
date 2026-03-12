@@ -20,13 +20,18 @@ $divisions = array(
 DB::table('divisions')->insert($divisions);
 
 $empresas = array(
-  array('id' => '1', 'tipo' => 'cliente', 'empresa' => 'CLIENTE GENERAL', 'direccion' => 'Calle 100 #123, Centro', 'telefono' => '9991234567'),
-  array('id' => '2', 'tipo' => 'proveedor', 'empresa' => 'PROVEEDOR GENERAL', 'direccion' => 'Calle 100 #123, Centro', 'telefono' => '9991234568')
+  array('id' => 1, 'IdNegocio' => 1, 'tipo' => 'cliente', 'empresa' => 'GASTOS', 'razonSocial' => 'GASTOS GENERAL', 'rfc' => 'GAS', 'direccion' => '', 'gmaps' => null, 'telefono' => '9991234567', 'email' => 'gastos@test.com', 'adicionales' => null),
+  array('id' => 2, 'IdNegocio' => 1, 'tipo' => 'proveedor', 'empresa' => 'PROV. FRANCIS', 'razonSocial' => 'FRANCIS MARTIN VALLE CHAN', 'rfc' => 'VACF791204MF5', 'direccion' => 'Calle 100 #125, Centro, Mérida', 'gmaps' => null, 'telefono' => '9991234569', 'email' => 'francis@test.com', 'adicionales' => null),
+  array('id' => 3, 'IdNegocio' => 1, 'tipo' => 'proveedor', 'empresa' => 'PROV. GENERAL', 'razonSocial' => '', 'rfc' => '', 'direccion' => '', 'gmaps' => null, 'telefono' => '999', 'email' => NULL, 'adicionales' => null)
 );
 DB::table('empresas')->insert($empresas);  
-
+$empresasCuentas = array(
+  array('id' => '1','IdEmpresa' => '2','banco' => 'Banorte','cuenta' => '0279557443','cuentaClabe' => '072910002795574433'),
+);
+DB::table('empresasCuentas')->insert($empresasCuentas); 
 $obras = array(
-  array('id' => '1','IdEmpresa' => '1','obra' => 'Obra Global')
+  array('id' => '1','IdEmpresa' => '1','obra' => 'Administración'),
+  array('id' => '2','IdEmpresa' => '1','obra' => 'Operación')
 );
 DB::table('obras')->insert($obras); 
 
@@ -77,18 +82,18 @@ $marcas = array(
   array('id' => '4','marca' => 'Robin - Fernandez','IdColorable' => '5','foto' => 'robinFernandez.jpg'),
   array('id' => '5','marca' => 'DMT','IdColorable' => NULL,'foto' => 'dmt.jpg'),
   array('id' => '6','marca' => 'Herrajes Aluplast','IdColorable' => NULL,'foto' => 'roto.jpg'),
-  array('id' => '7','marca' => 'Emerita','IdColorable' => NULL,'foto' => NULL)
+  array('id' => '7','marca' => 'Emerita','IdColorable' => NULL,'foto' => NULL),
 );
 DB::table('marcas')->insert($marcas);  
 
 $lineas = array(
-  array('id' => '1','IdMarca' => '1','IdColorablePerfil' => '1','linea' => 'Corrediza 3"','orden' => '10'),
-  array('id' => '12','IdMarca' => '2','IdColorablePerfil' => '2','linea' => 'Corrediza 60','orden' => '10000'),
-  array('id' => '16','IdMarca' => '3','IdColorablePerfil' => NULL,'linea' => 'Vidrio','orden' => '10000'),
-  array('id' => '17','IdMarca' => '4','IdColorablePerfil' => NULL,'linea' => 'Herrajes y accesorios','orden' => '10000'),
-  array('id' => '18','IdMarca' => '5','IdColorablePerfil' => NULL,'linea' => 'Herrajes y accesorios','orden' => '10000'),
-  array('id' => '19','IdMarca' => '6','IdColorablePerfil' => NULL,'linea' => 'Herrajes Varios','orden' => '10000'),
-  array('id' => '20','IdMarca' => '7','IdColorablePerfil' => '3','linea' => 'Cortinas','orden' => '10000')
+  array('id' => '1','IdMarca' => '1','IdColorable' => '1','linea' => 'Corrediza 3"','orden' => '10'),
+  array('id' => '12','IdMarca' => '2','IdColorable' => '2','linea' => 'Corrediza 60','orden' => '10000'),
+  array('id' => '16','IdMarca' => '3','IdColorable' => NULL,'linea' => 'Vidrio','orden' => '10000'),
+  array('id' => '17','IdMarca' => '4','IdColorable' => NULL,'linea' => 'Herrajes y accesorios','orden' => '10000'),
+  array('id' => '18','IdMarca' => '5','IdColorable' => NULL,'linea' => 'Herrajes y accesorios','orden' => '10000'),
+  array('id' => '19','IdMarca' => '6','IdColorable' => NULL,'linea' => 'Herrajes Varios','orden' => '10000'),
+  array('id' => '20','IdMarca' => '7','IdColorable' => '3','linea' => 'Nueva','orden' => '10000'),
 );
 DB::table('lineas')->insert($lineas); 
 

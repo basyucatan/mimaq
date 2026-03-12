@@ -199,3 +199,28 @@ window.addEventListener('log', event => {
     console.log('🔍 Livewire log:', event.detail);
 });
 
+// Expandir Imagen 
+document.addEventListener('click', function (e) {
+    const img = e.target.closest('.ImgExpandible');
+    if (img) {
+        const modal = document.getElementById('ImgModal');
+        const modalImg = document.getElementById('ImgModalImg');
+        if (!modal || !modalImg) return;
+
+        modalImg.src = img.dataset.src || img.getAttribute('src');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        return;
+    }
+    if (e.target && e.target.id === 'ImgModal') {
+        cerrarModal();
+    }
+});
+function cerrarModal() {
+    const modal = document.getElementById('ImgModal');
+    const modalImg = document.getElementById('ImgModalImg');
+
+    if (modal) modal.style.display = 'none';
+    if (modalImg) modalImg.src = '';
+    document.body.style.overflow = '';
+}

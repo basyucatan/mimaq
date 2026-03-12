@@ -10,13 +10,8 @@ class CatsBasicosSeeder extends Seeder
     {
 $unidads = array(
   array('id' => '1','tipo' => 'pieza','unidad' => 'pieza','abreviatura' => 'pz','factorConversion' => '1'),
-  array('id' => '2','tipo' => 'longitud','unidad' => 'milímetro','abreviatura' => 'mm','factorConversion' => '1000'),
-  array('id' => '3','tipo' => 'longitud','unidad' => 'metro','abreviatura' => 'm','factorConversion' => '1'),
-  array('id' => '4','tipo' => 'longitud','unidad' => 'centímetro','abreviatura' => 'cm','factorConversion' => '100'),
-  array('id' => '5','tipo' => 'longitud','unidad' => 'pie','abreviatura' => 'ft','factorConversion' => '3.281'),
-  array('id' => '6','tipo' => 'longitud','unidad' => 'pulgada','abreviatura' => 'in','factorConversion' => '39.37'),
-  array('id' => '7','tipo' => 'area','unidad' => 'milímetros cuadrados','abreviatura' => 'mm²','factorConversion' => '1000000'),
-  array('id' => '8','tipo' => 'area','unidad' => 'metro cuadrado','abreviatura' => 'm²','factorConversion' => '1')
+  array('id' => '2','tipo' => 'longitud','unidad' => 'metro','abreviatura' => 'm','factorConversion' => '1'),
+  array('id' => '3','tipo' => 'area','unidad' => 'metro cuadrado','abreviatura' => 'm²','factorConversion' => '1')
 );
 DB::table('unidads')->insert($unidads);
 

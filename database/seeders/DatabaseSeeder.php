@@ -16,10 +16,5 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(CatsBasicosSeeder::class);
         $this->call(CatsRestoSeeder::class);
-        $this->call(CatsMatsModsSeeder::class);
-        $this->call(CostosVariosSeeder::class);
-        $this->call(CostosCuprumSeeder::class);
-        $this->call(CostosAluplastSeeder::class);
-        $this->call(MovsSeeder::class);
     }
 }

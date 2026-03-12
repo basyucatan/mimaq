@@ -2,7 +2,7 @@
     <div class="cardSec-header">
         Modelos
     </div>
-    <div class="cardSec-body" style="height: 45vh; overflow-y: auto; padding: 0;">
+    <div class="cardSec-body" style="height: 45%; max-height: 45vh; overflow-y: auto; padding: 0;">
         <div class="table-responsive">
             <table class="table tabBase">
                 <thead>

@@ -2,12 +2,12 @@
     <div class="modal-overlay"> 
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" style="width: 80%;">
             <div class="modal-content">
-                <div class="cardPrin">
+                <div class="cardPrin" style="overflow-y: auto; height: 60vh; min-height: 200px;">
                     <div class="cardPrin-header">{{ $selected_id ? 'Editar' : 'Crear' }}</div>
                     <div class="cardPrin-body">
                         @foreach($campos as $key => $valor)
                             <div style="margin-bottom: 15px;">
-                                <label style="display: block; font-weight: bold; margin-bottom: 5px;">
+                                <label class="etiBase"> 
                                     {{ ucwords(preg_replace('/(?<!^)[A-Z]/', ' $0', $key)) }}
                                 </label>
                                 <input wire:model="campos.{{ $key }}" class="inpBase">

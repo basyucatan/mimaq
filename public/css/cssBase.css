@@ -3,7 +3,7 @@
 :root {
     --primarioO: #00329e;
     --primarioC: #60a5fa;
-    --secundarioO: #6d4100;
+    --secundarioO: #bc7204;
     --secundarioC: #f7ed92;    
     --claro1: #e4eff9;
     --claro2: #eafdeb;    
@@ -30,6 +30,7 @@
 html, body {
     height: 100%; overflow: hidden; padding-top: 33px;
     background: var(--Blanco);color: var(--Negro);
+    /* font-size: 16px; */
 }
 
 .tabbar-container input[type="radio"]{display:none}
@@ -77,10 +78,53 @@ html, body {
     outline: none;
     caret-color: transparent;
 }
+
+.ImgExpandible{
+    max-height:50px;
+    cursor:zoom-in;
+    object-fit:contain;
+    transition:transform .2s ease-in-out;
+}
+.imgModal{
+    position:fixed;
+    inset:0;
+    background-color:rgba(0,0,0,.7);
+    z-index:9999;
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+.imgModalContent{
+    height:90vh;
+    max-width:90vw;
+    overflow:auto;
+    background:white;
+    padding:10px;
+    border-radius:8px;
+    box-shadow:0 0 10px black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.imgModalContent img{
+    max-height:100%;
+    max-width:100%;
+    width:auto;
+    height:auto;
+    cursor:zoom-out;
+    display:block;
+}
+.cuadroColor {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #333;
+    margin-left: 5px;
+    vertical-align: middle;
+}
 .cardPrin {
     background: var(--grisC);
     border-radius: 1rem 1rem 1rem 1rem;
-    width: 100%;
 }
 
 .cardPrin-header {
@@ -98,7 +142,7 @@ html, body {
 .cardPrin-body {
     background: var(--claro1);
     padding: 0.2rem;
-    max-height: 70vh;
+    max-height: 95vh;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -109,7 +153,6 @@ html, body {
     padding: 4px;
     text-align: center;
 }
-
 .cardSec {
     background: var(--Blanco);
     border: 3px solid var(--primarioC);
@@ -124,6 +167,7 @@ html, body {
 .cardSec-header {
     background: linear-gradient(135deg, var(--Negro), var(--claro2));
     display: flex;
+    justify-content: space-between;
     width: 100%;
     padding: 4px;
     text-align: center;
@@ -224,6 +268,7 @@ html, body {
 .botVerde   { background: var(--Verde); }
 .botVerdeC  { background: var(--VerdeC); color: var(--Negro)}
 .botNaranja { background: var(--Naranja); }
+.botGris { background: var(--grisO); color: var(--Negro); }
 .botMorado { background: var(--Morado); }
 .botRojo    { background: var(--Rojo); }
 .botAzul    { background: var(--Azul); }
@@ -320,6 +365,19 @@ html, body {
     font-size: 12px !important;
 }
 
+
+.tablaSB th,
+.tablaSB td {
+    border: none;
+}
+.tablaCB th,
+.tablaCB td {
+    border: 1px solid #ccc;
+    text-align: left;
+    padding: 4px;
+    text-align: center;
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -372,35 +430,51 @@ html, body {
 .tab-headers {
     display: flex;
     flex-shrink: 0;
-    border-bottom: 1px solid var(--grisO);
+    border-bottom: 2px solid var(--secundarioC); /* Grosor para unir con la activa */
+    padding: 5px 5px 0; /* Espacio para que respiren las pestañas */
+    background: var(--grisO);
 }
 
-.tab-button {
+.tab-button,
+.tab-button2 {
     flex: 1;
-    padding: 4px;
+    padding: 6px;
     border: 1px solid var(--grisO);
     border-bottom: none;
-    background: var(--claro2);
     cursor: pointer;
     font-weight: 600;
     font-size: .9em;
     color: var(--Negro);
-    border-radius: 15px 15px 0 0;
-    transition: background-color .2s ease, color .2s ease;
+    border-radius: 10px 10px 0 0;
+    transition: all .2s ease;
+    
+    /* Fundamento del entrelazado */
+    margin-right: -10px; 
+    position: relative;
+    z-index: 1;
 }
 
-.tab-button:hover {
+.tab-button {background: var(--claro2);}
+.tab-button2 {background: var(--claro1);}
+
+.tab-button:hover,
+.tab-button2:hover {
     background: var(--secundarioO);
+    z-index: 2;
 }
 
-.tab-button.active {
-    background: var(--secundarioC);
+.tab-button.active,
+.tab-button2.active {
+    background: var(--primarioO);
+    color: var(--Blanco); /* Opcional para contraste */
+    z-index: 3; /* Se pone al frente */
+    margin-top: -3px; /* Sobresale un poco */
 }
 
 .tab-content-wrapper {
     flex: 1;
     padding: 4px;
-    overflow-y: auto;
+    min-height: 0; /* Permite scroll interno de tablas */
     box-sizing: border-box;
 }
 
@@ -410,5 +484,5 @@ html, body {
 
 .tab-content.active {
     display: block;
+    height: 100%;
 }
-

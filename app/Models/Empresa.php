@@ -13,7 +13,9 @@ class Empresa extends Model
 
     protected $table = 'empresas';
 
-    protected $fillable = ['IdNegocio','tipo','empresa','direccion','gmaps','telefono','email','adicionales'];
+    protected $fillable = ['IdNegocio','tipo','empresa','direccion',
+        'razonSocial', 'rfc',
+        'gmaps','telefono','email','adicionales'];
 	
     public function empresascontactos()
     {

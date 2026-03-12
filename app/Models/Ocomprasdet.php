@@ -13,7 +13,7 @@ class Ocomprasdet extends Model
 
     protected $table = 'ocomprasdets';
 
-    protected $fillable = ['IdOCompra','IdMatCosto','cantidad','precioU'];
+    protected $fillable = ['IdOCompra','IdMatCosto','cantidad','costoU'];
 	
     public function materialscosto()
     {

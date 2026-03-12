@@ -24,7 +24,7 @@ class Obras extends Component
 	public function filteredObras()
 	{
 		$keyWord = '%' . $this->keyWord . '%';
-		return Obra::Where('id','>',0)
+		return Obra::Where('IdEmpresa',$this->IdEmpresa)
 			->where(function ($query) use ($keyWord) {
 				$query
 						->orWhere('IdEmpresa', 'LIKE', $keyWord)
@@ -50,7 +50,7 @@ class Obras extends Component
 
     public function resetInput()
     {
-        $this->reset();
+        $this->resetExcept('IdEmpresa');
     }
 
     public function edit($id)

@@ -3,12 +3,15 @@ namespace App\Helpers;
 
 class SweetAlert
 {
-    public static function mensaje(array $arr): array
-    {
+    public static function mensaje(
+        string $mensaje,
+        int $duracion = 1000,
+        string $tipo = 'success'
+    ): array {
         return [
-            'text'  => $arr[0] ?? 'XD',
-            'timer' => $arr[1] ?? 1000,
-            'icon'  => $arr[2] ?? 'success',
+            'text' => $mensaje,
+            'timer' => $duracion,
+            'icon' => $tipo,
         ];
     }
 }

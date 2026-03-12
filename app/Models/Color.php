@@ -29,25 +29,6 @@ class Color extends Model
         return $this->hasMany(Modelo::class, 'IdColorVidrio');
     }
 
-    // public function presuelemsPerfil()
-    // {
-    //     return $this->hasMany(Presuelem::class, 'IdColorPerfil');
-    // }
-
-    // public function presuelemsVidrio()
-    // {
-    //     return $this->hasMany(Presuelem::class, 'IdColorVidrio');
-    // }
-
-    public function presupuestosPerfil()
-    {
-        return $this->hasMany(Presupuesto::class, 'IdColorPerfil');
-    }
-
-    public function presupuestosVidrio()
-    {
-        return $this->hasMany(Presupuesto::class, 'IdColorVidrio');
-    }
     public function colorable()
     {
         return $this->hasOne('App\Models\Colorable', 'id', 'IdColorable');

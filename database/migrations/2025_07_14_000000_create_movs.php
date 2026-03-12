@@ -102,13 +102,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('IdDivision')->constrained('divisions')->onDelete('restrict');
             $table->foreignId('IdProveedor')->constrained('empresas')->onDelete('restrict');
-            $table->foreignId('IdUser')->nullable()->constrained('users')->nullOnDelete('set null');
+            $table->foreignId('IdCuentaProv')->nullable()->constrained('empresasCuentas')->onDelete('restrict');
+            $table->foreignId('IdUser')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('IdAprobo')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('IdObra')->nullable()->constrained('obras')->nullOnDelete();
             $table->bigInteger('IdCondPago')->default(1);
             $table->bigInteger('IdCondFlete')->default(1);
             $table->dateTime('fechaHSol');
-            $table->dateTime('fechaERec');
-            $table->float('porDescuento')->nullable()->default(0);
+            $table->dateTime('fechaERec')->nullable();
+            $table->decimal('porDescuento', 4, 2)->default(0);
+            $table->decimal('subtotal', 14, 2)->default(0);
             $table->string('concepto')->nullable();
             $table->enum('estatus', ['edicion', 'aprobado', 'comprado','recibido', 'completado']);
             $table->json('adicionales')->nullable();
@@ -116,10 +119,10 @@ return new class extends Migration
         });  
         Schema::create('oComprasDets', function (Blueprint $table) { 
             $table->id();
-            $table->foreignId('IdOCompra')->constrained('oCompras')->onDelete('restrict');
+            $table->foreignId('IdOCompra')->constrained('oCompras')->onDelete('cascade');
             $table->foreignId('IdMatCosto')->constrained('materialscostos')->onDelete('cascade');
             $table->float('cantidad')->nullable()->default(0);
-            $table->float('precioU')->nullable()->default(0);
+            $table->float('costoU')->nullable()->default(0);
         });                  
         Schema::create('traspasos', function (Blueprint $table) {
             $table->id();

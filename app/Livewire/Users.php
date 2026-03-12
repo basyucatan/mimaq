@@ -18,29 +18,26 @@ class Users extends Component
     public $verModalUser=false, $selected_id, $keyWord, $password, $passwordConf,
         $name, $telefono, $email, $IdRol;
     public $roles = [];
-    #[Computed]
-	public function filteredUsers()
-	{
-		$keyWord = '%' . $this->keyWord . '%';
-		return User::Where('id','>',0)
-			->where(function ($query) use ($keyWord) {
-				$query
-						->orWhere('name', 'LIKE', $keyWord)
-						->orWhere('telefono', 'LIKE', $keyWord)
-						->orWhere('email', 'LIKE', $keyWord);
-			})
-			->paginate(10);
-	}
+
 	public function mount(){
         $this->roles = Util::getArray('roles','name');
     }
 	
-	public function render()
-	{
-		return view('livewire.users.view', [
-			'users' => $this->filteredUsers,
-		]);
-	}
+public function render()
+{
+    $keyWord = '%' . $this->keyWord . '%';
+    $miNivelMaximo = auth()->user()->roles->max('nivel');
+    $users = User::whereHas('roles', function ($query) use ($miNivelMaximo) {
+        $query->where('nivel', '>=', $miNivelMaximo);
+    })
+    ->where(function ($query) use ($keyWord) {
+        $query->orWhere('name', 'LIKE', $keyWord)
+            ->orWhere('telefono', 'LIKE', $keyWord)
+            ->orWhere('email', 'LIKE', $keyWord);
+    })
+    ->paginate(10);
+    return view('livewire.users.view', compact(['users']));
+}
 	
     public function cancel()
     {

@@ -57,7 +57,7 @@ Route::middleware("auth")->group(function () {
     Route::view('kardex', 'livewire.kardex.index');
     Route::view('guias', 'livewire.guias.index');
     
-    Route::view('kardex', 'livewire.kardex.index');
+    Route::view('materials', 'livewire.materials.index');
     Route::view('invfisicos', 'livewire.invfisicos.index');
     Route::view('compras', 'livewire.compras.index');
     Route::view('cortes', 'livewire.cortes.index');

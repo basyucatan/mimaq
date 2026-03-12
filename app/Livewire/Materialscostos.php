@@ -621,8 +621,11 @@ public function resetInput()
         $material = DB::table('materials')->find($this->IdMaterial);
         $this->validate([
             'IdMaterial' => 'required',
+            'referencia' => 'required',
+            'costo' => 'required',
             'IdMoneda' => 'required',
             'IdBarra' => $material && $material->IdClase == 1 ? 'required' : 'nullable',
+            'IdPanel' => $material && $material->IdClase == 2 ? 'required' : 'nullable',
         ]);
 
         Materialscosto::updateOrCreate(

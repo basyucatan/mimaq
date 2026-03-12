@@ -9,13 +9,15 @@ class Empresas extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $verModalEmpresa = false;
-    public $selected_id, $keyWord, $IdNegocio, $tipo, $empresa, $direccion, 
+    public $selected_id, $keyWord, $IdNegocio=1, $tipo, $empresa, $direccion, 
+        $razonSocial, $rfc, $tituloTipo,
 		$gmaps, $telefono, $email, $adicionales;
     public $tipoContexto;
     public function mount($tipoContexto = 'cliente')
     {
         $this->tipoContexto = $tipoContexto;
         $this->tipo = $this->tipoContexto;
+        $this->tituloTipo = $this->tipo == 'cliente' ? 'Clientes' : 'Proveedores';
     }
     public function updatedKeyWord()
     {
@@ -48,7 +50,8 @@ class Empresas extends Component
     }
     public function resetInput()
     {
-        $this->reset(['selected_id', 'IdNegocio', 'empresa', 'direccion', 'gmaps', 'telefono', 'email', 'adicionales']);
+        $this->reset(['selected_id', 'empresa', 'razonSocial', 'rfc',
+            'direccion', 'gmaps', 'telefono', 'email', 'adicionales']);
         $this->tipo = $this->tipoContexto;
     }
     public function edit($id)
@@ -64,13 +67,21 @@ class Empresas extends Component
     }
     public function save()
     {
-        $this->validate(['tipo' => 'required', 'empresa' => 'required']);
+        $this->validate([
+            'tipo' => 'required',
+            'empresa' => 'required',
+            'razonSocial' => 'required',
+            'rfc' => 'required',
+            'telefono' => 'required|numeric|digits:10'
+            ]);
         Empresa::updateOrCreate(
             ['id' => $this->selected_id],
             [
                 'IdNegocio' => $this->IdNegocio,
                 'tipo' => $this->tipo,
                 'empresa' => $this->empresa,
+                'razonSocial' => $this->razonSocial,
+                'rfc' => $this->rfc,
                 'direccion' => $this->direccion,
                 'gmaps' => $this->gmaps,
                 'telefono' => $this->telefono,

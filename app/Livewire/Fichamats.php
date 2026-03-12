@@ -16,7 +16,8 @@ class Fichamats extends Component
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap';
-    public $verModal = false, $tabActivo = 'tab1', $IdMaterial, $material;
+    public $verModal = false, $tabActivo = 'tab1', $subTabActivo = 'sub1',
+    $IdMaterial, $material;
     protected $listeners = [
         'IdArbolElecto' => 'IdArbolElecto',
     ];

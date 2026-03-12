@@ -7,6 +7,9 @@ return new class extends Migration
 {
     public function up()
     {
+        Schema::table('roles', function (Blueprint $table) {
+                $table->tinyInteger('nivel')->default(1);
+            });         
         Schema::create('unidads', function (Blueprint $table) {
             $table->id();
             $table->enum('tipo', ['pieza','longitud','area','peso','tiempo', 'otro']);

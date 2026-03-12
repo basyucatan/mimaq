@@ -22,7 +22,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('IdMarca')->constrained('marcas')->onDelete('cascade');
             $table->foreignId('IdDivision')->nullable()->constrained('divisions')->onDelete('set null');
-            $table->foreignId('IdColorablePerfil')->nullable()->constrained('colorables')->onDelete('set null');
+            $table->foreignId('IdColorable')->nullable()->constrained('colorables')->onDelete('set null');
             $table->string('linea', 200)->default('nueva línea');
             $table->integer('orden')->unsigned()->default(10000);
         });      

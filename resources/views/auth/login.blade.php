@@ -21,16 +21,17 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-12 position-relative">
+                            <div class="col-12">
                                 <label for="password" class="etiBase">{{ __('Password') }}</label>
-                                <input id="password" type="password" 
-                                       class="inpBase @error('password') is-invalid @enderror" 
-                                       name="password" required autocomplete="current-password">
-                                <button type="button"
-                                        class="bot botAzul btn-sm position-absolute top-0 end-0"
-                                        style="margin-top: 26px; margin-right: 12px"
-                                        onclick="togglePassword()">👁
-                                </button>
+                                <div class="position-relative">
+                                    <input id="password" type="password"
+                                        class="inpBase pe-5 @error('password') is-invalid @enderror"
+                                        name="password" required autocomplete="current-password">
+                                    <button type="button"
+                                            class="bot botAzul position-absolute top-0 end-0 h-100 px-2"
+                                            onclick="togglePassword()">👁
+                                    </button>
+                                </div>
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -42,9 +43,9 @@
                             <button type="submit" class="bot botAzul">
                                 {{ __('Login') }}
                             </button>
-                            <a class="nav-link p-0" href="{{ url('/registro') }}">
+                            {{-- <a class="nav-link p-0" href="{{ url('/registro') }}">
                                 📝 Registro
-                            </a>
+                            </a> --}}
                         </div>
                     </form>
                 </div>

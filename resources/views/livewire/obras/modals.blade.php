@@ -1,5 +1,5 @@
-@if($verModalObra)
-    <div class="modal-overlay"> 
+@if ($verModalObra)
+    <div class="modal-overlay">
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" style="width: 80%;" wire:ignore.self>
             <div class="modal-content">
                 <div class="cardPrin" style="cursor: move;">
@@ -16,22 +16,21 @@
                                     <input type="hidden" wire:model="selected_id">
                                 @endif
                                 <div class="col-md-6">
-                                    <label for="IdEmpresa" class="etiBase">Idempresa</label>
-                                    <input wire:model="IdEmpresa" type="text" class="inpBase" id="IdEmpresa">@error('IdEmpresa') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-6">
                                     <label for="obra" class="etiBase">Obra</label>
-                                    <input wire:model="obra" type="text" class="inpBase" id="obra">@error('obra') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <input wire:model="obra" type="text" class="inpBase" id="obra">
+                                    @error('obra')
+                                        <span class="error text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label for="gmaps" class="etiBase">Gmaps</label>
-                                    <input wire:model="gmaps" type="text" class="inpBase" id="gmaps">@error('gmaps') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <input wire:model="gmaps" type="text" class="inpBase" id="gmaps">
+                                    @error('gmaps')
+                                        <span class="error text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="adicionales" class="etiBase">Adicionales</label>
-                                    <input wire:model="adicionales" type="text" class="inpBase" id="adicionales">@error('adicionales') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
-</div></form>
+                            </div>
+                        </form>
                     </div>
                     <div class="cardPrin-footer mt-3 d-flex justify-content-end gap-2">
                         <a wire:click.prevent="cancel()" class="bot botNegro">Cerrar</a>

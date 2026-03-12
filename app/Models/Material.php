@@ -13,49 +13,54 @@ class Material extends Model
 
     protected $table = 'materials';
 
-    protected $fillable = ['IdClase','IdUnidad','IdLinea','IdTipo','referencia', 'KgxMetro',
-        'rendimiento', 'IdUnidadRend', 'material','foto','costoU','stockMin','adicionales'];
-    protected $casts = ['adicionales' => 'array'];
-    public function getRutaFotoAttribute()
-    {
-        $marcaNombre = $this->Linea->Marca->marca ?? 'generico';
-        $marcaLimpia = mb_convert_encoding($marcaNombre, 'UTF-8', 'UTF-8');
-        return "materiales/" . strtolower($marcaLimpia);
-    }
-    public function Unidad()
-    {
-        return $this->hasOne('App\Models\Unidad', 'id', 'IdUnidad');
-    }   
-    public function materialessmetas()
-    {
-        return $this->hasMany('App\Models\Materialessmeta', 'IdMaterial', 'id');
-    }
-    public function Clase()
+    protected $fillable = ['IdClase','IdLinea','IdUnidad','IdTipo',
+        'referencia','material','foto','KgxMetro','rendimiento','IdUnidadRend','adicionales'];
+    protected $casts = ['adicionales' => 'array'];        
+public function getFotoUrlAttribute()
+{
+    if (!$this->foto) return null;
+    $marcaNombre = $this->linea->marca->marca ?? 'generico';
+    $marcaLimpia = \Illuminate\Support\Str::slug($marcaNombre);
+    return asset("storage/materiales/{$marcaLimpia}/{$this->foto}");
+}
+    public function clase()
     {
         return $this->hasOne('App\Models\Clase', 'id', 'IdClase');
-    }    
-    public function Linea()
+    }
+    
+    public function linea()
     {
         return $this->hasOne('App\Models\Linea', 'id', 'IdLinea');
-    }    
-    public function Tipo()
-    {
-        return $this->hasOne('App\Models\Tipo', 'id', 'IdTipo');
-    }    
-    public function Costos()
+    }
+    
+    public function materialscostos()
     {
         return $this->hasMany('App\Models\Materialscosto', 'IdMaterial', 'id');
-    } 
-    public function Materialscostos()
+    }
+    
+    public function modelopremats()
     {
-        return $this->hasMany('App\Models\Materialscosto', 'IdMaterial', 'id');
-    }     
-    public function Reglas()
+        return $this->hasMany('App\Models\Modelopremat', 'IdMaterial', 'id');
+    }
+    
+    public function modelosmats()
+    {
+        return $this->hasMany('App\Models\Modelosmat', 'IdMaterial', 'id');
+    }
+    
+    public function reglas()
     {
         return $this->hasMany('App\Models\Regla', 'IdMaterial', 'id');
-    } 
-    public function UnidadRend()
+    }
+    
+    public function tablaherrajesdets()
+    {
+        return $this->hasMany('App\Models\Tablaherrajesdet', 'IdMaterial', 'id');
+    }
+    
+    public function unidad()
     {
         return $this->hasOne('App\Models\Unidad', 'id', 'IdUnidadRend');
-    }     
+    }
+    
 }

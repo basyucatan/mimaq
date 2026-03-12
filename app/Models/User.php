@@ -22,5 +22,8 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\Depto', 'id', 'IdDepto');
     }
-         
+    public function Division()
+    {
+        return $this->hasOne('App\Models\Division', 'id', 'IdDivision');
+    }      
 }
