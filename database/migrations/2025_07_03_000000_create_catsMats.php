@@ -101,14 +101,14 @@ return new class extends Migration
             $table->decimal('factor',8,4,true);
             $table->decimal('descuento',8,0)->nullable();
         });          
-        Schema::create('tablaHerrajes', function (Blueprint $table) { //OXXO, ox, batiente
+        Schema::create('tablaherrajes', function (Blueprint $table) { //OXXO, ox, batiente
             $table->id();
             $table->foreignId('IdLinea')->constrained('lineas')->onDelete('cascade');
             $table->string('tablaHerraje',50);
             $table->string('fichaTecnica',250)->nullable();
             $table->json('adicionales')->nullable();
         });   
-        Schema::create('tablaHerrajesDets', function (Blueprint $table) { //perfiles, herrajes, etc.
+        Schema::create('tablaherrajesdets', function (Blueprint $table) { //perfiles, herrajes, etc.
             $table->id();
             $table->foreignId('IdTablaHerraje')->constrained('tablaHerrajes')->onDelete('cascade');
             $table->Integer('cantidad');
@@ -136,7 +136,7 @@ return new class extends Migration
         Schema::dropIfExists('materials');
         Schema::dropIfExists('materialscostos');
         Schema::dropIfExists('reglas');
-        Schema::dropIfExists('tablaHerrajes');
-        Schema::dropIfExists('tablaHerrajesDets');
+        Schema::dropIfExists('tablaherrajes');
+        Schema::dropIfExists('tablaherrajesdets');
     }
 };

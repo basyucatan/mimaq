@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamps();
         });  
         
-        Schema::create('modelosPre', function (Blueprint $table) {
+        Schema::create('modelospre', function (Blueprint $table) {
             $table->id();
             $table->smallInteger('consecutivo');
             $table->string('foto')->nullable();
@@ -59,7 +59,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('modeloPreMats', function (Blueprint $table) { 
+        Schema::create('modelopremats', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('IdModeloPre')->constrained('modelosPre')->onDelete('cascade');
             $table->foreignId('IdMaterialCosto')->nullable()->constrained('materialscostos')->nullOnDelete();
@@ -80,7 +80,7 @@ return new class extends Migration
             $table->json('adicionales')->nullable();
             $table->timestamps();
         });             
-        Schema::create('movInventarios', function (Blueprint $table) {
+        Schema::create('movinventarios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdUserOri')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('IdUserDes')->nullable()->constrained('users')->nullOnDelete();
@@ -98,7 +98,7 @@ return new class extends Migration
             $table->timestamps();
             $table->index(['IdMatCosto', 'IdDeptoOri', 'IdDeptoDes', 'fechaH']);
         });
-        Schema::create('oCompras', function (Blueprint $table) { 
+        Schema::create('ocompras', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('IdDivision')->constrained('divisions')->onDelete('restrict');
             $table->foreignId('IdProveedor')->constrained('empresas')->onDelete('restrict');
@@ -117,7 +117,7 @@ return new class extends Migration
             $table->json('adicionales')->nullable();
             $table->timestamps();
         });  
-        Schema::create('oComprasDets', function (Blueprint $table) { 
+        Schema::create('ocomprasdets', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('IdOCompra')->constrained('oCompras')->onDelete('cascade');
             $table->foreignId('IdMatCosto')->constrained('materialscostos')->onDelete('cascade');
@@ -139,7 +139,7 @@ return new class extends Migration
             $table->timestamps();
             $table->index(['tipo', 'estatus']);
         });       
-        Schema::create('traspasosDets', function (Blueprint $table) {
+        Schema::create('traspasosdets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdTraspaso')->constrained('traspasos')->cascadeOnDelete();
             $table->foreignId('IdMatCosto')->nullable()->constrained('materialscostos')->nullOnDelete();
@@ -148,7 +148,7 @@ return new class extends Migration
             $table->string('dimensiones', 100)->nullable();
             $table->json('adicionales')->nullable();
         });
-        Schema::create('presuCortes', function (Blueprint $table) {
+        Schema::create('presucortes', function (Blueprint $table) {
             $table->id();
             $table->enum('tipo', ['perfil', 'vidrio'])->default('perfil');
             $table->foreignId('IdPresupuesto')->constrained('presupuestos')->cascadeOnDelete();
@@ -162,11 +162,11 @@ return new class extends Migration
     {
         Schema::dropIfExists('presupuestos');
         Schema::dropIfExists('modelosPre');
-        Schema::dropIfExists('modeloPreMats');
-        Schema::dropIfExists('movInventarios');        
+        Schema::dropIfExists('modelopreMmts');
+        Schema::dropIfExists('movinventarios');        
         Schema::dropIfExists('traspasos');        
-        Schema::dropIfExists('traspasosDets');        
-        Schema::dropIfExists('presuCortes');        
+        Schema::dropIfExists('traspasosdets');        
+        Schema::dropIfExists('presucortes');        
     }
 };
 
