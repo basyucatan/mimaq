@@ -18,7 +18,7 @@ class Ocompras extends Component
     public $divisions = [], $provs = [], $obras = [], $clientes = [], $clases = [], 
         $marcas = [], $lineas = [], $colors = [], $unidads = [], $monedas = [], 
         $cuentas=[],$condsPago=[], $condsFlete=[];
-    public $detalles = [], $nuevoMat = [], $nuevaEmpresa = [], $nuevaObra = [];
+    public $detalles = [], $nuevoMat = [], $nuevaEmpresa = [];
 
     public function mount()
     {
@@ -214,9 +214,11 @@ class Ocompras extends Component
         $this->verModalOcompra = true;
     }
     public function cancel() { $this->verModalOcompra = false; $this->resetInput(); }
-    private function resetInput() { $this->reset(['selected_id', 'IdDivision', 'IdProveedor', 'IdUser', 'IdObra', 'IdCliente', 'fechaHSol', 'porDescuento', 'concepto', 'estatus', 'adicionales', 'detalles', 'keyWordMat', 'keyWordProv', 'keyWordCte', 'cantidadMat', 'verNuevoMat']); $this->resetNuevoMat(); $this->resetNuevaEmpresa(); }
-    private function resetNuevoMat() {$this->nuevoMat = [];}
-    private function resetNuevaEmpresa() { $this->nuevaEmpresa =[];}
+    private function resetInput() { 
+        $this->resetExcept([ 'selected_id', 'IdDivision','divisions','condsPago','condsFlete']);
+        $this->nuevoMat = [];
+        $this->nuevaEmpresa =[];
+    }
     public function render() 
     { 
         if(!$this->IdDivision){

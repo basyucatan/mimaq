@@ -52,7 +52,7 @@ trait OComprasGestion
             'email' => $this->nuevaEmpresa['email']
         ]);
         $this->elegirProv($emp->id, $emp->empresa);
-        $this->resetNuevaEmpresa();
+        $this->nuevaEmpresa =[];
     }
     public function crearObra()
     {
@@ -93,6 +93,6 @@ trait OComprasGestion
         ]);
         $this->elegirMaterial($costo->id);
         $this->verNuevoMat = false;
-        $this->resetNuevoMat();
+        $this->nuevoMat = [];
     }
 }

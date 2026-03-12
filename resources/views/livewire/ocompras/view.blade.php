@@ -7,7 +7,7 @@
             <button class="bot botVerde" wire:click="create">Nueva</button>
         </div>
     </div>
-    <div class="cardPrin-body">
+    <div class="cardPrin-body" style="max-height: 450px; overflow-y: auto;">
         @include('livewire.ocompras.modals')
         {{-- Vista para PC --}}
         <div class="table-responsive d-none d-md-block">
