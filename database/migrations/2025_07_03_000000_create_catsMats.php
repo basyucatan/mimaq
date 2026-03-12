@@ -110,7 +110,7 @@ return new class extends Migration
         });   
         Schema::create('tablaherrajesdets', function (Blueprint $table) { //perfiles, herrajes, etc.
             $table->id();
-            $table->foreignId('IdTablaHerraje')->constrained('tablaHerrajes')->onDelete('cascade');
+            $table->foreignId('IdTablaHerraje')->constrained('tablaherrajes')->onDelete('cascade');
             $table->Integer('cantidad');
             $table->foreignId('IdMaterial')->constrained('materials')->onDelete('cascade');
             $table->double('rangoMenor')->nullable();

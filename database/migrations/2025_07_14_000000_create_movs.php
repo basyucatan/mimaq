@@ -61,9 +61,9 @@ return new class extends Migration
 
         Schema::create('modelopremats', function (Blueprint $table) { 
             $table->id();
-            $table->foreignId('IdModeloPre')->constrained('modelosPre')->onDelete('cascade');
+            $table->foreignId('IdModeloPre')->constrained('modelospre')->onDelete('cascade');
             $table->foreignId('IdMaterialCosto')->nullable()->constrained('materialscostos')->nullOnDelete();
-            $table->foreignId('IdTablaHerraje')->nullable()->constrained('tablaHerrajes')->onDelete('restrict');
+            $table->foreignId('IdTablaHerraje')->nullable()->constrained('tablaherrajes')->onDelete('restrict');
             $table->Integer('cantidadHerraje')->nullable();
             $table->boolean('principal')->default(false);
             $table->Integer('cantidad');
@@ -102,7 +102,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('IdDivision')->constrained('divisions')->onDelete('restrict');
             $table->foreignId('IdProveedor')->constrained('empresas')->onDelete('restrict');
-            $table->foreignId('IdCuentaProv')->nullable()->constrained('empresasCuentas')->onDelete('restrict');
+            $table->foreignId('IdCuentaProv')->nullable()->constrained('empresascuentas')->onDelete('restrict');
             $table->foreignId('IdUser')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('IdAprobo')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('IdObra')->nullable()->constrained('obras')->nullOnDelete();
@@ -119,7 +119,7 @@ return new class extends Migration
         });  
         Schema::create('ocomprasdets', function (Blueprint $table) { 
             $table->id();
-            $table->foreignId('IdOCompra')->constrained('oCompras')->onDelete('cascade');
+            $table->foreignId('IdOCompra')->constrained('ocompras')->onDelete('cascade');
             $table->foreignId('IdMatCosto')->constrained('materialscostos')->onDelete('cascade');
             $table->float('cantidad')->nullable()->default(0);
             $table->float('costoU')->nullable()->default(0);
@@ -162,7 +162,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('presupuestos');
         Schema::dropIfExists('modelosPre');
-        Schema::dropIfExists('modelopreMmts');
+        Schema::dropIfExists('modelopremats');
         Schema::dropIfExists('movinventarios');        
         Schema::dropIfExists('traspasos');        
         Schema::dropIfExists('traspasosdets');        

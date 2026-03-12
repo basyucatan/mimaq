@@ -7,12 +7,12 @@ return new class extends Migration
 {
     public function up()
     {         
-        Schema::create('divsCajas', function (Blueprint $table) {
+        Schema::create('divscajas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdDivision')->nullable()->constrained('divisions')->onDelete('cascade');
             $table->string('caja',50);
         });         
-        Schema::create('divsBodegas', function (Blueprint $table) {
+        Schema::create('divsbodegas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdDivision')->nullable()->constrained('divisions')->onDelete('cascade');
             $table->string('bodega',50);
@@ -38,7 +38,7 @@ return new class extends Migration
             $table->string('gmaps',250)->nullable();
             $table->json('adicionales')->nullable();
         });
-        Schema::create('empresasCuentas', function (Blueprint $table) { 
+        Schema::create('empresascuentas', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('IdEmpresa')->constrained('empresas')->onDelete('cascade');
             $table->string('banco',100);
@@ -46,7 +46,7 @@ return new class extends Migration
             $table->string('cuentaClabe',20);
             $table->json('adicionales')->nullable();
         });        
-        Schema::create('empresasContactos', function (Blueprint $table) {
+        Schema::create('empresascontactos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdEmpresa')->constrained('empresas')->onDelete('cascade');
             $table->string('contacto',100);
@@ -68,7 +68,8 @@ return new class extends Migration
     {
         Schema::dropIfExists('empresas');
         Schema::dropIfExists('empresassucs');
-        Schema::dropIfExists('contactos');
+        Schema::dropIfExists('empresascuentas');
+        Schema::dropIfExists('empresascontactos');
         Schema::dropIfExists('obras');
     }
 };

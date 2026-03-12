@@ -30,7 +30,7 @@ return new class extends Migration
             $table->boolean('principal')->default(false);
             $table->Integer('cantidad');
             $table->foreignId('IdMaterial')->nullable()->constrained('materials')->onDelete('restrict');
-            $table->foreignId('IdTablaHerraje')->nullable()->constrained('tablaHerrajes')->onDelete('restrict');
+            $table->foreignId('IdTablaHerraje')->nullable()->constrained('tablaherrajes')->onDelete('restrict');
             $table->Integer('cantidadHerraje')->nullable();
             $table->string('diferenciador')->nullable(); //a veces se usa de manera diferente
             $table->tinyInteger('IdTipo')->unsigned()->nullable(); //Hoja, Marco, Junquillo, alma, etc.
