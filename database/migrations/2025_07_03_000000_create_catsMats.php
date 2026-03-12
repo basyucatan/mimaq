@@ -64,7 +64,7 @@ return new class extends Migration
         Schema::create('materials', function (Blueprint $table) { // chambrana, zoclo, cabezal, etc.
             $table->id();
             $table->foreignId('IdClase')->constrained('clases')->onDelete('cascade');
-            $table->foreignId('IdLinea')->nullable()->constrained('Lineas')->onDelete('cascade');
+            $table->foreignId('IdLinea')->nullable()->constrained('lineas')->onDelete('cascade');
             $table->foreignId('IdUnidad')->constrained('unidads')->onDelete('restrict');
             $table->tinyInteger('IdTipo')->nullable()->unsigned()->nullable(); //Hoja, Marco, Junquillo, alma, etc.            
             $table->string('referencia',30)->nullable()->unique();
