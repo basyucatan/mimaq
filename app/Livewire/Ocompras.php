@@ -2,7 +2,7 @@
 namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Traits\OcomprasGestion;
+use App\Traits\OComprasGestion;
 use Illuminate\Support\Facades\DB;
 use App\Models\{User, Util, Ocompra, Materialscosto, Negocio, Empresa, Empresascuenta};
 class Ocompras extends Component
