@@ -143,6 +143,7 @@ html, body {
     background: var(--claro1);
     padding: 0.2rem;
     max-height: 95vh;
+    height: 95%;
     overflow-y: auto;
     overflow-x: hidden;
 }
