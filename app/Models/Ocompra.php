@@ -17,10 +17,16 @@ class Ocompra extends Model
         'IdObra','IdCondPago', 'subtotal','IdCondFlete','fechaHSol','fechaERec',
         'porDescuento','concepto','estatus','adicionales'];
 	
+    protected $casts = [
+        'subtotal' => 'decimal:4',
+        'porDescuento' => 'decimal:2'
+    ];
     public function getTotalAttribute()
     {
-        $descuento = $this->subtotal * ($this->porDescuento / 100);
-        return round($this->subtotal - $descuento, 2);
+        $subtotal = (float)$this->subtotal;
+        $descuento = $subtotal * ((float)$this->porDescuento / 100);
+        $total = $subtotal - $descuento;
+        return $total;
     }
     public function division()
     {

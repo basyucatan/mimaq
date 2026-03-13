@@ -114,7 +114,7 @@ return new class extends Migration
             $table->dateTime('fechaPago')->nullable();
             $table->dateTime('fechaComp')->nullable();
             $table->decimal('porDescuento', 4, 2)->default(0);
-            $table->decimal('subtotal', 14, 2)->default(0);
+            $table->decimal('subtotal', 14, 5)->default(0);
             $table->string('docPago')->nullable();
             $table->string('docFactura')->nullable();
             $table->string('concepto')->nullable();
@@ -127,7 +127,7 @@ return new class extends Migration
             $table->foreignId('IdOCompra')->constrained('ocompras')->onDelete('cascade');
             $table->foreignId('IdMatCosto')->constrained('materialscostos')->onDelete('restrict');
             $table->float('cantidad')->nullable()->default(0);
-            $table->float('costoU')->nullable()->default(0);
+            $table->decimal('costoU', 12, 5)->nullable()->default(0);
         });                  
         Schema::create('traspasos', function (Blueprint $table) {
             $table->id();

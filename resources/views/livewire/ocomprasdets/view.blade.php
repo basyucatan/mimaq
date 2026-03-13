@@ -25,7 +25,7 @@
 								<th>Idocompra</th>
 								<th>Idmatcosto</th>
 								<th>Cantidad</th>
-								<th>Preciou</th>
+								<th>Costou</th>
 <th>Acciones</th></tr>
                             </thead>
                             <tbody>
@@ -35,7 +35,7 @@
 								<td>{{ $row->IdOCompra }}</td>
 								<td>{{ $row->IdMatCosto }}</td>
 								<td>{{ $row->cantidad }}</td>
-								<td>{{ $row->precioU }}</td>
+								<td>{{ $row->costoU }}</td>
 
                                         <td width="60">
                                             <div class="d-flex justify-content-around align-items-center gap-1">

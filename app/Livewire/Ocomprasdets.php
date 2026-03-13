@@ -14,7 +14,7 @@ class Ocomprasdets extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalOcomprasdet=false, $selected_id, $keyWord, $IdOCompra, $IdMatCosto, $cantidad, $precioU;
+    public $verModalOcomprasdet=false, $selected_id, $keyWord, $IdOCompra, $IdMatCosto, $cantidad, $costoU;
 	
     public function updatedKeyWord()
 	{
@@ -30,7 +30,7 @@ class Ocomprasdets extends Component
 						->orWhere('IdOCompra', 'LIKE', $keyWord)
 						->orWhere('IdMatCosto', 'LIKE', $keyWord)
 						->orWhere('cantidad', 'LIKE', $keyWord)
-						->orWhere('precioU', 'LIKE', $keyWord);
+						->orWhere('costoU', 'LIKE', $keyWord);
 			})
 			->paginate(12);
 	}
@@ -77,7 +77,7 @@ class Ocomprasdets extends Component
 				'IdOCompra' => $this-> IdOCompra,
 				'IdMatCosto' => $this-> IdMatCosto,
 				'cantidad' => $this-> cantidad,
-				'precioU' => $this-> precioU
+				'costoU' => $this-> costoU
 			]
 		);
         $this->resetInput();

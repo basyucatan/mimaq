@@ -28,8 +28,8 @@
                                     <input wire:model="cantidad" type="text" class="inpBase" id="cantidad">@error('cantidad') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="precioU" class="etiBase">Preciou</label>
-                                    <input wire:model="precioU" type="text" class="inpBase" id="precioU">@error('precioU') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label for="costoU" class="etiBase">Costou</label>
+                                    <input wire:model="costoU" type="text" class="inpBase" id="costoU">@error('costoU') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
 </div></form>
                     </div>

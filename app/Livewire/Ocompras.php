@@ -13,7 +13,7 @@ class Ocompras extends Component
     public $IdDivision, $IdProveedor, $IdCuentaProv, $IdUser, $IdAprobo, $IdObra,
         $IdCliente = 1, $IdCondPago = 1, $IdCondFlete = 1, $selected_id, 
         $keyWord, $keyWordMat, $keyWordProv, $keyWordCte,
-        $cantidadMat = 1, $IdMarca, $IdLinea, $IdColor, 
+        $cantidadMat = 1, $IdMarca, $IdLinea, $IdColor, $factorIva,
         $fechaHSol, $porDescuento = 0, $concepto, $estatus = 'edicion', $adicionales;
     public $divisions = [], $provs = [], $obras = [], $clientes = [], $clases = [], 
         $marcas = [], $lineas = [], $colors = [], $unidads = [], $monedas = [], 
@@ -33,7 +33,8 @@ class Ocompras extends Component
         $this->clientes = DB::table('empresas')->where('tipo', 'cliente')
 				->pluck('empresa', 'id');
         $this->condsPago = Util::getArrayJS('condicionesPago','condicion');
-        $this->condsFlete = Util::getArrayJS('condicionesFlete','condicion');                
+        $this->condsFlete = Util::getArrayJS('condicionesFlete','condicion');
+        $this->factorIva = 1+Util::getArrayJS('datosFacturacion')[1]['factorIva'];
         $this->elegirCliente($this->IdCliente, 'gas');
     }	
 
@@ -79,7 +80,7 @@ class Ocompras extends Component
     
     public function getSubtotalProperty()
     {
-        return collect($this->detalles)->sum(fn($d) => (float)$d['cantidad'] * (float)$d['costoU']);
+        return collect($this->detalles)->sum(fn($d) => (float)$d['cantidad'] * (float)$d['costoN']);
     }
     public function getTotalProperty()
     {
@@ -87,6 +88,20 @@ class Ocompras extends Component
         return round($this->subtotal - $descuento, 2);
     }
 	public function updatedKeyWord() { $this->resetPage(); }
+    public function updatedDetalles($valor, $nombre)
+    {
+        $partes = explode('.', $nombre);
+        $conteo = count($partes);
+        if ($conteo < 2) return;
+        $idx = ($conteo === 3) ? $partes[1] : $partes[0];
+        $campo = ($conteo === 3) ? $partes[2] : $partes[1];
+        if ($campo === 'costoU') {
+            $this->detalles[$idx]['costoN'] = (float)$valor * $this->factorIva;
+        } elseif ($campo === 'costoN') {
+            $this->detalles[$idx]['costoU'] = (float)$valor / $this->factorIva;
+            $this->detalles[$idx]['costoN'] = (float)$valor;
+        }
+    }
 	public function updatedKeyWordProv(){
 		$this->IdProveedor = null;
 		$this->provs = $this->filtroProvs();
@@ -125,6 +140,7 @@ class Ocompras extends Component
                 'IdMatCosto' => $mat->id,
                 'cantidad' => $this->cantidadMat,
                 'costoU' => $vals['valorURealMXN'],
+                'costoN' => $vals['valorURealMXN']*$this->factorIva,
                 'nombre' => $mat->material->referencia ." ". $mat->material->material ." ". ($mat->unidad ? $mat->unidad : "pz"),
                 'colorRgba' => $mat->color->colorRgba ?? null,
                 'unidad' => $mat->unidad,
@@ -148,7 +164,8 @@ class Ocompras extends Component
             'IdObra' => 'required', 
             'concepto' => 'required', 
             'IdProveedor' => 'required', 
-            'detalles' => 'required|array|min:1']);
+            'detalles' => 'required|array|min:1'
+        ]);
         $oc = Ocompra::updateOrCreate(
             ['id' => $this->selected_id],
             [
@@ -161,7 +178,7 @@ class Ocompras extends Component
                 'IdCondFlete' => $this->IdCondFlete,
                 'fechaHSol' => $this->fechaHSol,
                 'porDescuento' => $this->porDescuento,
-                'subtotal' => round($this->subtotal, 2),
+                'subtotal' => number_format($this->subtotal / $this->factorIva, 4, '.', ''),
                 'concepto' => mb_convert_case(mb_strtolower($this->concepto), MB_CASE_TITLE, "UTF-8"),
                 'estatus' => $this->estatus,
                 'adicionales' => $this->adicionales
@@ -172,7 +189,8 @@ class Ocompras extends Component
             $oc->ocomprasdets()->create([
                 'IdMatCosto' => $det['IdMatCosto'],
                 'cantidad' => $det['cantidad'],
-                'costoU' => $det['costoU']
+                'costoU' => $det['costoU'],
+                'costoN' => $det['costoN']
             ]);
         }
         $this->cancel();
@@ -195,6 +213,7 @@ class Ocompras extends Component
                 'IdMatCosto' => $d->IdMatCosto,
                 'cantidad' => $d->cantidad,
                 'costoU' => $d->costoU,
+                'costoN' => $d->costoU*$this->factorIva,
                 'nombre' => $m->material->referencia ." ".$m->material->material ." ". ($m->unidad ? $m->unidad : "pz"),
                 'colorRgba' => $m->color->colorRgba ?? null,
                 'unidad' => $m->unidad,
@@ -215,7 +234,7 @@ class Ocompras extends Component
     }
     public function cancel() { $this->verModalOcompra = false; $this->resetInput(); }
     private function resetInput() { 
-        $this->resetExcept([ 'selected_id', 'IdDivision','unidads','monedas',
+        $this->resetExcept([ 'selected_id', 'factorIva', 'IdDivision','unidads','monedas',
             'marcas','lineas','clases','colors','divisions','condsPago','condsFlete']);
         $this->nuevoMat = [];
         $this->nuevaEmpresa =[];

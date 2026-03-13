@@ -57,31 +57,31 @@
     <table class="tabla-full tabla-info">
         <tr>
             <td class="etiqueta text-right">Proveedor</td>
-            <td class="valor text-bold">{{ $orden->Proveedor->empresa ?? 'N/A' }}</td>
+            <td class="valor text-bold">{{ $orden->Proveedor->empresa ?? '' }}</td>
             <td class="etiqueta text-right">Estatus</td>
             <td class="valor text-bold">{{ strtoupper($orden->estatus) }}</td>
         </tr>
         <tr>
             <td class="etiqueta text-right">Obra</td>
-            <td class="valor">{{ $orden->obra->obra ?? 'N/A' }}</td>
+            <td class="valor">{{ $orden->obra->obra ?? '' }}</td>
             <td class="etiqueta text-right">Solicitó</td>
-            <td class="valor">{{ $orden->Solicito->name ?? 'N/A' }}</td>
+            <td class="valor">{{ $orden->Solicito->name ?? '' }}</td>
         </tr>
         <tr>
             <td class="etiqueta text-right">Concepto</td>
             <td class="valor">{{ $orden->concepto }}</td>
             <td class="etiqueta text-right">Teléfono</td>
-            <td class="valor">{{ $orden->Solicito->telefono ?? 'N/A' }}</td>
+            <td class="valor">{{ $orden->Solicito->telefono ?? '' }}</td>
         </tr>
         <tr>
             <td class="etiqueta text-right">Cond. Pago</td>
-            <td class="valor">{{ $condsPago[$orden->IdCondPago] ?? 'N/A' }}</td>
+            <td class="valor">{{ $condsPago[$orden->IdCondPago] ?? '' }}</td>
             <td class="etiqueta text-right">Email</td>
-            <td class="valor text-lowercase">{{ $orden->Solicito->email ?? 'N/A' }}</td>
+            <td class="valor text-lowercase">{{ $orden->Solicito->email ?? '' }}</td>
         </tr>
         <tr>
             <td class="etiqueta text-right">Cond. Flete</td>
-            <td class="valor">{{ $condsFlete[$orden->IdCondFlete] ?? 'N/A' }}</td>
+            <td class="valor">{{ $condsFlete[$orden->IdCondFlete] ?? '' }}</td>
             <td colspan="2"></td>
         </tr>
     </table>
@@ -135,10 +135,10 @@
             <td class="col-pie">
                 <span class="titulo-pie">Proveedor</span>
                 <div class="datos-texto">
-                    <strong>{{ $proveedorInfo->razonSocial ?? 'N/A' }}</strong><br>
-                    RFC: {{ $proveedorInfo->rfc ?? 'N/A' }}<br>
-                    Tel: {{ $proveedorInfo->telefono ?? 'N/A' }}<br>
-                    {{ $proveedorInfo->email ?? 'N/A' }}
+                    <strong>{{ $proveedorInfo->razonSocial ?? '' }}</strong><br>
+                    RFC: {{ $proveedorInfo->rfc ?? '' }}<br>
+                    Tel: {{ $proveedorInfo->telefono ?? '' }}<br>
+                    {{ $proveedorInfo->email ?? '' }}
                 </div>
                 @if($cuentaProv)
                 <div class="mt-2">
