@@ -21,8 +21,8 @@
                     </div>
                 </td>
                 <td class="text-end text-muted small d-none d-md-block">{{ $det['simbolo'] }}{{ number_format($det['precioOrig'], 2) }}</td>
-                <td><input type="number" step="any" wire:model.blur="detalles.{{$idx}}.costoU" class="inpSolo text-end p-1"></td>
-                <td><input type="number" step="any" wire:model.blur="detalles.{{$idx}}.costoN" class="inpSolo text-end p-1"></td>
+                <td><input type="number" wire:model.blur="detalles.{{$idx}}.costoU" onfocus="this.select()" class="inpSolo text-end p-1"></td>
+                <td><input type="number" wire:model.blur="detalles.{{$idx}}.costoN" onfocus="this.select()" class="inpSolo text-end p-1"></td>
                 <td class="text-end fw-bold text-dark">
                     ${{ number_format((float)$det['cantidad'] * (float)$det['costoN'], 2) }}
                 </td>
