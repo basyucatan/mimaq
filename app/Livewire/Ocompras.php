@@ -215,7 +215,8 @@ class Ocompras extends Component
     }
     public function cancel() { $this->verModalOcompra = false; $this->resetInput(); }
     private function resetInput() { 
-        $this->resetExcept([ 'selected_id', 'IdDivision','divisions','condsPago','condsFlete']);
+        $this->resetExcept([ 'selected_id', 'IdDivision','unidads','monedas',
+            'marcas','lineas','clases','colors','divisions','condsPago','condsFlete']);
         $this->nuevoMat = [];
         $this->nuevaEmpresa =[];
     }
