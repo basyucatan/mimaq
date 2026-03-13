@@ -105,11 +105,14 @@ return new class extends Migration
             $table->foreignId('IdCuentaProv')->nullable()->constrained('empresascuentas')->onDelete('restrict');
             $table->foreignId('IdUser')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('IdAprobo')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('IdRecibio')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('IdObra')->nullable()->constrained('obras')->nullOnDelete();
             $table->bigInteger('IdCondPago')->default(1);
             $table->bigInteger('IdCondFlete')->default(1);
             $table->dateTime('fechaHSol');
-            $table->dateTime('fechaERec')->nullable();
+            $table->dateTime('fechaRec')->nullable();
+            $table->dateTime('fechaPago')->nullable();
+            $table->dateTime('fechaComp')->nullable();
             $table->decimal('porDescuento', 4, 2)->default(0);
             $table->decimal('subtotal', 14, 2)->default(0);
             $table->string('concepto')->nullable();
