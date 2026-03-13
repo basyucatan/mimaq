@@ -115,6 +115,8 @@ return new class extends Migration
             $table->dateTime('fechaComp')->nullable();
             $table->decimal('porDescuento', 4, 2)->default(0);
             $table->decimal('subtotal', 14, 2)->default(0);
+            $table->string('docPago')->nullable();
+            $table->string('docFactura')->nullable();
             $table->string('concepto')->nullable();
             $table->enum('estatus', ['edicion', 'aprobado', 'comprado','recibido', 'completado']);
             $table->json('adicionales')->nullable();
