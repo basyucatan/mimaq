@@ -41,6 +41,8 @@ class UserSeeder extends Seeder
             'password'=>Hash::make('sandra1234'),'activo'=>true, 'IdDepto' => 10])->assignRole('Admin');
         User::create(['name'=>'Swemy', 'email'=>'swemy@gmail.com','telefono'=>'9998020084',
             'password'=>Hash::make('swemy1234'),'activo'=>true, 'IdDepto' => 10])->assignRole('Admin');
+        User::create(['name'=>'Gaby', 'email'=>'gaby@gmail.com','telefono'=>'9994762824',
+            'password'=>Hash::make('julio1234'),'activo'=>true, 'IdDepto' => 10])->assignRole('Admin');            
 
     }
 }

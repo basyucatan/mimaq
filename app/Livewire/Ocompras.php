@@ -244,7 +244,7 @@ class Ocompras extends Component
 
             })
             ->orderBy('fechaHSol','desc')
-            ->paginate(10);
+            ->paginate(12);
         return view('livewire.ocompras.view', [
             'ocompras' => $ocompras,
             'mats' => $this->filtroMats(),
