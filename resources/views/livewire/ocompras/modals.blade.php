@@ -17,7 +17,7 @@
                         </div>
                         <button wire:click="cancel" type="button" class="btn-close" aria-label="Cerrar"></button>
                     </div>
-                    <div class="cardPrin-body" style="padding: 0 20px; max-height: 450px; overflow-y: auto;">
+                    <div class="cardPrin-body" style="padding: 0 20px;">
                         @include('livewire.ocompras.modalOCompra')
                         @include('livewire.ocompras.modalElegirMats')
                         @include('livewire.ocompras.modalDetalles')                       
