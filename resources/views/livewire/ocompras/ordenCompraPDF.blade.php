@@ -156,11 +156,8 @@
         @if($orden->estatus == 'edicion')
         <tr>
             <td colspan="2" style="border: 1.5px dashed #e74c3c; background-color: #fff5f4; padding: 8px; text-align: center;">
-                <div style="color: #e74c3c; font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">
+                <div style="color: #e74c3c; font-weight: bold; font-size: 13px; text-transform: uppercase;">
                     No Autorizado !!!
-                </div>
-                <div style="color: #e74c3c; font-size: 8px; font-style: italic;">
-                    Documento en modo edición
                 </div>
             </td>
         </tr>
@@ -172,16 +169,16 @@
         @if($orden->porDescuento > 0)
         <tr>
             <td class="text-right text-bold">Desc. ({{ $orden->porDescuento }}%)</td>
-            <td class="text-right">-{{ number_format($orden->subtotal * ($orden->porDescuento / 100), 2) }}</td>
+            <td class="text-right">-{{ number_format($orden->monto_descuento, 2) }}</td>
         </tr>
         @endif
         <tr>
-            <td class="text-right text-bold">IVA ({{ $datosFac[1]['factorIva'] * 100 }}%)</td>
-            <td class="text-right">{{ number_format($orden->total * $datosFac[1]['factorIva'], 2) }}</td>
+            <td class="text-right text-bold">IVA ({{ \App\Models\Util::getArrayJS('datosFacturacion')[1]['factorIva'] * 100 }}%)</td>
+            <td class="text-right">{{ number_format($orden->monto_iva, 2) }}</td>
         </tr>
         <tr @if($orden->estatus == 'edicion') style="background-color: #e74c3c; color: white;" @else class="total-fila" @endif>
             <td class="text-right text-bold">TOTAL</td>
-            <td class="text-right text-bold">${{ number_format($orden->total * (1 + $datosFac[1]['factorIva']), 2) }}</td>
+            <td class="text-right text-bold">${{ number_format($orden->total, 2) }}</td>
         </tr>
     </table>
 </td>

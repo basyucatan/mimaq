@@ -14,7 +14,7 @@
         <tbody>
             @foreach($detalles as $idx => $det)
             <tr class="align-middle">
-                <td><input type="number" step="1" class="inpSolo" wire:model.blur="detalles.{{$idx}}.cantidad"></td>
+                <td><input type="number" step="1"  onfocus="this.select()" class="inpSolo" wire:model.blur="detalles.{{$idx}}.cantidad"></td>
                 <td>
                     <div class="d-flex gap-2">
                         <span class="fw-bold small">{{ $det['nombre'] }}</span>

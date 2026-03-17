@@ -37,6 +37,57 @@ class Ocompras extends Component
         $this->factorIva = 1+Util::getArrayJS('datosFacturacion')[1]['factorIva'];
         $this->elegirCliente($this->IdCliente, 'gas');
     }	
+    public function cambiarEstatus($id, $nuevo)
+    {
+        $compra = Ocompra::findOrFail($id);
+
+        $this->authorize('cambiarEstatus', [$compra, $nuevo]);
+
+        $compra->cambiarEstatus($nuevo);
+    }
+
+public function cerrarRecepcion($id)
+{
+    $compra = Ocompra::with('ocomprasdets')->findOrFail($id);
+
+    $this->authorize('gestionar', $compra);
+
+    $diferencias = [];
+
+    foreach ($compra->ocomprasdets as $det) {
+
+        $cantidadRec = $det->cantidadRec ?? $det->cantidad;
+        $costoURec = $det->costoURec ?? $det->costoU;
+
+        if ($cantidadRec != $det->cantidad) {
+            $diferencias[] = [
+                'IdMatCosto' => $det->IdMatCosto,
+                'tipo' => 'cantidad',
+                'pedido' => $det->cantidad,
+                'recibido' => $cantidadRec
+            ];
+        }
+
+        if ($costoURec != $det->costoU) {
+            $diferencias[] = [
+                'IdMatCosto' => $det->IdMatCosto,
+                'tipo' => 'costo',
+                'original' => $det->costoU,
+                'recibido' => $costoURec
+            ];
+        }
+    }
+
+    $adicionales = is_array($compra->adicionales)
+        ? $compra->adicionales
+        : [];
+
+    $adicionales['diferencia'] = $diferencias;
+    $adicionales['obsDiferencia'] = $this->obsDiferencia ?? null;
+
+    $compra->adicionales = $adicionales ?: null;
+    $compra->save();
+}
 
     public function elegirCliente($id, $cliente)
     {

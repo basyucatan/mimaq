@@ -118,7 +118,7 @@ return new class extends Migration
             $table->string('docPago')->nullable();
             $table->string('docFactura')->nullable();
             $table->string('concepto')->nullable();
-            $table->enum('estatus', ['edicion', 'aprobado', 'comprado','recibido', 'completado']);
+            $table->enum('estatus', ['edicion', 'aprobado', 'ordenado','recibido','cancelado']);
             $table->json('adicionales')->nullable();
             $table->timestamps();
         });  

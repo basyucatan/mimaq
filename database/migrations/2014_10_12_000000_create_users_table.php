@@ -47,6 +47,8 @@ return new class extends Migration
 };
 
 // Ejecutar una sola migracion
+//php artisan migrate
+//Si se trata de algo más específico:
 //php artisan migrate --path=database/migrations/2025_07_14_000000_create_movs.php
 //php artisan migrate:rollback --path=database/migrations/2025_07_14_000000_create_movs.php
 
