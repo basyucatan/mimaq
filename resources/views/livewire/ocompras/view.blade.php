@@ -72,6 +72,9 @@
                     <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
                         🚧<span class="fw-bold">{{ $row->Obra->obra }} 
                             ({{ explode(' ', $row->Obra->Cliente->empresa)[0] ?? '' }})</span>                        
+                        
+                    </div>
+                    <div>
                         @include('livewire.ocompras.botones')
                     </div>
                 </div>
