@@ -177,7 +177,7 @@ class Ocompras extends Component
                 'IdDivision' => $this->IdDivision,
                 'IdProveedor' => $this->IdProveedor,
                 'IdCuentaProv' => $this->IdCuentaProv,
-                'IdUser' => auth()->id(),
+                'IdUser' => $this->IdUser ?? auth()->id(),
                 'IdObra' => $this->IdObra,
                 'IdCondPago' => $this->IdCondPago,
                 'IdCondFlete' => $this->IdCondFlete,
