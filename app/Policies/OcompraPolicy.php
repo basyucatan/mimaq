@@ -8,7 +8,7 @@ class OcompraPolicy
     {
         $eSuperAdmin = $usuario->hasAnyRole(['SuperAdmin', 'Director']);
         $esAdmin = $usuario->hasRole('Admin');
-        if ($compra->subtotal > 5000) {
+        if ($compra->total > 5000) {
             return $eSuperAdmin;
         }
         return $eSuperAdmin || $esAdmin;

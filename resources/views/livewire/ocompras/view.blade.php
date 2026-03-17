@@ -61,7 +61,7 @@
                 <div class="card-body p-2">
                     <div class="d-flex justify-content-between">
                         <span class="fw-bold">#{{ str_pad($row->id, 4, '0', STR_PAD_LEFT) }}</span>
-                        <span class="fw-bold">${{ str_pad(number_format($row->total*$factorIva, 2), 4, '0', STR_PAD_LEFT) }}</span>
+                        <span class="fw-bold">${{ str_pad(number_format($row->total, 2), 4, '0', STR_PAD_LEFT) }}</span>
                         <span class="small text-muted">{{ App\Models\Util::formatFecha($row->fechaHSol,'Corta') }}</span>
                     </div>
                     <div class="fw-bold text-dark">

@@ -24,9 +24,16 @@
             </div>    
             <div class="col-6">
                 <label class="etiChico">Costo</label>
-                <input type="number" wire:model="nuevoMat.costo" class="inpChico">
+                <input type="number" wire:model="nuevoMat.costo" wire:change="calCostoDep('costo')"
+                     onfocus="this.select()" class="inpChico">
                 @error('nuevoMat.costo') <span class="text-danger">{{ $message }}</span> @enderror
             </div>  
+            <div class="col-6">
+                <label class="etiChico">Neto</label>
+                <input type="number" wire:model="nuevoMat.neto" wire:change="calCostoDep('neto')"
+                    onfocus="this.select()" class="inpChico">
+                @error('nuevoMat.neto') <span class="text-danger">{{ $message }}</span> @enderror
+            </div>              
             <div class="col-6">
                 <label class="etiChico">Moneda</label>
                 <select wire:model="nuevoMat.IdMoneda" class="inpChico">

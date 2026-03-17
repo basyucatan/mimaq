@@ -23,10 +23,11 @@ class Ocompra extends Model
     ];
     public function getTotalAttribute()
     {
+        $factorIva = 1+Util::getArrayJS('datosFacturacion')[1]['factorIva'];
         $subtotal = (float)$this->subtotal;
         $descuento = $subtotal * ((float)$this->porDescuento / 100);
         $total = $subtotal - $descuento;
-        return $total;
+        return $total*$factorIva;
     }
     public function division()
     {

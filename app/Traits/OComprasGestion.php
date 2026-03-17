@@ -72,7 +72,8 @@ trait OComprasGestion
         $this->validate([
             'nuevoMat.referencia' => 'required|unique:materials,referencia',
             'nuevoMat.material' => 'required|unique:materials,material',
-            'nuevoMat.costo' => 'required|numeric|gt:0',
+            'nuevoMat.costo' => 'required_without:nuevoMat.neto|nullable|numeric|gt:0',
+            'nuevoMat.neto' => 'required_without:nuevoMat.costo|nullable|numeric|gt:0',            
             'nuevoMat.IdMoneda' => 'required',
             'nuevoMat.IdClase' => 'required'
         ]);

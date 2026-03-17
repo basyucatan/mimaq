@@ -111,7 +111,11 @@ class Ocompras extends Component
         $this->IdCliente = null;
         $this->clientes = $this->filtroClientes();
     }
-
+    public function calCostoDep($tipo){
+        if($tipo == 'costo'){ $this->nuevoMat['neto'] = $this->nuevoMat['costo']*$this->factorIva;}
+        if($tipo == 'neto'){ $this->nuevoMat['costo'] = $this->nuevoMat['neto']/$this->factorIva;}
+        $xd=1;
+    }
     public function toggleNuevoMaterial()
     {
         $this->verNuevoMat = !$this->verNuevoMat;
@@ -125,6 +129,7 @@ class Ocompras extends Component
                 'IdClase' => 7,
                 'IdLinea' => 20,
                 'costo' => '',
+                'neto' => '',
                 'IdColor' => null
             ];
         }
@@ -178,7 +183,7 @@ class Ocompras extends Component
                 'IdCondFlete' => $this->IdCondFlete,
                 'fechaHSol' => $this->fechaHSol,
                 'porDescuento' => $this->porDescuento,
-                'subtotal' => number_format($this->subtotal / $this->factorIva, 4, '.', ''),
+                'subtotal' => number_format($this->subtotal / $this->factorIva, 5, '.', ''),
                 'concepto' => mb_convert_case(mb_strtolower($this->concepto), MB_CASE_TITLE, "UTF-8"),
                 'estatus' => $this->estatus,
                 'adicionales' => $this->adicionales
@@ -206,7 +211,9 @@ class Ocompras extends Component
         $this->fill($oc->toArray());
         $this->keyWordProv = $oc->Proveedor->empresa ?? '';
         $this->IdCliente = $oc->obra->IdEmpresa ?? null;
-        $this->keyWordCte = $oc->obra->empresa->empresa ?? '';
+        $cliente = $oc->obra->Cliente->empresa ?? '';
+        $this->elegirCliente($this->IdCliente, $cliente);
+        $this->IdObra = $oc->IdObra;
         foreach ($oc->ocomprasdets as $d) {
             $m = $d->materialscosto;
             $this->detalles[] = [
@@ -235,7 +242,7 @@ class Ocompras extends Component
     public function cancel() { $this->verModalOcompra = false; $this->resetInput(); }
     private function resetInput() { 
         $this->resetExcept([ 'selected_id', 'factorIva', 'IdDivision','unidads','monedas',
-            'marcas','lineas','clases','colors','divisions','condsPago','condsFlete']);
+            'obras','marcas','lineas','clases','colors','divisions','condsPago','condsFlete']);
         $this->nuevoMat = [];
         $this->nuevaEmpresa =[];
     }
