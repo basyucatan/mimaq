@@ -32,7 +32,22 @@ html, body {
     background: var(--Blanco);color: var(--Negro);
     /* font-size: 16px; */
 }
-
+.pagination { margin-bottom: 0; gap: 2px; }
+    .page-link {
+        padding: 0.375rem 0.75rem;
+        color: #333;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        font-size: 0.85rem;
+        border-radius: 6px !important; /* Bordes redondeados individuales */
+    }
+    .page-item.active .page-link {
+        background-color: #212529; /* Color oscuro como tu header */
+        border-color: #212529;
+        color: white;
+    }
+    .page-link:hover { background-color: #f8f9fa; color: #000; }
+    
 .tabbar-container input[type="radio"]{display:none}
 .tabbar-container .tabbar {
     position: fixed;
@@ -426,21 +441,19 @@ html, body {
 .filtrosChip { background:#eef2ff; border-radius:999px; padding:.28rem .45rem; font-size:.78rem; color:#1f2d6b; }
 
 .tab-container {
+    background: var(--claro1);
+    border: 1px solid var(--primarioC);
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
-    min-height: 200px;
-    border: 1px solid var(--primarioC);
-    border-radius: 8px;
-    overflow: hidden;
-    background: var(--claro1);
-    box-shadow: 0 4px 6px rgba(0,0,0,.1);
 }
 
 .tab-headers {
     display: flex;
     flex-shrink: 0;
-    border-bottom: 2px solid var(--secundarioC); /* Grosor para unir con la activa */
-    padding: 5px 5px 0; /* Espacio para que respiren las pestañas */
+    border-bottom: 2px solid var(--secundarioC);
+    padding: 5px 5px 0;
     background: var(--grisO);
 }
 

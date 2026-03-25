@@ -46,47 +46,45 @@ class Ocompra extends Model
     public function cambiarEstatus($nuevo)
     {
         $permitidos = $this->puedePasarA($nuevo);
-
         if (!in_array($nuevo, $permitidos)) {
             throw new \Exception("Transición no permitida");
         }
-
         $this->estatus = $nuevo;
-
         if ($nuevo === self::EST_APROBADO) {
             $this->IdAprobo = auth()->id();
         }
-
         if ($nuevo === self::EST_RECIBIDO && !$this->fechaRec) {
             $this->fechaRec = now();
             $this->IdRecibio = auth()->id();
         }
-
         $this->save();
     }
 
-// Dentro de App\Models\Ocompra.php
-
-public function getMontoDescuentoAttribute()
+public function getDescuentoAttribute()
 {
     return (float)$this->subtotal * ((float)$this->porDescuento / 100);
 }
 
-public function getBaseImponibleAttribute()
+public function getBaseAttribute()
 {
-    return (float)$this->subtotal - $this->monto_descuento;
+    return (float)$this->subtotal - $this->descuento;
 }
-
+public function getTasaIvaAttribute()
+{
+    static $tIva = null;
+    if ($tIva === null) {
+        $tIva = (float)Util::getArrayJS('datosFacturacion')[1]['factorIva'];
+    }
+    return $tIva;
+}
 public function getMontoIvaAttribute()
 {
-    $factorIva = Util::getArrayJS('datosFacturacion')[1]['factorIva'];
-    return $this->base_imponible * (float)$factorIva;
+    return $this->base * $this->tasaIva;
 }
 
 public function getTotalAttribute()
 {
-    // El total es la base con descuento + el IVA de esa base
-    return $this->base_imponible + $this->monto_iva;
+    return $this->base+$this->montoIva;
 }
 
     public function division()
@@ -108,7 +106,10 @@ public function getTotalAttribute()
     {
         return $this->hasOne('App\Models\User', 'id', 'IdUser');
     }
-
+    public function Recibio()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'IdRecibio');
+    }
     public function ocomprasdets()
     {
         return $this->hasMany('App\Models\Ocomprasdet', 'IdOCompra', 'id');

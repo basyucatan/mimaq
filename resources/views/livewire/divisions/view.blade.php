@@ -13,8 +13,8 @@
                     <div>
                         <button class="bot botVerde" wire:click="create" title="Nuevo Division">
                             <i class="bi bi-file-earmark-plus"></i>
-                        </button>                   
-                    </div>                
+                        </button>
+                    </div>
                 </div>
                 <div class="cardPrin-body">
                     @include('livewire.divisions.modals')
@@ -22,28 +22,21 @@
                         <table class="table tabBase ch">
                             <thead>
                                 <tr>
-								<th>Idnegocio</th>
-								<th>Division</th>
-<th>Acciones</th></tr>
+                                    <th>Division</th>
+                                    <th>Acciones</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 @forelse($divisions as $row)
                                     <tr>
-                                        
-								<td>{{ $row->IdNegocio }}</td>
-								<td>{{ $row->division }}</td>
+
+                                        <td>{{ $row->division }}</td>
 
                                         <td width="60">
                                             <div class="d-flex justify-content-around align-items-center gap-1">
-                                                <button wire:click="edit({{ $row->id }})"
-                                                        class="bot botNaranja"
-                                                        title="Editar">
+                                                <button wire:click="edit({{ $row->id }})" class="bot botNaranja"
+                                                    title="Editar">
                                                     <i class="bi-pencil-square"></i>
-                                                </button>
-                                                <button wire:click="destroy({{ $row->id }})"
-                                                        class="bot botRojo"
-                                                        onclick="confirm('¿Estás seguro de eliminar este registro?') || event.stopImmediatePropagation()">
-                                                    <i class="bi-trash3-fill"></i>
                                                 </button>
                                             </div>
                                         </td>

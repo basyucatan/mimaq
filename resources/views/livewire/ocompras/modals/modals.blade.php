@@ -11,16 +11,16 @@
                                     TOTAL (MXN)
                                 </small>
                                 <span class="h5 m-0 fw-bold text-success">
-                                    ${{ number_format($this->total, 2) }}
+                                    ${{ number_format($this->subtotal * $factorIva, 2) }}
                                 </span>
                             </div>
                         </div>
                         <button wire:click="cancel" type="button" class="btn-close" aria-label="Cerrar"></button>
                     </div>
                     <div class="cardPrin-body" style="padding: 0 20px;">
-                        @include('livewire.ocompras.modalOCompra')
-                        @include('livewire.ocompras.modalElegirMats')
-                        @include('livewire.ocompras.modalDetalles')                       
+                        @include('livewire.ocompras.modals.oCompra')
+                        @include('livewire.ocompras.modals.elegirMats')
+                        @include('livewire.ocompras.modals.detalles')                       
                     </div>
                     <div class="cardPrin-footer mt-3 d-flex justify-content-end gap-2">
                         <a wire:click.prevent="cancel()" class="bot botNegro">Cerrar</a>

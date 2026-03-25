@@ -17,7 +17,7 @@ class Tablaherrajes extends Component
 	protected $paginationTheme = 'bootstrap';
     public $marcas = [],$lineas = [], $modelos = [];
     public $verModalTablaherraje=false, $selected_id, $keyWord, $tabActivo = 'tab1',
-    $IdMarca, $IdLinea, $tablaHerraje, $fichaTecnica, $posicion;
+    $IdMarca, $IdLinea, $tablaHerraje, $fichaTecnica;
 
 	public function updatingKeyWord()
 	{
@@ -42,7 +42,7 @@ class Tablaherrajes extends Component
                             });
                     });
             })
-            ->get();
+            ->paginate(6);
     }
 
 
@@ -123,7 +123,6 @@ public function render()
 			['id' => $this->selected_id],
 			[
 				'IdLinea' => $this-> IdLinea,
-				'posicion' => $this->posicion ?: null,
 				'tablaHerraje' => $this-> tablaHerraje,
 				'fichaTecnica' => $this-> fichaTecnica
 			]
@@ -138,4 +137,8 @@ public function render()
             Tablaherraje::where('id', $id)->delete();
         }
     }
+    public function paginationView()
+    {
+        return 'livewire.paginacionBase';
+    }    
 }

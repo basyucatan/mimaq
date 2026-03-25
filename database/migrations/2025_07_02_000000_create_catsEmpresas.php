@@ -6,17 +6,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up()
-    {         
-        Schema::create('divscajas', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('IdDivision')->nullable()->constrained('divisions')->onDelete('cascade');
-            $table->string('caja',50);
-        });         
-        Schema::create('divsbodegas', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('IdDivision')->nullable()->constrained('divisions')->onDelete('cascade');
-            $table->string('bodega',50);
-        });                      
+    {                              
         Schema::create('empresas', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('IdNegocio')->nullable()->constrained('negocios')->onDelete('cascade');

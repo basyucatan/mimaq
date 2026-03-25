@@ -8,8 +8,8 @@
         </div>
     </div>
     <div class="cardPrin-body">
-        @include('livewire.ocompras.modals')
-        {{-- Vista para PC --}}
+        @include('livewire.ocompras.modals.modals')
+        @include('livewire.ocompras.modals.destino')        
         <div class="table-responsive d-none d-md-block">
             <table class="table tabBase ch">
                 <thead>
@@ -23,7 +23,7 @@
                         <th>Concepto</th>
                         <th>Total</th>
                         <th class="text-center">Estatus</th>
-                        <th width="100">Acciones</th>
+                        <th width="200">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,47 +34,39 @@
                         <td class="text-center small">{{ \Carbon\Carbon::parse($row->fechaHSol)->format('d/m/y') }}</td>
                         <td>{{ Str::limit($row->obra->Cliente->empresa, 20) }}</td>
                         <td>{{ Str::limit($row->obra->obra, 30) }}</td>
-                        <td>
-                            <div class="fw-bold">{{ $row->proveedor->empresa ?? 'N/A' }}</div>
-                        </td>
+                        <td><div class="fw-bold">{{ $row->proveedor->empresa ?? 'N/A' }}</div></td>
                         <td>{{ Str::limit($row->concepto, 50) }}</td>
-                        <td>${{ number_format($row->total*$factorIva, 2) }}</td>
+                        <td>${{ number_format($row->subtotal * $factorIva, 2) }}</td>
                         <td class="text-center">
-                            <span class="badge {{ $row->estatus == 'aprobado' ? 'bg-success' : 'bg-warning text-dark' }} text-uppercase">
+                            <span class="badge {{ $row->estatus == 'edicion' ? 'bg-warning text-dark' : ($row->estatus == 'cancelado' ? 'bg-danger' : 'bg-success') }} text-uppercase">
                                 {{ $row->estatus }}
                             </span>
                         </td>
-                        <td>
-                            @include('livewire.ocompras.botones')
-                        </td>
+                        <td>@include('livewire.ocompras.botones')</td>
                     </tr>
                     @empty
-                    <tr><td colspan="6" class="text-center text-muted">No hay registros</td></tr>
+                    <tr><td colspan="10" class="text-center text-muted">No hay registros</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        {{-- Vista para Móvil --}}
         <div class="d-md-none">
             @forelse($ocompras as $row)
-            <div class="card border mb-2 shadow-sm border-start border-4 {{ $row->estatus == 'aprobado' ? 'border-success' : 'border-warning' }}">
+            <div class="card border mb-2 shadow-sm border-start border-4 {{ $row->estatus == 'edicion' ? 'border-warning' : ($row->estatus == 'cancelado' ? 'border-danger' : 'border-success') }}">
                 <div class="card-body p-2">
                     <div class="d-flex justify-content-between">
                         <span class="fw-bold">#{{ str_pad($row->id, 4, '0', STR_PAD_LEFT) }}</span>
-                        <span class="fw-bold">${{ str_pad(number_format($row->total, 2), 4, '0', STR_PAD_LEFT) }}</span>
+                        <span class="fw-bold">${{ number_format($row->subtotal*$factorIva, 2) }}</span>
                         <span class="small text-muted">{{ App\Models\Util::formatFecha($row->fechaHSol,'Corta') }}</span>
                     </div>
                     <div class="fw-bold text-dark">
-                        {{ $row->Solicito->name ?? '' }}➡️
-                        {{ $row->proveedor->empresa ?? '' }}
+                        {{ $row->Solicito->name ?? '' }}➡️{{ $row->proveedor->empresa ?? '' }}
                     </div>
-                    <span class="small text-muted">{{ $row->concepto}}</span>
-                    <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
-                        🚧<span class="fw-bold">{{ $row->Obra->obra }} 
-                            ({{ explode(' ', $row->Obra->Cliente->empresa)[0] ?? '' }})</span>                        
-                        
-                    </div>
+                    <span class="small text-muted">{{ $row->concepto }}</span>
                     <div>
+                        🚧<span class="fw-bold">{{ $row->Obra->obra }} ({{ explode(' ', $row->Obra->Cliente->empresa)[0] ?? '' }})</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1 pt-2 border-top">
                         @include('livewire.ocompras.botones')
                     </div>
                 </div>

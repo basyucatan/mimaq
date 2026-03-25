@@ -80,24 +80,6 @@ return new class extends Migration
             $table->json('adicionales')->nullable();
             $table->timestamps();
         });             
-        Schema::create('movinventarios', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('IdUserOri')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('IdUserDes')->nullable()->constrained('users')->nullOnDelete();
-            $table->enum('tipo', [
-                'Compra', 'InvFisico', 'Corte', 'Traspaso', 
-                'Ensamble', 'Entrega', 'Devolucion']);
-            $table->foreignId('IdMatCosto')->constrained('materialscostos')->onDelete('cascade');
-            $table->foreignId('IdDeptoOri')->nullable()->constrained('deptos')->nullOnDelete();
-            $table->foreignId('IdDeptoDes')->nullable()->constrained('deptos')->nullOnDelete();
-            $table->dateTime('fechaH')->useCurrent();
-            $table->decimal('cantidad', 12, 3)->default(0);
-            $table->decimal('valorU', 12, 3)->default(0);
-            $table->string('dimensiones')->nullable();
-            $table->json('adicionales')->nullable();
-            $table->timestamps();
-            $table->index(['IdMatCosto', 'IdDeptoOri', 'IdDeptoDes', 'fechaH']);
-        });
         Schema::create('ocompras', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('IdDivision')->constrained('divisions')->onDelete('restrict');
@@ -128,17 +110,25 @@ return new class extends Migration
             $table->foreignId('IdMatCosto')->constrained('materialscostos')->onDelete('restrict');
             $table->float('cantidad')->nullable()->default(0);
             $table->decimal('costoU', 12, 5)->nullable()->default(0);
+            $table->decimal('cantidadRec',10,4)->nullable();
+            $table->decimal('costoURec', 12, 5)->nullable();            
         });                  
+        Schema::create('presucortes', function (Blueprint $table) {
+            $table->id();
+            $table->enum('tipo', ['perfil', 'vidrio'])->default('perfil');
+            $table->foreignId('IdPresupuesto')->constrained('presupuestos')->cascadeOnDelete();
+            $table->foreignId('IdMaterialCosto')->nullable()->constrained('materialscostos')->nullOnDelete();
+            $table->decimal('cantidad', 12, 3)->default(0);
+            $table->json('adicionales')->nullable();
+        });   
         Schema::create('traspasos', function (Blueprint $table) {
             $table->id();
-            $table->enum('tipo', [
-                'Compra', 'InvFisico', 'Corte', 'Traspaso', 
-                'Ensamble', 'Entrega', 'Devolucion']);
+            $table->enum('tipo', ['Compra', 'InvFisico', 'Corte', 'Traspaso', 'Ensamble', 'Entrega', 'Devolucion']);
             $table->foreignId('IdUserOri')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('IdUserDes')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('IdDeptoOri')->nullable()->constrained('deptos')->nullOnDelete();
-            $table->foreignId('IdDeptoDes')->nullable()->constrained('deptos')->nullOnDelete();
-            $table->dateTime('fecha')->useCurrent();
+            $table->foreignId('IdBodegaOri')->nullable()->constrained('divsbodegas')->nullOnDelete();
+            $table->foreignId('IdBodegaDes')->nullable()->constrained('divsbodegas')->nullOnDelete();
+            $table->dateTime('fechaH')->useCurrent();
             $table->enum('estatus', ['Abierto', 'Cerrado', 'Cancelado'])->default('Abierto');
             $table->json('adicionales')->nullable();
             $table->timestamps();
@@ -148,20 +138,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('IdTraspaso')->constrained('traspasos')->cascadeOnDelete();
             $table->foreignId('IdMatCosto')->nullable()->constrained('materialscostos')->nullOnDelete();
-            $table->decimal('cantidad', 12, 3)->default(0);
-            $table->decimal('valorU', 12, 3)->default(0);
+            $table->decimal('cantidad', 14, 5)->default(0);
+            $table->decimal('valorU', 14, 5)->default(0);
             $table->string('dimensiones', 100)->nullable();
             $table->json('adicionales')->nullable();
-        });
-        Schema::create('presucortes', function (Blueprint $table) {
-            $table->id();
-            $table->enum('tipo', ['perfil', 'vidrio'])->default('perfil');
-            $table->foreignId('IdPresupuesto')->constrained('presupuestos')->cascadeOnDelete();
-            $table->foreignId('IdMaterialCosto')->nullable()->constrained('materialscostos')->nullOnDelete();
-            $table->decimal('cantidad', 12, 3)->default(0);
-            $table->json('adicionales')->nullable();
-        });        
-
+        });              
     }
     public function down()
     {
@@ -169,9 +150,9 @@ return new class extends Migration
         Schema::dropIfExists('modelosPre');
         Schema::dropIfExists('modelopremats');
         Schema::dropIfExists('movinventarios');        
+        Schema::dropIfExists('presucortes');        
         Schema::dropIfExists('traspasos');        
         Schema::dropIfExists('traspasosdets');        
-        Schema::dropIfExists('presucortes');        
     }
 };
 

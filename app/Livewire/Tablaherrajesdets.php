@@ -6,7 +6,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Tablaherrajesdet;
 use Livewire\Attributes\Computed;
-use App\Models\Util;
 use Illuminate\Support\Facades\DB;
 
 class Tablaherrajesdets extends Component
@@ -17,8 +16,11 @@ class Tablaherrajesdets extends Component
     public $verModalTablaherrajesdet=false, $selected_id, $keyWord, 
 	$IdTablaHerraje, $cantidad, $IdMaterial, $rangoMenor, $tablaHerraje,
 	$rangoMayor, $factorExtra, $adicionales, $material;
-	protected $listeners = ['agregarMaterial' => 'agregarMaterial'];
-
+	protected $listeners = ['IdArbolAgregar' => 'agregarMaterial'];
+	public function updatingKeyWord()
+	{
+		$this->resetPage();
+	}
     #[Computed]
 	public function filteredTablaherrajesdets()
 	{
@@ -31,7 +33,7 @@ class Tablaherrajesdets extends Component
 						->orWhere('rangoMayor', 'LIKE', $keyWord)
 						->orWhere('adicionales', 'LIKE', $keyWord);
 			})
-			->get();
+			->paginate(18);
 	}
 
 	public function mount(){
@@ -68,7 +70,8 @@ class Tablaherrajesdets extends Component
 	public function resetInput(){
 		$this->resetExcept('IdTablaHerraje', 'tablaHerraje');
 	}
-	public function agregarMaterial($id){
+	public function agregarMaterial($tipo, $id){
+		if ($tipo != 'Material') return;
 		$this->resetInput();
 		$this->IdMaterial = $id;
 		$this->material = DB::table('materials')->find($id);
@@ -108,11 +111,14 @@ class Tablaherrajesdets extends Component
         $this->resetInput();
         $this->verModalTablaherrajesdet = false;
     }
-
     public function destroy($id)
     {
         if ($id) {
             Tablaherrajesdet::where('id', $id)->delete();
         }
     }
+    public function paginationView()
+    {
+        return 'livewire.paginacionBase';
+    }	
 }

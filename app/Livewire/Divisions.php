@@ -14,7 +14,7 @@ class Divisions extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalDivision=false, $selected_id, $keyWord, $IdNegocio, $division;
+    public $verModalDivision=false, $selected_id, $keyWord, $IdNegocio=1, $division;
 	
     public function updatedKeyWord()
 	{
@@ -48,7 +48,7 @@ class Divisions extends Component
 
     public function resetInput()
     {
-        $this->reset();
+        $this->resetExcept('IdNegocio');
     }
 
     public function edit($id)

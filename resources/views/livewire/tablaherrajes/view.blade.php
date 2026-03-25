@@ -1,14 +1,24 @@
-@section('title', __('Tablaherrajes'))
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-4" style="height: 80vh; overflow-y: hidden;">
-                    @include('livewire.tablaherrajes.arboles')
+<div class="container-fluid p-2" style="height: 100vh; overflow: hidden;">
+    <div class="cardPrin d-flex flex-column" style="height: 88vh; overflow: hidden;">
+        <div class="cardPrin-header flex-shrink-0 d-flex justify-content-between align-items-center py-2 px-3">
+            <span class="fw-bold text-white">Tablas de herraje</span>
+        </div>
+        <div class="cardPrin-body flex-grow-1" style="overflow-y: auto;">
+            <div class="row g-0 m-0">
+                <div class="col-12 col-md-4 border-end h-md-100">
+                    <div class="cardSec-body p-0" style="overflow: hidden;">
+                        <div style="overflow-y: auto;">
+                            @include('livewire.tablaherrajes.tablas')
+                        </div>
+                        
+                        <div style="overflow-y: auto;">
+                            <livewire:arbolclasesmats />
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-12 col-md-8 border-end">
                     <div class="cardSec-body">
-                        <div id="catalogo-center" style="width: 100%; height: 80vh; overflow-y: hidden;">
+                        <div style="max-height: 100%; overflow: hidden;">
                             <div class="tab-container">
                                 <div class="tab-headers">
                                     <button wire:click="$set('tabActivo', 'tab1')"
@@ -18,7 +28,7 @@
                                         class="tab-button {{ $tabActivo === 'tab2' ? 'active' : '' }}"
                                         data-tab="tab2">Dependencias</button>
                                 </div>
-                                <div style="overflow-y: none; height: 85vh; min-height: 250px; padding-bottom: 3rem;">
+                                <div style="height: 100%; min-height: 25vh;">
                                     <div class="tab-content-wrapper">
                                         <div id="tab1" class="tab-content {{ $tabActivo === 'tab1' ? 'active' : '' }}">
                                             @livewire('tablaherrajesdets', ['IdTablaHerraje' => $selected_id], 
@@ -32,8 +42,7 @@
                             </div>
                         </div>                           
                     </div>
-                </div>
-            </div>            
+                </div>                
         </div>
     </div>
 </div>

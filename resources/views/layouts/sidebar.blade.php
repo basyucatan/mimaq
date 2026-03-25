@@ -28,20 +28,32 @@
                 </form>
             @endguest
         </div>
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title">Menú</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        <div class="offcanvas offcanvas-start cardSec" tabindex="-1" id="offcanvasNavbar">
+            <div class="cardSec-header">
+                <span class="fs-5">Menú</span>
+                <button type="button" class="bot botNegro" data-bs-dismiss="offcanvas">X</button>
             </div>
-            <div class="offcanvas-body">
+            <div class="cardSec-body">
                 <ul class="navbar-nav pe-3">
                     <li class="nav-item custom-dropdown-item">
-                        <a href="#" class="nav-link menu-trigger">💸 Compras</a>
-                        <ul class="submenu d-none list-unstyled ps-3 border-start">
+                        <a href="#" class="nav-link menu-trigger">💸 Admin</a>
+                        <ul class="submenu d-none list-unstyled ps-2 border-start">
                             <li><a href="{{ url('/ocompras') }}" class="nav-link small">🛒 Orden de Compra</a></li>
-                        </ul>
+                            <li><a href="{{ url('/recepcionoc') }}" class="nav-link small">📥 Recepción OC</a></li>
+                            <li class="border-top"><a href="{{ url('/kardex') }}" class="nav-link small">🗂️ Kardex</a></li>
+                        </ul>                        
                     </li>
                 </ul>
+                <ul class="navbar-nav pe-3">
+                    <a href="#" class="nav-link menu-trigger">🧱 Materiales</a>
+                    <ul class="submenu d-none list-unstyled ps-3 border-start">
+                        <li><a href="{{ url('/fichamats') }}" class="nav-link small">🗂️ Ficha del Material</a></li>
+                        <li><a href="{{ url('/clases') }}" class="nav-link small">🛠️ TablaHerrajes</a></li>
+                        <li><a href="{{ url('/clases') }}" class="nav-link small">🧩 Clases</a></li>
+                        <li><a href="{{ url('/marcas') }}" class="nav-link small">🧿 Marcas</a></li>
+                        <li><a href="{{ url('/lineas') }}" class="nav-link small">📁 Líneas</a></li>
+                    </ul>
+                </ul>  
                 <ul class="navbar-nav pe-3">
                     <li class="nav-item custom-dropdown-item">
                         <a href="#" class="nav-link menu-trigger">🔗 Catálogos</a>
@@ -54,27 +66,22 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link menu-trigger">🧱 Materiales</a>
-                                <ul class="submenu d-none list-unstyled ps-3 border-start">
-                                    <li><a href="{{ url('/fichamats') }}" class="nav-link small">🗂️ Ficha del Material</a></li>
-                                    <li><a href="{{ url('/tablaherrajes') }}" class="nav-link small">🛠️ TablaHerrajes</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
                                 <a href="#" class="nav-link menu-trigger">🧰 Configuración</a>
                                 <ul class="submenu d-none list-unstyled ps-3 border-start">
                                     <li><a href="{{ url('/negocios') }}" class="nav-link small">🏠 Mi Empresa</a></li>
                                     <li><a href="{{ url('/divisions') }}" class="nav-link small">📌 Divisiones</a></li>
-                                    <li><a href="{{ url('/catalogos') }}" class="nav-link small">🧩 Básicos</a></li>
+                                    <li><a href="{{ url('/divsbodegas') }}" class="nav-link small">📌 Bodegas</a></li>
+                                    <li><a href="{{ url('/unidads') }}" class="nav-link small">🚚 Unidades</a></li>
                                     <li><a href="{{ url('/colors') }}" class="nav-link small">🌈 Colores</a></li>
+                                    <li><a href="{{ url('/colorables') }}" class="nav-link small">🖌️ Colorables</a>
                                     <li><a href="{{ url('/vidrios') }}" class="nav-link small">🪟 Vidrios</a></li>
-                                    <li><a href="{{ url('/clases') }}" class="nav-link small">🧩 Clases</a></li>
                                     <li><a href="{{ url('/users') }}" class="nav-link small">🧑‍💻 Usuarios</a></li>
+                                    <li><a href="{{ url('/catalogos') }}" class="nav-link small">🧩 Básicos</a></li>
                                 </ul>
                             </li>
                         </ul>
                     </li>
-                </ul>
+                </ul>                              
             </div>
         </div>
     </div>

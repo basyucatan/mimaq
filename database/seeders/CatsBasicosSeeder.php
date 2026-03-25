@@ -23,11 +23,11 @@ $monedas = array(
 DB::table('monedas')->insert($monedas);
 
 $colorables = array(
-  array('id' => '1','colorable' => 'Aluminio'),
-  array('id' => '2','colorable' => 'PVC'),
-  array('id' => '3','colorable' => 'Acero'),
-  array('id' => '4','colorable' => 'Vidrio'),
-  array('id' => '5','colorable' => 'Herraje')
+  array('id' => '1','colorable' => 'Aluminio','tipo' => 'Perfil'),
+  array('id' => '2','colorable' => 'PVC','tipo' => 'Perfil'),
+  array('id' => '3','colorable' => 'Acero','tipo' => 'Perfil'),
+  array('id' => '4','colorable' => 'Vidrio','tipo' => 'Vidrio'),
+  array('id' => '5','colorable' => 'Herraje','tipo' => 'Herraje')
 );
 DB::table('colorables')->insert($colorables);
 

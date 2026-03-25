@@ -12,7 +12,6 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 class Util
 {
-    //Formato moneda
     public static function Dinero($Numero, $centavos = 2)
     {
         $num = '$ ' . number_format(abs($Numero), $centavos);
@@ -49,6 +48,15 @@ class Util
                     $meses[$carbonDate->month - 1]
                 );
                 break;
+            case 'DDMMM HH:mm': //29Feb 22:55
+                $fecha = sprintf(
+                    "%d%s %02d:%02d",
+                    $carbonDate->day,
+                    $meses[$carbonDate->month - 1],
+                    $carbonDate->hour,
+                    $carbonDate->minute
+                );
+            break;                
             case 'hm': //23:31	
                 $fecha = sprintf(
                     "%02d:%02d",
@@ -247,5 +255,14 @@ class Util
         return $nombreFoto;
     }
 
+    public static function colorTexto($rgba)
+    {
+        if (!preg_match('/rgba?\((\d+),\s*(\d+),\s*(\d+)/', $rgba, $m)) {return '#000000';}
+        preg_match('/rgba?\((\d+),\s*(\d+),\s*(\d+)/', $rgba, $m);
+        $r = $m[1] ?? 255;
+        $g = $m[2] ?? 255;
+        $b = $m[3] ?? 255;
+        return (0.299*$r + 0.587*$g + 0.114*$b) > 186 ? '#000000' : '#ffffff';
+    }
 
 }

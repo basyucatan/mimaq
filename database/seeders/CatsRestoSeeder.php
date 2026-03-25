@@ -8,17 +8,6 @@ class CatsRestoSeeder extends Seeder
 {
     public function run()
     {
-// Empresas
-$negocios = array(array('id' => '1','negocio' => 'Emerita','razonSocial' => 'PRACTISUR S.A. DE C.V.', 'logo' => 'logo.png'));
-DB::table('negocios')->insert($negocios);
-
-$divisions = array(
-  array('id' => '1', 'IdNegocio'=>1, 'division' => 'Ventanas'),
-  array('id' => '2', 'IdNegocio'=>1, 'division' => 'Cortinas'),
-  array('id' => '3', 'IdNegocio'=>1, 'division' => 'Herrería')
-);
-DB::table('divisions')->insert($divisions);
-
 $empresas = array(
   array('id' => 1, 'IdNegocio' => 1, 'tipo' => 'cliente', 'empresa' => 'GASTOS', 'razonSocial' => 'GASTOS GENERAL', 'rfc' => 'GAS', 'direccion' => '', 'gmaps' => null, 'telefono' => '9991234567', 'email' => 'gastos@test.com', 'adicionales' => null),
   array('id' => 2, 'IdNegocio' => 1, 'tipo' => 'proveedor', 'empresa' => 'PROV. FRANCIS', 'razonSocial' => 'FRANCIS MARTIN VALLE CHAN', 'rfc' => 'VACF791204MF5', 'direccion' => 'Calle 100 #125, Centro, Mérida', 'gmaps' => null, 'telefono' => '9991234569', 'email' => 'francis@test.com', 'adicionales' => null),

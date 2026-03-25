@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -19,11 +20,21 @@ return new class extends Migration
             $table->id();
             $table->foreignId('IdNegocio')->constrained('negocios')->onDelete('cascade');
             $table->string('division',50);
+        });        
+        Schema::create('divscajas', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('IdDivision')->nullable()->constrained('divisions')->onDelete('cascade');
+            $table->string('caja',50);
         });         
+        Schema::create('divsbodegas', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('IdDivision')->nullable()->constrained('divisions')->onDelete('cascade');
+            $table->string('bodega',50);
+        });          
         Schema::create('deptos', function (Blueprint $table) {
             $table->id();
             $table->string('depto',20);
-        });                  
+        });                          
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdDivision')->nullable()->constrained('divisions')->nullOnDelete();
@@ -36,7 +47,34 @@ return new class extends Migration
             $table->json('adicionales')->nullable();
             $table->rememberToken();
         });
+        $this->insertarDatos();
     }
+    private function insertarDatos(): void
+    {
+        DB::table('negocios')->insert([
+            ['id' => 1, 'negocio' => 'Emerita', 'razonSocial' => 'PRACTISUR S.A. DE C.V.', 'logo' => 'logo.png']
+        ]);
+        DB::table('divisions')->insert([
+            ['id' => 1, 'IdNegocio' => 1, 'division' => 'Ventanas'],
+            ['id' => 2, 'IdNegocio' => 1, 'division' => 'Cortinas'],
+            ['id' => 3, 'IdNegocio' => 1, 'division' => 'Herrería']
+        ]);
+        DB::table('divsbodegas')->insert([
+            ['id' => 1, 'IdDivision' => 1, 'bodega' => 'Ventanas'],
+            ['id' => 2, 'IdDivision' => 1, 'bodega' => 'Cortinas']
+        ]);
+        DB::table('deptos')->insert([
+            ['id' => 1, 'depto' => 'Compras'],
+            ['id' => 2, 'depto' => 'AlmacenMP'],
+            ['id' => 3, 'depto' => 'Retales'],
+            ['id' => 4, 'depto' => 'Corte'],
+            ['id' => 5, 'depto' => 'Ensamble'],
+            ['id' => 6, 'depto' => 'AlmacénPT'],
+            ['id' => 7, 'depto' => 'Instalación'],
+            ['id' => 8, 'depto' => 'Entregas'],
+            ['id' => 9, 'depto' => 'Administración'],
+        ]);
+    }    
     public function down(): void
     {
         Schema::dropIfExists('negocios');

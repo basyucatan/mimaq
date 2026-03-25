@@ -16,13 +16,6 @@
                                     <input type="hidden" wire:model="selected_id">
                                 @endif
                                 <div class="col-md-6">
-                                    <label for="IdNegocio" class="etiBase">Idnegocio</label>
-                                    <input wire:model="IdNegocio" type="text" class="inpBase" id="IdNegocio">
-                                    @error('IdNegocio')
-                                        <span class="error text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
                                     <label for="division" class="etiBase">Division</label>
                                     <input wire:model="division" type="text" class="inpBase" id="division">
                                     @error('division')

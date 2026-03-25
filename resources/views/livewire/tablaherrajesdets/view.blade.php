@@ -2,19 +2,22 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="cardSec" style="overflow-y: auto; height: 62vh; min-height: 200px;">
-                <div class="cardSec-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>Herrajes para {{$tablaHerraje}}</div>
-                        <div>
-                            <input wire:model.live="keyWord" type="text" class="form-control" placeholder="Buscar">
-                        </div>
+            <div class="cardSec">
+                <div class="cardSec-header d-flex gap-2">
+                    <div>
+                        Herrajes para <span class="badge bg-primary">{{$tablaHerraje}}</span>
+                    </div>
+                    <div>
+                        <input wire:model.live="keyWord" type="text" class="form-control" placeholder="Buscar">
                     </div>
                 </div>
                 <div class="cardSec-body">
                     @include('livewire.tablaherrajesdets.modals')
                     <div class="table-responsive">
-                        <table class="table tabBase">
+                        <div class="float-end">
+                            {{ $tablaherrajesdets->links() }}
+                        </div>                           
+                        <table class="table tabBase ch">
                             <thead>
                                 <tr>
                                     <th>Cantidad</th>
@@ -50,9 +53,9 @@
                                     <tr>
                                         <td colspan="100%" class="text-center">No se encontraron datos.</td>
                                     </tr>
-                                @endforelse
+                                @endforelse                              
                             </tbody>
-                        </table>
+                        </table>                       
                     </div>
                 </div>
             </div>

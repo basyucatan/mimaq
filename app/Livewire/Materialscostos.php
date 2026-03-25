@@ -4,12 +4,10 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Materialscosto;
+use App\Models\{Util, Material, Materialscosto, Movinventario};
 use Livewire\Attributes\Computed;
-use App\Models\Util;
 use Illuminate\Support\Facades\DB;
 use App\Services\TcpdfService;
-use Illuminate\Validation\Rule;
 
 class Materialscostos extends Component
 {
@@ -469,7 +467,7 @@ class Materialscostos extends Component
             return;
         }
         if ($material->Clase->clase == 'Perfiles') {
-            $IdColorable = $material->Linea->IdColorablePerfil ?? null;
+            $IdColorable = $material->Linea->IdColorable ?? null;
         }
         if ($material->Clase->clase == 'Herrajes') {
             $IdColorable = 5;
@@ -513,11 +511,8 @@ class Materialscostos extends Component
         } else {
             $err = "✅ Se generaron $nuevos costos satisfactoriamente!";
         }
-        $this->dispatch('sweetalert', \App\Helpers\SweetAlert::mensaje(
-            $err,
-            1500,
-            str_starts_with($err, '✅') ? 'success' : 'warning'
-        ));
+        $this->dispatch('sweetalert', \App\Helpers\SweetAlert::mensaje($err,1500,
+            str_starts_with($err, '✅') ? 'success' : 'warning'));
     }
 
     public function cargarArrays()
@@ -538,7 +533,7 @@ class Materialscostos extends Component
         if (!$material) return;
         $IdColorable = null;
         if ($material->Clase->clase == 'Perfiles') {
-            $IdColorable = $material->Linea->IdColorablePerfil ?? null;
+            $IdColorable = $material->Linea->IdColorable ?? null;
         }
         if ($material->Clase->clase == 'Herrajes') {
             $IdColorable = 5;
@@ -556,12 +551,12 @@ class Materialscostos extends Component
     {
         if (!$this->IdMaterial) return;
         $this->cargarArrays();
-        $material = \App\Models\Material::Where('id', $this->IdMaterial)->first();
+        $material = Material::Where('id', $this->IdMaterial)->first();
         switch ($material->Clase->clase) {
             case 'Perfiles':
-                if ($material->Linea->IdColorablePerfil) {
+                if ($material->Linea->IdColorable) {
                     $this->colors = DB::table('colors')
-                        ->where('IdColorable', $material->Linea->Colorable->id)->pluck('color', 'id');
+                        ->where('IdColorable', $material->Linea->IdColorable)->pluck('color', 'id');
                 }
                 break;
             case 'Vidrios':
@@ -607,6 +602,13 @@ public function resetInput()
     {
         $this->selected_id = $id;
         $this->fill(Materialscosto::findOrFail($id)->toArray());
+        $material = Material::findOrFail($this->IdMaterial);
+        $IdColorable = $material->Linea->IdColorable ?? null;
+        if($IdColorable){
+            $this->colors = DB::table('colors')
+                ->where('IdColorable', $IdColorable)
+                ->pluck('color', 'id');
+        }
         $this->verModalMaterialscosto = true;
     }
     public function create()
@@ -648,8 +650,14 @@ public function resetInput()
 
     public function destroy($id)
     {
-        if ($id) {
-            Materialscosto::where('id', $id)->delete();
+        if (!$id) return;
+        try {
+            DB::table('materialscostos')->where('id', $id)->delete();
+        } catch (\Throwable $e) {
+            $this->dispatch('sweetalert', \App\Helpers\SweetAlert::mensaje(
+                'Error '.$e->getCode(), 1000, 'error'
+            ));
+
         }
-    }
+    } 
 }

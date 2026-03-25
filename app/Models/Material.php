@@ -33,7 +33,7 @@ public function getFotoUrlAttribute()
         return $this->hasOne('App\Models\Linea', 'id', 'IdLinea');
     }
     
-    public function materialscostos()
+    public function Materialscostos()
     {
         return $this->hasMany('App\Models\Materialscosto', 'IdMaterial', 'id');
     }

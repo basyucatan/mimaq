@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +31,7 @@ Route::middleware("auth")->group(function () {
 
     Route::view('negocios', 'livewire.negocios.index');
     Route::view('divisions', 'livewire.divisions.index');
+    Route::view('divsbodegas', 'livewire.divsbodegas.index');
     Route::view('obras', 'livewire.obras.index');
     Route::view('empresas', 'livewire.empresas.index');
     Route::view('clientes', 'livewire.empresas.index', ['tipo' => 'cliente']);
@@ -52,6 +54,7 @@ Route::middleware("auth")->group(function () {
     Route::view('guias', 'livewire.guias.index');
 
     Route::view('ocompras', 'livewire.ocompras.index');
+    Route::view('recepcionoc', 'livewire.ocompras.recepcion.index');
     Route::view('ocomprasdets', 'livewire.ocompras.index');
 
     Route::view('kardex', 'livewire.kardex.index');

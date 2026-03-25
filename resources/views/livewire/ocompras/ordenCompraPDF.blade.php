@@ -24,23 +24,27 @@
         .total-fila { background-color: #f2f2f2; font-size: 13px; }
         .contenedor-totales { position: relative; }
         .marca-agua {
-            position: absolute;
-            top: 50%;
+            position: fixed;
+            top: 20%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-15deg);
-            color: rgba(231, 76, 60, 0.4);
-            font-size: 24px;
+            font-size: 3cm;
+            line-height: 7cm;
+            color: rgba(231, 76, 60, 0.15);
             font-weight: bold;
-            border: 3px solid rgba(231, 76, 60, 0.4);
-            padding: 5px 10px;
-            text-transform: uppercase;
-            white-space: nowrap;
+            text-align: center;
+            width: 100%;
             z-index: 1000;
             pointer-events: none;
         }
     </style>
 </head>
 <body>
+    @if($orden->estatus == 'cancelado')
+        <div class="marca-agua">
+            CANCELADO
+        </div>
+    @endif    
     <table class="tabla-full">
         <tr>
             <td style="width: 20%; vertical-align: middle;">
@@ -151,37 +155,37 @@
                 </div>
                 @endif
             </td>
-<td class="col-pie" style="width: 34%;">
-    <table class="tabla-full tabla-totales">
-        @if($orden->estatus == 'edicion')
-        <tr>
-            <td colspan="2" style="border: 1.5px dashed #e74c3c; background-color: #fff5f4; padding: 8px; text-align: center;">
-                <div style="color: #e74c3c; font-weight: bold; font-size: 13px; text-transform: uppercase;">
-                    No Autorizado !!!
-                </div>
+            <td class="col-pie" style="width: 34%;">
+                <table class="tabla-full tabla-totales">
+                    @if($orden->estatus == 'edicion')
+                    <tr>
+                        <td colspan="2" style="border: 1.5px dashed #e74c3c; background-color: #fff5f4; padding: 8px; text-align: center;">
+                            <div style="color: #e74c3c; font-weight: bold; font-size: 13px; text-transform: uppercase;">
+                                No Autorizado !!!
+                            </div>
+                        </td>
+                    </tr>
+                    @endif
+                    <tr>
+                        <td class="text-right text-bold" style="background-color: #f8f9fa;">Subtotal</td>
+                        <td class="text-right" style="width: 45%;">{{ number_format($orden->subtotal, 2) }}</td>
+                    </tr>
+                    @if($orden->porDescuento > 0)
+                    <tr>
+                        <td class="text-right text-bold">Desc. ({{ $orden->porDescuento }}%)</td>
+                        <td class="text-right">-{{ number_format($orden->monto_descuento, 2) }}</td>
+                    </tr>
+                    @endif
+                    <tr>
+                        <td class="text-right text-bold">IVA ({{ \App\Models\Util::getArrayJS('datosFacturacion')[1]['factorIva'] * 100 }}%)</td>
+                        <td class="text-right">{{ number_format($orden->monto_iva, 2) }}</td>
+                    </tr>
+                    <tr @if($orden->estatus == 'edicion') style="background-color: #e74c3c; color: white;" @else class="total-fila" @endif>
+                        <td class="text-right text-bold">TOTAL</td>
+                        <td class="text-right text-bold">${{ number_format($orden->total, 2) }}</td>
+                    </tr>
+                </table>
             </td>
-        </tr>
-        @endif
-        <tr>
-            <td class="text-right text-bold" style="background-color: #f8f9fa;">Subtotal</td>
-            <td class="text-right" style="width: 45%;">{{ number_format($orden->subtotal, 2) }}</td>
-        </tr>
-        @if($orden->porDescuento > 0)
-        <tr>
-            <td class="text-right text-bold">Desc. ({{ $orden->porDescuento }}%)</td>
-            <td class="text-right">-{{ number_format($orden->monto_descuento, 2) }}</td>
-        </tr>
-        @endif
-        <tr>
-            <td class="text-right text-bold">IVA ({{ \App\Models\Util::getArrayJS('datosFacturacion')[1]['factorIva'] * 100 }}%)</td>
-            <td class="text-right">{{ number_format($orden->monto_iva, 2) }}</td>
-        </tr>
-        <tr @if($orden->estatus == 'edicion') style="background-color: #e74c3c; color: white;" @else class="total-fila" @endif>
-            <td class="text-right text-bold">TOTAL</td>
-            <td class="text-right text-bold">${{ number_format($orden->total, 2) }}</td>
-        </tr>
-    </table>
-</td>
         </tr>
     </table>
 </body>

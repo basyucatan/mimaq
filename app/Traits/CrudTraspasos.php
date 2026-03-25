@@ -146,37 +146,36 @@ trait CrudTraspasos
     {
         $traspaso = $this->elegir($id);
         if (!$traspaso->traspasosdets->count()) {
-                $this->dispatch('sweetalert', \App\Helpers\SweetAlert::mensaje(
-                    'No hay movimientos a operar',
-                    1500,
-                    'warning'
-                ));
-                return;
+            $this->dispatch('sweetalert', \App\Helpers\SweetAlert::mensaje(
+                'No hay movimientos a operar',
+                1500,
+                'warning'
+            ));
+            return;
         }
         $traspaso->estatus = 'Cerrado';
         $traspaso->IdUserDes = Auth::id();
         $traspaso->save();
-       
         foreach ($traspaso->traspasosdets as $det) {
             $adicionales = [];
-            if ($traspaso->tipo == 'Compra'){
-                $adicionales['IdPresupuesto'] = $traspaso->adicionales['IdPresupuesto'];
+            if ($traspaso->tipo == 'Compra') {
+                $adicionales['IdPresupuesto'] = $traspaso->adicionales['IdPresupuesto'] ?? 0;
             }
             MovInventario::create([
-                'IdUserOri'   => $traspaso->IdUserOri,
-                'IdUserDes'   => $traspaso->IdUserDes,
-                'tipo'        => $traspaso->tipo,
-                'IdMatCosto'  => $det->IdMatCosto,
-                'IdDeptoOri'    => $traspaso->IdDeptoOri,
-                'IdDeptoDes'   => $traspaso->IdDeptoDes,
-                'fechaH'      => now()->tz('America/Mexico_City'),
-                'cantidad'    => $det->cantidad,
-                'valorU'      => $det->valorU ?? 0,
+                'IdUserOri' => $traspaso->IdUserOri,
+                'IdUserDes' => $traspaso->IdUserDes,
+                'tipo' => $traspaso->tipo,
+                'IdMatCosto' => $det->IdMatCosto,
+                'IdDeptoOri' => $traspaso->IdDeptoOri,
+                'IdDeptoDes' => $traspaso->IdDeptoDes,
+                'fechaH' => now()->tz('America/Mexico_City'),
+                'cantidad' => $det->cantidad,
+                'valorU' => $det->valorU ?? 0,
                 'dimensiones' => $det->dimensiones ?? null,
                 'adicionales' => $adicionales,
             ]);
         }
-        $this->dispatch('cambioEstatus',$traspaso->id, 'Cerrado');
+        $this->dispatch('cambioEstatus', $traspaso->id, 'Cerrado');
     }
 
     public function devolver($id)

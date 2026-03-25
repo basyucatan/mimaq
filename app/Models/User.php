@@ -16,12 +16,12 @@ class User extends Authenticatable
 
     protected $table = 'users';
 
-    protected $fillable = ['name','telefono','IdDepto','email','password'];   
+    protected $fillable = ['name','telefono','IdBodega','IdDepto','email','password'];   
      
     public function Depto()
     {
         return $this->hasOne('App\Models\Depto', 'id', 'IdDepto');
-    }
+    }   
     public function Division()
     {
         return $this->hasOne('App\Models\Division', 'id', 'IdDivision');

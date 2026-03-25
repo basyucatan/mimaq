@@ -12,9 +12,9 @@ return new class extends Migration
             });         
         Schema::create('unidads', function (Blueprint $table) {
             $table->id();
-            $table->enum('tipo', ['pieza','longitud','area','peso','tiempo', 'otro']);
             $table->string('unidad', 50);
             $table->string('abreviatura', 10);
+            $table->enum('tipo', ['pieza','longitud','area','peso','tiempo', 'otro']);
             $table->double('factorConversion')->default(1);
         });     
 
@@ -29,6 +29,7 @@ return new class extends Migration
         Schema::create('colorables', function (Blueprint $table) { //'Aluminio', 'PVC', 'Acero',
             $table->id();
             $table->string('colorable',30);
+            // $table->enum('tipo', ['Perfil', 'Vidrio', 'Herraje', 'Otro']);
         });         
         Schema::create('colors', function (Blueprint $table) {
             $table->id();

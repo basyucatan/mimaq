@@ -10,12 +10,17 @@ class OcompraPolicy
         if ($compra->estatus !== Ocompra::EST_EDICION) {
             return false;
         }
-        $eSuperAdmin = $usuario->hasAnyRole(['SuperAdmin','Director']);
+        $nivelActual = $usuario->roles->first()->nivel ?? 999;
+        $nivelSolicitante = $compra->Solicito->roles->first()->nivel ?? 999;
+        if ($nivelActual > $nivelSolicitante) {
+            return false;
+        }
+        $esSuperAdmin = $usuario->hasAnyRole(['SuperAdmin', 'Director']);
         $esAdmin = $usuario->hasRole('Admin');
         if ($compra->total > 5000) {
-            return $eSuperAdmin;
+            return $esSuperAdmin;
         }
-        return $eSuperAdmin || $esAdmin;
+        return $esSuperAdmin || $esAdmin;
     }
 
     public function gestionar(User $usuario, Ocompra $compra)
@@ -23,6 +28,11 @@ class OcompraPolicy
         if ($compra->estatus === Ocompra::EST_CANCELADO) {
             return false;
         }
+        return true;
+    }
+
+    public function eliminar(User $usuario, Ocompra $compra)
+    {
         $esDueno = $usuario->id === $compra->IdUser;
         $nivelUsuario = $usuario->roles->first()->nivel ?? 999;
         $nivelCreador = $compra->Solicito->roles->first()->nivel ?? 999;
@@ -32,7 +42,15 @@ class OcompraPolicy
 
     public function cambiarEstatus(User $usuario, Ocompra $compra, $nuevo)
     {
-        if (!$this->gestionar($usuario, $compra)) {return false;}
+        if ($nuevo === Ocompra::EST_APROBADO) {
+            return $this->validarAprobacion($usuario, $compra);
+        }
+        if ($nuevo === Ocompra::EST_CANCELADO) {
+            return $this->eliminar($usuario, $compra);
+        }
+        if (!$this->gestionar($usuario, $compra)) {
+            return false;
+        }
         return in_array($nuevo, $compra->puedePasarA($nuevo));
     }
 }
