@@ -145,7 +145,7 @@ html, body {
     border-radius: 1rem;
     max-height: calc(100dvh - 40px); 
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 .cardPrin-body {
     background: var(--claro1);
@@ -155,6 +155,7 @@ html, body {
     flex-grow: 1;
     min-height: 0; 
     -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
 }
 .cardPrin-body > div:last-child {
     padding-bottom: env(safe-area-inset-bottom);
