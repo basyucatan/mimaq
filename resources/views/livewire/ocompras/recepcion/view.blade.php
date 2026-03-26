@@ -11,6 +11,9 @@
         @include('livewire.ocompras.modals.modals')
         @include('livewire.ocompras.modals.destino')
         <div class="table-responsive d-none d-md-block">
+            <div class="float-end">
+                {{ $ocompras->links() }}
+            </div>            
             <table class="table tabBase ch">
                 <thead>
                     <tr>
@@ -74,9 +77,6 @@
             @empty
             <div class="text-center p-3 text-muted">Sin registros</div>
             @endforelse
-        </div>
-        <div class="p-2">
-            {{ $ocompras->links() }}
         </div>
     </div>
 </div>

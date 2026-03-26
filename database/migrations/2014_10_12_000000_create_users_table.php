@@ -61,8 +61,9 @@ return new class extends Migration
         ]);
         DB::table('divsbodegas')->insert([
             ['id' => 1, 'IdDivision' => 1, 'bodega' => 'Ventanas'],
-            ['id' => 2, 'IdDivision' => 1, 'bodega' => 'Cortinas']
-        ]);
+            ['id' => 2, 'IdDivision' => 2, 'bodega' => 'Cortinas'],
+            ['id' => 3, 'IdDivision' => 3, 'bodega' => 'Herrería']
+        ]);         
         DB::table('deptos')->insert([
             ['id' => 1, 'depto' => 'Compras'],
             ['id' => 2, 'depto' => 'AlmacenMP'],

@@ -233,4 +233,8 @@ abstract class OcomprasBase extends Component
         $oc = Ocompra::find($id);
         if ($oc && $oc->estatus === 'edicion') { $oc->delete(); }
     }     
+    public function paginationView()
+    {
+        return 'livewire.paginacionBase';
+    }    
 }

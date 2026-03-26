@@ -11,6 +11,9 @@
         @include('livewire.ocompras.modals.modals')
         @include('livewire.ocompras.modals.destino')        
         <div class="table-responsive d-none d-md-block">
+            <div class="float-end">
+                {{ $ocompras->links() }}
+            </div>            
             <table class="table tabBase ch">
                 <thead>
                     <tr>
@@ -51,6 +54,9 @@
             </table>
         </div>
         <div class="d-md-none">
+            <div class="d-flex justify-content-end align-items-center mb-2">
+                {{ $ocompras->links() }}
+            </div>         
             @forelse($ocompras as $row)
             <div class="card border mb-2 shadow-sm border-start border-4 {{ $row->estatus == 'edicion' ? 'border-warning' : ($row->estatus == 'cancelado' ? 'border-danger' : 'border-success') }}">
                 <div class="card-body p-2">
@@ -74,9 +80,6 @@
             @empty
             <div class="text-center p-3 text-muted">Sin registros</div>
             @endforelse
-        </div>
-        <div class="p-2">
-            {{ $ocompras->links() }}
         </div>
     </div>
 </div>

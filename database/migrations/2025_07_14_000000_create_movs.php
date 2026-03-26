@@ -7,6 +7,24 @@ return new class extends Migration
 {
     public function up()
     {        
+        Schema::create('movinventarios', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('IdUserOri')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('IdUserDes')->nullable()->constrained('users')->nullOnDelete();
+            $table->enum('tipo', ['Compra','InvFisico','Corte','Traspaso','Ensamble','Entrega','Devolucion']);
+            $table->foreignId('IdBodega')->constrained('divsbodegas')->cascadeOnDelete();
+            $table->foreignId('IdDepto')->constrained('deptos')->cascadeOnDelete();
+            $table->foreignId('IdBodegaOri')->nullable()->constrained('divsbodegas')->nullOnDelete();
+            $table->foreignId('IdDeptoOri')->nullable()->constrained('deptos')->nullOnDelete();
+            $table->foreignId('IdMatCosto')->constrained('materialscostos')->cascadeOnDelete();
+            $table->dateTime('fechaH')->useCurrent();
+            $table->decimal('cantidad',12,4)->default(0);
+            $table->decimal('valorU',12,5)->default(0);
+            $table->string('dimensiones')->nullable();
+            $table->json('adicionales')->nullable();
+            $table->timestamps();
+            $table->index(['IdMatCosto','IdBodega','IdDepto','fechaH'],'idx_kardex');
+        });        
         Schema::create('presupuestos', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('IdCliente')->constrained('empresas')->onDelete('restrict');

@@ -29,7 +29,7 @@ return new class extends Migration
         Schema::create('colorables', function (Blueprint $table) { //'Aluminio', 'PVC', 'Acero',
             $table->id();
             $table->string('colorable',30);
-            // $table->enum('tipo', ['Perfil', 'Vidrio', 'Herraje', 'Otro']);
+            $table->enum('tipo', ['Perfil', 'Vidrio', 'Herraje', 'Otro'])->default('Perfil');
         });         
         Schema::create('colors', function (Blueprint $table) {
             $table->id();

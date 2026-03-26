@@ -6,6 +6,7 @@
 
 /node_modules/
 /public/storage
+public/oc/
 /storage/*.key
 
 /storage/logs/*.log
