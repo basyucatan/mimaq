@@ -6,6 +6,6 @@ class Ocompras extends OcomprasBase
 {
     public function render()
     {
-        return $this->aplicarRender(['edicion', 'aprobado', 'cancelado'], 'livewire.ocompras.view');
+        return $this->aplicarRender(['edicion', 'aprobado'], 'livewire.ocompras.view');
     }
 }
