@@ -71,7 +71,7 @@ abstract class OcomprasBase extends Component
                     });
             })
             ->orderBy('id', 'desc')
-            ->paginate(15);
+            ->paginate(4);
         return view($nombreVista, [
             'ocompras' => $ocompras,
             'mats' => $this->filtroMats()
