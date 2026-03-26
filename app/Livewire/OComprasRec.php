@@ -1,6 +1,6 @@
 <?php
 namespace App\Livewire;
-class OComprasRec extends OcomprasBase
+class Ocomprasrec extends OcomprasBase
 {
     public function render()
     {

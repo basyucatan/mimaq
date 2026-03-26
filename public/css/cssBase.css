@@ -154,7 +154,7 @@ html, body {
     flex-grow: 1;
     min-height: 0; 
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 30px;
+    padding-bottom: 40px;
 }
 .cardPrin-body > div:last-child {
     padding-bottom: env(safe-area-inset-bottom);
@@ -211,7 +211,6 @@ html, body {
     flex-grow: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-bottom: 30px;
 }
 
 .cardSec-footer {
