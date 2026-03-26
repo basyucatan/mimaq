@@ -17,7 +17,7 @@
         @endif
         @can('eliminar', $row)
             @if(!in_array($row->estatus, ['recibido', 'cancelado']))
-                <button wire:click="cambiarEstatus({{ $row->id }}, 'cancelado')" class="bot botRojo" onclick="confirm('¿Cancelar esta orden?') || event.stopImmediatePropagation()">✖</button>
+                <button wire:click="cambiarEstatus({{ $row->id }}, 'cancelado')" class="bot botRojo" onclick="confirm('¿Cancelar esta orden?') || event.stopImmediatePropagation()">X</button>
             @endif
         @endcan
         @if($row->estatus !== 'recibido')
