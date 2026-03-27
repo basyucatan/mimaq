@@ -171,7 +171,7 @@ abstract class OcomprasBase extends Component
                 [
                     'IdDivision' => $this->IdDivision,
                     'IdProveedor' => $this->IdProveedor,
-                    'IdCuentaProv' => $this->IdCuentaProv,
+                    'IdCuentaProv' => $this->IdCuentaProv ?: null,
                     'IdUser' => $this->IdUser ?? auth()->id(),
                     'IdObra' => $this->IdObra,
                     'IdCondPago' => $this->IdCondPago,
