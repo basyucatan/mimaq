@@ -82,7 +82,7 @@
                 </select>
             </div>
             <div class="card-footer">
-                <button wire:click="crearMaterial" type="button" class="bot botVerde">Guardar</button>
+                <button wire:click="crearMaterial" type="button" class="bot botVerde">Guardar y Agregar</button>
             </div>            
         </div>                                        
     </div>
