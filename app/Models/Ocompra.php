@@ -26,9 +26,7 @@ class Ocompra extends Model
     ];
     public function anularAprobacion()
     {
-        if ($this->estatus === self::EST_APROBADO) {
-            $this->estatus = self::EST_EDICION;
-        }
+        $this->estatus = self::EST_EDICION;
     }
     public function puedePasarA($nuevo)
     {

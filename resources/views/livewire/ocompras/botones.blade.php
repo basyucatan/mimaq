@@ -34,16 +34,16 @@
             <button wire:click="mostrarDetalles({{ $row->id }})" class="bot {{ 
                 $row->estatus !== 'edicion' ? 'botGris' : 'botBlanco' }}"
                 @if($row->estatus === 'aprobado') 
-                    onclick="confirm('Esta orden ya está aprobada. Editarla anulará la '
-                        +'aprobación actual. ¿Continuar?') || event.stopImmediatePropagation()" 
+                    onclick="confirm('Esta orden ya está aprobada. Editar su importe anulará la '
+                        +'aprobación actual. ¿Deseas continuar?') || event.stopImmediatePropagation()" 
                 @endif>
                 🖌️
             </button>
             <button wire:click="edit({{ $row->id }})" 
                 class="bot {{ $row->estatus !== 'edicion' ? 'botGris' : 'botNaranja' }}"
                 @if($row->estatus === 'aprobado') 
-                    onclick="confirm('Esta orden ya está aprobada. Editarla anulará la '
-                        +'aprobación actual. ¿Continuar?') || event.stopImmediatePropagation()" 
+                    onclick="confirm('Esta orden ya está aprobada. Editar su importe anulará la '
+                        +'aprobación actual. ¿Deseas continuar?') || event.stopImmediatePropagation()" 
                 @endif>
                 <i class="bi bi-pencil"></i>
             </button>

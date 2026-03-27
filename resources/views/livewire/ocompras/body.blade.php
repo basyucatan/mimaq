@@ -38,7 +38,7 @@
                         <td>{{ Str::limit($row->obra->obra, 30) }}</td>
                         <td><div class="fw-bold">{{ $row->proveedor->empresa ?? 'N/A' }}</div></td>
                         <td>{{ Str::limit($row->concepto, 50) }}</td>
-                        <td>${{ number_format($row->subtotal * $factorIva, 2) }}</td>
+                        <td class="text-end fw-bold">{{ number_format($row->subtotal * $factorIva, 2) }}</td>
                         <td class="text-center">
                             <span class="badge {{ $clase }} text-uppercase">
                                 {{ $row->estatus }}

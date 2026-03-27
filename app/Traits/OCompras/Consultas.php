@@ -63,11 +63,13 @@ trait Consultas
     }
     public function elegirProv($id, $empresa)
     {
-        $this->IdProveedor = $id;
+        $this->IdProveedor = $id;       
         $this->keyWordProv = $empresa;
         $this->provs = [];
+        $this->cuentas = DB::table('empresascuentas')->where('IdEmpresa', $id)
+            ->select(DB::raw("CONCAT(banco, ' - ', cuentaClabe) as cuenta"), 'id')
+            ->pluck('cuenta', 'id');           
         $this->IdCuentaProv = null;
-        $this->cuentas = DB::table('empresascuentas')->where('IdEmpresa', $id)->select(DB::raw("CONCAT(banco, ' - ', cuenta) as cuenta"), 'id')->pluck('cuenta', 'id');           
     } 
     public function calCostoDep($tipo)
     {

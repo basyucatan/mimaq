@@ -70,7 +70,7 @@ class Empresas extends Component
         $this->validate([
             'tipo' => 'required',
             'empresa' => 'required',
-            'telefono' => 'required|numeric|digits:10'
+            'telefono' => 'nullable|numeric|digits:10'
             ]);
         Empresa::updateOrCreate(
             ['id' => $this->selected_id],

@@ -12,8 +12,8 @@ return new class extends Migration
             $table->foreignId('IdNegocio')->nullable()->constrained('negocios')->onDelete('cascade');
             $table->enum('tipo', ['cliente', 'proveedor', 'ambos']);
             $table->string('empresa',100);
-            $table->string('razonSocial',200);
-            $table->string('rfc',20);
+            $table->string('razonSocial',200)->nullable();
+            $table->string('rfc',20)->nullable();
             $table->string('direccion',200)->nullable();
             $table->string('gmaps',250)->nullable();
             $table->string('telefono',100)->unique()->nullable();

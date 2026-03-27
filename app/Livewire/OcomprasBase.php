@@ -43,7 +43,7 @@ abstract class OcomprasBase extends Component
         $this->divisions = Util::getArray('divisions');
         $this->bodegas = Util::getArray('divsbodegas', 'bodega');
         $this->deptos = Util::getArray('deptos');        
-        $this->cuentas = Util::getArray('empresascuentas', 'cuenta');
+        $this->cuentas = Util::getArray('empresascuentas', 'cuentaClabe');
         $this->clientes = DB::table('empresas')->where('tipo', 'cliente')->pluck('empresa', 'id');
         $this->condsPago = Util::getArrayJS('condicionesPago', 'condicion');
         $this->condsFlete = Util::getArrayJS('condicionesFlete', 'condicion');
@@ -126,6 +126,9 @@ abstract class OcomprasBase extends Component
             ->where('IdEmpresa', $this->IdCliente)
             ->where('estatus', 'vigente')
             ->pluck('obra', 'id');
+        $this->cuentas = DB::table('empresascuentas')->where('IdEmpresa', $id)
+            ->select(DB::raw("CONCAT(banco, ' - ', cuentaClabe) as cuenta"), 'id')
+            ->pluck('cuenta', 'id');       
         $this->keyWordCte = $oc->obra->Cliente->empresa ?? '';
         $this->detalles = [];
         foreach ($oc->ocomprasdets as $d) {
@@ -156,6 +159,13 @@ abstract class OcomprasBase extends Component
             'detalles' => 'required|array|min:1'
         ]);
         DB::transaction(function () {
+            if ($this->selected_id) {
+                $oc = Ocompra::find($this->selected_id);
+                if ($oc && round((float)$oc->porDescuento, 2) < round((float)$this->porDescuento, 2)) {
+                    $oc->anularAprobacion();
+                    $this->estatus = $oc->estatus;
+                }
+            }
             $oc = Ocompra::updateOrCreate(
                 ['id' => $this->selected_id],
                 [
@@ -190,6 +200,7 @@ abstract class OcomprasBase extends Component
 
     private function procesarDetalles($oc)
     {
+        $subtotalAnterior = (float)$oc->subtotal;
         $idsEnFormulario = collect($this->detalles)->pluck('IdMatCosto')->toArray();
         $oc->ocomprasdets()->whereNotIn('IdMatCosto', $idsEnFormulario)->delete();
         foreach ($this->detalles as $det) {
@@ -215,9 +226,14 @@ abstract class OcomprasBase extends Component
                 );
             }
         }
-        $oc->anularAprobacion();
-        $this->calcSubtotal($oc);
-        $oc->save();
+        $nuevoSubtotal = (float)$oc->ocomprasdets()->get()->sum(function ($det) {
+            return (float)$det->cantidad * (float)$det->costoU;
+        });
+        if (round($subtotalAnterior, 2) < round($nuevoSubtotal, 2) ) {
+            $oc->anularAprobacion();
+            $oc->subtotal = $nuevoSubtotal;
+            $oc->save();
+        }
     }
 
     private function calcSubtotal($oc)
