@@ -11,7 +11,8 @@ abstract class OcomprasBase extends Component
 {
     use WithPagination, Consultas, Acciones;
 
-    public $verModalOcompra = false, $verModalDestino = false, $verNuevoMat = false, $verNuevaObra = false;
+    public $verDetalles = false, $verModalOcompra = false, $verModalDestino = false, 
+        $verNuevoMat = false, $verNuevaObra = false;
     public $selected_id, $oCompra, $IdCompraPen, $IdBodega=1, $IdDepto=1;
     public $keyWord, $keyWordMat, $keyWordProv, $keyWordCte;
     public $IdDivision, $IdObra, $IdProveedor, $IdCuentaProv;
@@ -167,43 +168,65 @@ abstract class OcomprasBase extends Component
                     'IdCondFlete' => $this->IdCondFlete,
                     'fechaHSol' => $this->fechaHSol,
                     'porDescuento' => $this->porDescuento,
-                    'subtotal' => (float) $this->subtotal,
                     'concepto' => mb_convert_case($this->concepto, MB_CASE_TITLE, "UTF-8"),
                     'estatus' => $this->estatus,
                 ]
             );
-            $idsEnFormulario = collect($this->detalles)->pluck('IdMatCosto')->toArray();
-            $oc->ocomprasdets()->whereNotIn('IdMatCosto', $idsEnFormulario)->delete();
-            foreach ($this->detalles as $det) {
-                $datos = [
-                    'IdMatCosto' => $det['IdMatCosto']
-                ];
-                if ($oc->estatus === 'ordenado' || $oc->estatus === 'recibido') {
-                    $registroExistente = $oc->ocomprasdets()->where('IdMatCosto', $det['IdMatCosto'])->first();
-                    $updateData = [
-                        'cantidadRec' => $det['cantidadRec'] ?? $det['cantidad'],
-                        'costoURec'   => $det['costoURec'] ?? $det['costoU']
-                    ];
-                    if (!$registroExistente) {
-                        $updateData['cantidad'] = 0;
-                        $updateData['costoU'] = 0;
-                    }
-                    $oc->ocomprasdets()->updateOrCreate(['IdMatCosto' => $det['IdMatCosto']], $updateData);
-                } else {
-                    $oc->ocomprasdets()->updateOrCreate(
-                        ['IdMatCosto' => $det['IdMatCosto']],
-                        [
-                            'cantidad' => $det['cantidad'],
-                            'costoU'   => $det['costoU'],
-                            'costoN'   => $det['costoN']
-                        ]
-                    );
-                }
-            }
+            $this->procesarDetalles($oc);
         });
         $this->cancel();
     }
+    public function guardarDetalles()
+    {
+        $this->validate([
+            'detalles' => 'required|array|min:1'
+        ]);
+        DB::transaction(function () {
+            $oc = Ocompra::findOrFail($this->oCompra->id);
+            $this->procesarDetalles($oc);
+        });
+        $this->cerrarDetalles();
+    }
 
+    private function procesarDetalles($oc)
+    {
+        $idsEnFormulario = collect($this->detalles)->pluck('IdMatCosto')->toArray();
+        $oc->ocomprasdets()->whereNotIn('IdMatCosto', $idsEnFormulario)->delete();
+        foreach ($this->detalles as $det) {
+            if ($oc->estatus === 'ordenado' || $oc->estatus === 'recibido') {
+                $registroExistente = $oc->ocomprasdets()->where('IdMatCosto', $det['IdMatCosto'])->first();
+                $updateData = [
+                    'cantidadRec' => $det['cantidadRec'] ?? $det['cantidad'],
+                    'costoURec' => $det['costoURec'] ?? $det['costoU']
+                ];
+                if (!$registroExistente) {
+                    $updateData['cantidad'] = 0;
+                    $updateData['costoU'] = 0;
+                }
+                $oc->ocomprasdets()->updateOrCreate(['IdMatCosto' => $det['IdMatCosto']], $updateData);
+            } else {
+                $oc->ocomprasdets()->updateOrCreate(
+                    ['IdMatCosto' => $det['IdMatCosto']],
+                    [
+                        'cantidad' => $det['cantidad'],
+                        'costoU' => $det['costoU'],
+                        'costoN' => $det['costoN']
+                    ]
+                );
+            }
+        }
+        $oc->anularAprobacion();
+        $this->calcSubtotal($oc);
+        $oc->save();
+    }
+
+    private function calcSubtotal($oc)
+    {
+        $nuevoSubtotal = $oc->ocomprasdets()->get()->sum(function ($det) {
+            return (float)$det->cantidad * (float)$det->costoU;
+        });
+        $oc->update(['subtotal' => $nuevoSubtotal]);
+    }
     public function removeDetalle($index)
     {
         unset($this->detalles[$index]);

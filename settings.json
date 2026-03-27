@@ -3,8 +3,7 @@
     {"id":1,"condicion":"Contado"},
     {"id":2,"condicion":"Crédito"},
     {"id":3,"condicion":"Crédito 30 días"},
-    {"id":4,"condicion":"Crédito 60 días"},
-    {"id":6,"condicion":"sfdasdfs"}
+    {"id":4,"condicion":"Crédito 60 días"}
   ],
 
   "condicionesFlete":[
@@ -20,5 +19,8 @@
 
   "cajero":[
     {"id":1,"cajero":"Gabriela Valdez","email":"cortinasdeaceroemerita@gmail.com","telefono":"999-986-11-18"}
-  ]
+  ],
+
+"parametros":[{"id":1,"umbralOC":5000,"margenUtil":30}]
+
 }

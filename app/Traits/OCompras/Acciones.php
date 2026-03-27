@@ -34,33 +34,38 @@ public function confirmarDestino()
     $this->dispatch('sweetalert', \App\Helpers\SweetAlert::mensaje('Esperando Recepción', 1000, 'success'));
 }
 
-    public function elegirMaterial($id)
-    {
-        $mat = Materialscosto::with(['material.Unidad', 'color', 'Moneda', 'barra'])->find($id);
-        if ($mat) {
-            $idExiste = collect($this->detalles)->search(fn($det) => $det['IdMatCosto'] == $id);
-            if ($idExiste !== false) {
-                $this->detalles[$idExiste]['cantidad'] += (float)$this->cantidadMat;
-            } else {
-                $vals = $mat->valores;
-                $this->detalles[] = [
-                    'IdMatCosto' => $mat->id, 
-                    'cantidad' => $this->cantidadMat, 
-                    'cantidadRec' => $this->cantidadMat, 
-                    'costoU' => $vals['valorURealMXN'], 
-                    'costoN' => $vals['valorURealMXN'] * $this->factorIva,
-                    'nombre' => $mat->material->referencia . " " . $mat->material->material . " " . ($mat->unidad ? $mat->unidad : "pz"),
-                    'colorRgba' => $mat->color->colorRgba ?? null, 
-                    'unidad' => $mat->unidad, 
-                    'simbolo' => $mat->Moneda->simbolo ?? '$', 
-                    'abr' => $mat->Moneda->abreviatura ?? 'MXN'
-                ];
-            }
+public function elegirMaterial($id)
+{
+    $mat = Materialscosto::with(['material.Unidad', 'color', 'Moneda', 'barra'])->find($id);
+    if ($mat) {
+        $idExiste = collect($this->detalles)->search(fn($det) => $det['IdMatCosto'] == $id);
+        if ($idExiste !== false) {
+            $this->detalles[$idExiste]['cantidad'] += (float)$this->cantidadMat;
+            $this->detalles[$idExiste]['cantidadRec'] += (float)$this->cantidadMat;
+        } else {
+            $vals = $mat->valores;
+            $costoU = (float)$vals['valorURealMXN'];
+            $factor = $this->factorIva ?? 1.16;
+            $this->detalles[] = [
+                'IdMatCosto' => $mat->id, 
+                'cantidad' => (float)$this->cantidadMat, 
+                'cantidadRec' => (float)$this->cantidadMat, 
+                'costoU' => round($costoU, 4), 
+                'costoURec' => round($costoU, 4),
+                'costoN' => round($costoU * $factor, 4),
+                'nombre' => $mat->material->referencia . " " . $mat->material->material . " " . ($mat->unidad ? $mat->unidad : "pz"),
+                'colorRgba' => $mat->color->colorRgba ?? null, 
+                'unidad' => $mat->unidad, 
+                'simbolo' => $mat->Moneda->simbolo ?? '$', 
+                'abr' => $mat->Moneda->abreviatura ?? 'MXN'
+            ];
         }
-        $this->keyWordMat = '';
-        $this->cantidadMat = 1;
     }
-    
+    $this->keyWordMat = '';
+    $this->mats = [];
+    $this->cantidadMat = 1;
+}
+
     public function cerrarRecepcion($id)
     {
         $oCompra = Ocompra::with('ocomprasdets')->findOrFail($id);

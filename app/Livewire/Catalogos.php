@@ -4,6 +4,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 use App\Models\Catalogo;
+use App\Models\Util;
 class Catalogos extends Component
 {
     use WithPagination;

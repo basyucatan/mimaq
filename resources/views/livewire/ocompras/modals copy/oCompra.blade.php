@@ -21,7 +21,7 @@
         </div>
         @endif
     </div>
-    <div class="col-12">
+    <div class="col-6">
         <label class="etiBase">Obra</label>
         <select wire:model="IdObra" class="inpBase">
             <option value=""></option>
@@ -31,7 +31,7 @@
         </select>
         @error('IdObra') <span class="text-danger">{{ $message }}</span> @enderror
     </div>
-    <div class="col-12">
+    <div class="col-6">
         <label class="etiBase">Concepto Compra</label>
         <input type="text" wire:model="concepto" class="inpBase">
         @error('concepto') <span class="text-danger">{{ $message }}</span> @enderror

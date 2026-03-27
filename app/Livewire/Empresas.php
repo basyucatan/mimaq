@@ -70,8 +70,6 @@ class Empresas extends Component
         $this->validate([
             'tipo' => 'required',
             'empresa' => 'required',
-            'razonSocial' => 'required',
-            'rfc' => 'required',
             'telefono' => 'required|numeric|digits:10'
             ]);
         Empresa::updateOrCreate(

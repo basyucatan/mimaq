@@ -7,11 +7,9 @@ return new class extends Migration
 {
     public function up()
     {
-         
-
-       
-    }
-public function down()
-{
-}    
+        Schema::table('empresas', function (Blueprint $table) {
+            $table->string('razonSocial', 200)->nullable()->change();
+            $table->string('rfc', 20)->nullable()->change();
+        });
+    }    
 };

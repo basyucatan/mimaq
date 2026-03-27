@@ -7,5 +7,5 @@
             <button class="bot botVerde" wire:click="create">Nueva</button>
         </div>
     </div>
-    @include('livewire.ocompras.bodyView')
+    @include('livewire.ocompras.body')
 </div>

@@ -1,25 +1,18 @@
-<?php 
-
+<?php
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Util;
-
 class Ocompra extends Model
 {
     use HasFactory;
-
     public const EST_EDICION   = 'edicion';
     public const EST_APROBADO  = 'aprobado';
     public const EST_ORDENADO  = 'ordenado';
     public const EST_RECIBIDO  = 'recibido';
     public const EST_CANCELADO = 'cancelado';
-
     public $timestamps = false;
-
     protected $table = 'ocompras';
-
     protected $fillable = [
         'IdDivision','IdProveedor','IdCuentaProv','IdUser','IdAprobo','IdRecibio',
         'fechaRec',
@@ -31,6 +24,12 @@ class Ocompra extends Model
         'porDescuento' => 'decimal:2',
         'adicionales' => 'array'
     ];
+    public function anularAprobacion()
+    {
+        if ($this->estatus === self::EST_APROBADO) {
+            $this->estatus = self::EST_EDICION;
+        }
+    }
     public function puedePasarA($nuevo)
     {
         return match ($this->estatus) {
@@ -42,7 +41,6 @@ class Ocompra extends Model
             default => [],
         };
     }
-
     public function cambiarEstatus($nuevo)
     {
         $permitidos = $this->puedePasarA($nuevo);
@@ -59,59 +57,24 @@ class Ocompra extends Model
         }
         $this->save();
     }
-
-public function getDescuentoAttribute()
-{
-    return (float)$this->subtotal * ((float)$this->porDescuento / 100);
-}
-
-public function getBaseAttribute()
-{
-    return (float)$this->subtotal - $this->descuento;
-}
-public function getTasaIvaAttribute()
-{
-    static $tIva = null;
-    if ($tIva === null) {
-        $tIva = (float)Util::getArrayJS('datosFacturacion')[1]['factorIva'];
-    }
-    return $tIva;
-}
-public function getMontoIvaAttribute()
-{
-    return $this->base * $this->tasaIva;
-}
-
-public function getTotalAttribute()
-{
-    return $this->base+$this->montoIva;
-}
-
-    public function division()
+    
+    public function getDescuentoAttribute(){return (float)$this->subtotal * ((float)$this->porDescuento / 100);}
+    public function getBaseAttribute(){return (float)$this->subtotal - $this->descuento;}
+    public function getMontoIvaAttribute(){return $this->base * $this->tasaIva;}
+    public function getTotalAttribute(){return $this->base+$this->montoIva;}    
+    public function getTasaIvaAttribute()
     {
-        return $this->hasOne('App\Models\Division', 'id', 'IdDivision');
+        static $tIva = null;
+        if ($tIva === null) {
+            $tIva = (float)Util::getArrayJS('datosFacturacion')[1]['factorIva'];
+        }
+        return $tIva;
     }
 
-    public function Proveedor()
-    {
-        return $this->hasOne('App\Models\Empresa', 'id', 'IdProveedor');
-    }
-
-    public function Obra()
-    {
-        return $this->hasOne('App\Models\Obra', 'id', 'IdObra');
-    }
-
-    public function Solicito()
-    {
-        return $this->hasOne('App\Models\User', 'id', 'IdUser');
-    }
-    public function Recibio()
-    {
-        return $this->hasOne('App\Models\User', 'id', 'IdRecibio');
-    }
-    public function ocomprasdets()
-    {
-        return $this->hasMany('App\Models\Ocomprasdet', 'IdOCompra', 'id');
-    }
+    public function division(){return $this->hasOne('App\Models\Division', 'id', 'IdDivision');}
+    public function Proveedor(){return $this->hasOne('App\Models\Empresa', 'id', 'IdProveedor');}
+    public function Obra(){return $this->hasOne('App\Models\Obra', 'id', 'IdObra');}
+    public function Solicito(){return $this->hasOne('App\Models\User', 'id', 'IdUser');}
+    public function Recibio(){return $this->hasOne('App\Models\User', 'id', 'IdRecibio');}
+    public function ocomprasdets(){return $this->hasMany('App\Models\Ocomprasdet', 'IdOCompra', 'id');}
 }

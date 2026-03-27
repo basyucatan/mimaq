@@ -1,7 +1,7 @@
 <?php
 namespace App\Traits\OCompras;
 use Illuminate\Support\Facades\DB;
-use App\Models\{Util, Materialscosto, Empresa};
+use App\Models\{OCompra, Materialscosto, Empresa};
 trait Consultas
 {
     public function filtroMats()
@@ -74,4 +74,40 @@ trait Consultas
         if($tipo == 'costo'){ $this->nuevoMat['neto'] = $this->nuevoMat['costo']*$this->factorIva;}
         if($tipo == 'neto'){ $this->nuevoMat['costo'] = $this->nuevoMat['neto']/$this->factorIva;}
     }
+public function mostrarDetalles($id)
+{
+    $oc = Ocompra::with([
+        'ocomprasdets.materialscosto.material.Unidad',
+        'ocomprasdets.materialscosto.color',
+        'ocomprasdets.materialscosto.Moneda',
+        'Proveedor',
+        'obra.cliente'
+    ])->findOrFail($id);
+    $this->oCompra = $oc;
+    $this->detalles = [];
+    foreach ($oc->ocomprasdets as $d) {
+        $m = $d->materialscosto;
+        $color = $m->color;
+        $this->detalles[] = [
+            'IdMatCosto' => $d->IdMatCosto,
+            'cantidad' => (float) $d->cantidad,
+            'cantidadRec' => (float) ($d->cantidadRec ?? $d->cantidad),
+            'costoU' => round($d->costoU, 4),
+            'costoURec' => (float) ($d->costoURec ?? $d->costoU),
+            'costoN' => round($d->costoU * (1 + $oc->tasaIva), 4),
+            'nombre' => ($m->material->referencia ?? '') . " " . ($m->material->material ?? ''),
+            'colorRgba' => $color->colorRgba ?? '#fff',
+            'simbolo' => $m->Moneda->simbolo ?? '$',
+            'unidad' => $m->unidad ?? 'PZ'
+        ];
+    }
+    $this->verDetalles = true;
+}
+
+public function cerrarDetalles()
+{
+    $this->verDetalles = false;
+    $this->detalles = [];
+}
+   
 }
