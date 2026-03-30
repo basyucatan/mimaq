@@ -157,7 +157,7 @@
             </td>
             <td class="col-pie" style="width: 34%;">
                 <table class="tabla-full tabla-totales">
-                    @if($orden->estatus == 'edicion')
+                    {{-- @if($orden->estatus == 'edicion')
                     <tr>
                         <td colspan="2" style="border: 1.5px dashed #e74c3c; background-color: #fff5f4; padding: 8px; text-align: center;">
                             <div style="color: #e74c3c; font-weight: bold; font-size: 13px; text-transform: uppercase;">
@@ -165,7 +165,7 @@
                             </div>
                         </td>
                     </tr>
-                    @endif
+                    @endif --}}
                     <tr>
                         <td class="text-right text-bold" style="background-color: #f8f9fa;">Subtotal</td>
                         <td class="text-right" style="width: 45%;">{{ number_format($orden->subtotal, 2) }}</td>
@@ -180,7 +180,7 @@
                         <td class="text-right text-bold">IVA ({{ \App\Models\Util::getArrayJS('datosFacturacion')[1]['factorIva'] * 100 }}%)</td>
                         <td class="text-right">{{ number_format($orden->monto_iva, 2) }}</td>
                     </tr>
-                    <tr @if($orden->estatus == 'edicion') style="background-color: #e74c3c; color: white;" @else class="total-fila" @endif>
+                    <tr @if($orden->estatus == 'edicion') style="background-color: #bd6e6c; color: white;" @else class="total-fila" @endif>
                         <td class="text-right text-bold">TOTAL</td>
                         <td class="text-right text-bold">${{ number_format($orden->total, 2) }}</td>
                     </tr>

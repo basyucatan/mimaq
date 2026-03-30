@@ -1,7 +1,7 @@
 <?php
 namespace App\Traits\OCompras;
 use Illuminate\Support\Facades\DB;
-use App\Models\{OCompra, Materialscosto, Empresa};
+use App\Models\{Ocompra, Materialscosto, Empresa};
 trait Consultas
 {
     public function filtroMats()
