@@ -55,6 +55,12 @@
                     </ul>
                 </ul>  
                 <ul class="navbar-nav pe-3">
+                    <a href="#" class="nav-link menu-trigger">🧱 Consultas y Reportes</a>
+                    <ul class="submenu d-none list-unstyled ps-3 border-start">
+                        <li><a href="{{ url('/consultas') }}" class="nav-link small">🔎 Compras</a></li>
+                    </ul>
+                </ul>                  
+                <ul class="navbar-nav pe-3">
                     <li class="nav-item custom-dropdown-item">
                         <a href="#" class="nav-link menu-trigger">🔗 Catálogos</a>
                         <ul class="submenu d-none list-unstyled ps-3">

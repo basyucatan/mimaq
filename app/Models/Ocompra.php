@@ -22,7 +22,8 @@ class Ocompra extends Model
     protected $casts = [
         'subtotal' => 'decimal:4',
         'porDescuento' => 'decimal:2',
-        'adicionales' => 'array'
+        'adicionales' => 'array',
+        'fechaHSol' => 'datetime'
     ];
     public function anularAprobacion()
     {

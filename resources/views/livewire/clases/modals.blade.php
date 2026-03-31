@@ -1,5 +1,5 @@
-@if($verModalClase)
-    <div class="modal-overlay"> 
+@if ($verModalClase)
+    <div class="modal-overlay">
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" style="width: 80%;" wire:ignore.self>
             <div class="modal-content">
                 <div class="cardPrin" style="cursor: move;">
@@ -17,13 +17,20 @@
                                 @endif
                                 <div class="col-md-6">
                                     <label for="clase" class="etiBase">Clase</label>
-                                    <input wire:model="clase" type="text" class="inpBase" id="clase">@error('clase') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <input wire:model="clase" type="text" class="inpBase" id="clase">
+                                    @error('clase')
+                                        <span class="error text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label for="orden" class="etiBase">Orden</label>
-                                    <input wire:model="orden" type="text" class="inpBase" id="orden">@error('orden') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <input wire:model="orden" type="text" class="inpBase" id="orden">
+                                    @error('orden')
+                                        <span class="error text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-</div></form>
+                            </div>
+                        </form>
                     </div>
                     <div class="cardPrin-footer mt-3 d-flex justify-content-end gap-2">
                         <a wire:click.prevent="cancel()" class="bot botNegro">Cerrar</a>

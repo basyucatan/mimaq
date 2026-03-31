@@ -58,11 +58,11 @@ Route::middleware("auth")->group(function () {
     Route::view('ocomprasdets', 'livewire.ocompras.index');
 
     Route::view('kardex', 'livewire.kardex.index');
-    Route::view('guias', 'livewire.guias.index');
     
     Route::view('materials', 'livewire.materials.index');
     Route::view('invfisicos', 'livewire.invfisicos.index');
     Route::view('compras', 'livewire.compras.index');
     Route::view('cortes', 'livewire.cortes.index');
-    Route::view('guias', 'livewire.guias.index');
+    
+    Route::view('consultas', 'livewire.consultas.index');
 });

@@ -2,69 +2,68 @@
 namespace App\Traits\OCompras;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Services\MovInvService;
-use App\Models\{Ocompra, Material, Materialscosto, 
-    Negocio, Empresa, Empresascuenta, Obra, Util};
+use App\Services\{MovInvService, ReporteService};
+use App\Models\{Ocompra, Material, Materialscosto};
 trait Acciones
 {
 
-public function cambiarEstatus($id, $nuevo)
-{
-    $oCompra = Ocompra::findOrFail($id);
-    $this->authorize('cambiarEstatus', [$oCompra, $nuevo]);
-    if ($nuevo === Ocompra::EST_ORDENADO) {
-        $this->IdCompraPen = $id;
-        $this->verModalDestino = true;
-        return;
-    }
-    $oCompra->cambiarEstatus($nuevo);
-}
-
-public function confirmarDestino()
-{
-    if(!$this->IdBodega || !$this->IdDepto) return;
-    $oCompra = Ocompra::findOrFail($this->IdCompraPen);
-    $datosAdic = is_array($oCompra->adicionales) ? $oCompra->adicionales : json_decode($oCompra->adicionales ?? '[]', true);
-    $datosAdic['IdBodega'] = $this->IdBodega;
-    $datosAdic['IdDepto'] = $this->IdDepto;
-    $oCompra->adicionales = $datosAdic;
-    $oCompra->cambiarEstatus(Ocompra::EST_ORDENADO);
-    $this->verModalDestino = false;
-    $this->reset(['IdCompraPen', 'IdBodega', 'IdDepto']);
-    $this->dispatch('sweetalert', \App\Helpers\SweetAlert::mensaje('Esperando Recepción', 1000, 'success'));
-}
-
-public function elegirMaterial($id)
-{
-    $mat = Materialscosto::with(['material.Unidad', 'color', 'Moneda', 'barra'])->find($id);
-    if ($mat) {
-        $idExiste = collect($this->detalles)->search(fn($det) => $det['IdMatCosto'] == $id);
-        if ($idExiste !== false) {
-            $this->detalles[$idExiste]['cantidad'] += (float)$this->cantidadMat;
-            $this->detalles[$idExiste]['cantidadRec'] += (float)$this->cantidadMat;
-        } else {
-            $vals = $mat->valores;
-            $costoU = (float)$vals['valorURealMXN'];
-            $factor = $this->factorIva ?? 1.16;
-            $this->detalles[] = [
-                'IdMatCosto' => $mat->id, 
-                'cantidad' => (float)$this->cantidadMat, 
-                'cantidadRec' => (float)$this->cantidadMat, 
-                'costoU' => round($costoU, 4), 
-                'costoURec' => round($costoU, 4),
-                'costoN' => round($costoU * $factor, 4),
-                'nombre' => $mat->material->referencia . " " . $mat->material->material . " " . ($mat->unidad ? $mat->unidad : "pz"),
-                'colorRgba' => $mat->color->colorRgba ?? null, 
-                'unidad' => $mat->unidad, 
-                'simbolo' => $mat->Moneda->simbolo ?? '$', 
-                'abr' => $mat->Moneda->abreviatura ?? 'MXN'
-            ];
+    public function cambiarEstatus($id, $nuevo)
+    {
+        $oCompra = Ocompra::findOrFail($id);
+        $this->authorize('cambiarEstatus', [$oCompra, $nuevo]);
+        if ($nuevo === Ocompra::EST_ORDENADO) {
+            $this->IdCompraPen = $id;
+            $this->verModalDestino = true;
+            return;
         }
+        $oCompra->cambiarEstatus($nuevo);
     }
-    $this->keyWordMat = '';
-    $this->mats = [];
-    $this->cantidadMat = 1;
-}
+
+    public function confirmarDestino()
+    {
+        if(!$this->IdBodega || !$this->IdDepto) return;
+        $oCompra = Ocompra::findOrFail($this->IdCompraPen);
+        $datosAdic = is_array($oCompra->adicionales) ? $oCompra->adicionales : json_decode($oCompra->adicionales ?? '[]', true);
+        $datosAdic['IdBodega'] = $this->IdBodega;
+        $datosAdic['IdDepto'] = $this->IdDepto;
+        $oCompra->adicionales = $datosAdic;
+        $oCompra->cambiarEstatus(Ocompra::EST_ORDENADO);
+        $this->verModalDestino = false;
+        $this->reset(['IdCompraPen', 'IdBodega', 'IdDepto']);
+        $this->dispatch('sweetalert', \App\Helpers\SweetAlert::mensaje('Esperando Recepción', 1000, 'success'));
+    }
+
+    public function elegirMaterial($id)
+    {
+        $mat = Materialscosto::with(['material.Unidad', 'color', 'Moneda', 'barra'])->find($id);
+        if ($mat) {
+            $idExiste = collect($this->detalles)->search(fn($det) => $det['IdMatCosto'] == $id);
+            if ($idExiste !== false) {
+                $this->detalles[$idExiste]['cantidad'] += (float)$this->cantidadMat;
+                $this->detalles[$idExiste]['cantidadRec'] += (float)$this->cantidadMat;
+            } else {
+                $vals = $mat->valores;
+                $costoU = (float)$vals['valorURealMXN'];
+                $factor = $this->factorIva ?? 1.16;
+                $this->detalles[] = [
+                    'IdMatCosto' => $mat->id, 
+                    'cantidad' => (float)$this->cantidadMat, 
+                    'cantidadRec' => (float)$this->cantidadMat, 
+                    'costoU' => round($costoU, 4), 
+                    'costoURec' => round($costoU, 4),
+                    'costoN' => round($costoU * $factor, 4),
+                    'nombre' => $mat->material->referencia . " " . $mat->material->material . " " . ($mat->unidad ? $mat->unidad : "pz"),
+                    'colorRgba' => $mat->color->colorRgba ?? null, 
+                    'unidad' => $mat->unidad, 
+                    'simbolo' => $mat->Moneda->simbolo ?? '$', 
+                    'abr' => $mat->Moneda->abreviatura ?? 'MXN'
+                ];
+            }
+        }
+        $this->keyWordMat = '';
+        $this->mats = [];
+        $this->cantidadMat = 1;
+    }
 
     public function cerrarRecepcion($id)
     {
@@ -154,22 +153,27 @@ public function elegirMaterial($id)
     public function imprimir($id)
     {
         if (!$id) return;
-        $orden = Ocompra::with(['Proveedor', 'Obra', 'Solicito', 'ocomprasdets.materialscosto.material', 'division'])->find($id);
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('livewire.ocompras.ordenCompraPDF', [
-            'orden' => $orden,
-            'negocio' => Negocio::find(1),
-            'condsPago' => $this->condsPago,
-            'condsFlete' => $this->condsFlete,
-            'datosFac' => Util::getArrayJS('datosFacturacion'),
-            'cajero' => Util::getArrayJS('cajero'),
-            'proveedorInfo' => Empresa::find($orden->IdProveedor),
-            'cuentaProv' => Empresascuenta::find($orden->IdCuentaProv)
-        ])->setPaper('letter', 'portrait');
-        $nombreArchivo = 'oCompra' . $id . '.pdf';
-        $directorioPath = public_path('oc');
-        if (!\Illuminate\Support\Facades\File::exists($directorioPath)) {\Illuminate\Support\Facades\File::makeDirectory($directorioPath, 0755, true);}
-        $pdfPath = $directorioPath . '/' . $nombreArchivo;
-        $pdf->save($pdfPath);
-        return response()->file($pdfPath, ['Content-Type' => 'application/pdf', 'Content-Disposition' => 'inline; filename="' . $nombreArchivo . '"']);
+        return app(ReporteService::class)->reporteOCompra($id);        
+    //     if (!$id) return;
+    //     $orden = Ocompra::with(['Proveedor', 'Obra', 'Solicito', 
+    //         'ocomprasdets.materialscosto.material', 'division'])->find($id);
+    //     $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('livewire.ocompras.ordenCompraPDF', [
+    //         'orden' => $orden,
+    //         'negocio' => Negocio::find(1),
+    //         'condsPago' => $this->condsPago,
+    //         'condsFlete' => $this->condsFlete,
+    //         'datosFac' => Util::getArrayJS('datosFacturacion'),
+    //         'cajero' => Util::getArrayJS('cajero'),
+    //         'proveedorInfo' => Empresa::find($orden->IdProveedor),
+    //         'cuentaProv' => Empresascuenta::find($orden->IdCuentaProv)
+    //     ])->setPaper('letter', 'portrait');
+    //     $nombreArchivo = 'oCompra' . $id . '.pdf';
+    //     $directorioPath = public_path('oc');
+    //     if (!\Illuminate\Support\Facades\File::exists($directorioPath)) {\Illuminate\Support\Facades\File::makeDirectory($directorioPath, 0755, true);}
+    //     $pdfPath = $directorioPath . '/' . $nombreArchivo;
+    //     $pdf->save($pdfPath);
+    //     return response()->file($pdfPath, ['Content-Type' => 'application/pdf', 
+    //         'Content-Disposition' => 'inline; filename="' . $nombreArchivo . '"']);
+    // 
     }
 }

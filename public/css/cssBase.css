@@ -160,21 +160,23 @@ html, body {
     padding-bottom: env(safe-area-inset-bottom);
 }
 .cardPrin-header {
-    flex-shrink: 0; 
     background: linear-gradient(to right, var(--primarioO), var(--grisC));
-    color: var(--Blanco);
+    color: var(--Blanco);    
     padding: 0.5rem;
-    border-radius: 1rem 1rem 0 0;
+    border-radius: 1rem 1rem 0 0;    
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center;    
+    flex-shrink: 0; 
 }
 .cardPrin-footer {
     background: linear-gradient(135deg, var(--primarioC), var(--Negro));
-    display: flex;
     border-radius: 0 0 1rem 1rem;
     padding: 4px;
-    text-align: center;
+    display: flex;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;      
 }
 
 .cardSec {

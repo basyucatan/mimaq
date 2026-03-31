@@ -18,6 +18,27 @@ document.addEventListener('livewire:init', () => {
         });
     });
 });
+
+//contador
+document.querySelectorAll('.contador').forEach(el => {
+    const objetivo = parseFloat(el.dataset.target) || 0;
+    const decimales = parseInt(el.dataset.decimales) || 0;
+    const { prefijo = '', sufijo = '' } = el.dataset;
+    const duracion = objetivo <= 10 ? 1500 : (objetivo <= 100 ? 1000 : 600);
+    const inicio = performance.now();
+    const actualizar = (tiempo) => {
+        const progreso = Math.min((tiempo - inicio) / duracion, 1);
+        const valorActual = (1 - Math.pow(1 - progreso, 3)) * objetivo;
+        const numeroFormateado = valorActual.toLocaleString('en-US', {
+            minimumFractionDigits: decimales,
+            maximumFractionDigits: decimales
+        });
+        el.textContent = `${prefijo}${numeroFormateado}${sufijo}`;
+        if (progreso < 1) requestAnimationFrame(actualizar);
+    };
+    requestAnimationFrame(actualizar);
+});
+
 //msgBox
 document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('msgBox', event => {
