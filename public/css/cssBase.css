@@ -351,6 +351,7 @@ html, body {
     display: inline-block;
 }
 
+/* --- Estilos Base (PC y General) --- */
 .tabBase {
     width: 100%;
     border-collapse: collapse;
@@ -359,7 +360,7 @@ html, body {
 
 .tabBase th,
 .tabBase td {
-    padding: 1px 1px;
+    padding: 8px 4px; /* Un poco más de aire en PC para legibilidad */
     line-height: 1.2;
     border: 1px solid var(--grisC);
     text-align: left;
@@ -370,11 +371,13 @@ html, body {
     background: linear-gradient(to bottom right, var(--Blanco), var(--secundarioC));
     color: var(--Negro);
 }
+
 .tabBase thead th {
     position: sticky;
     top: 0;
     z-index: 10;
 }
+
 .tabBase td {
     background: var(--Blanco);
 }
@@ -387,9 +390,25 @@ html, body {
     background: var(--Amarillo);
     cursor: pointer;
 }
-.tabBase.ch td,
-.tabBase.ch th {
-    font-size: 12px !important;
+
+@media (max-width: 767.98px) {
+    .tabBase.ch td,
+    .tabBase.ch th {
+        font-size: 11px !important; /* Un poco más pequeño para móviles */
+        padding: 2px 1px;         /* Reducimos el padding al mínimo */
+    }
+    /* Opcional: ocultar columnas menos importantes en móvil si es necesario */
+    .d-none-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 768px) { /* Si la pantalla es PC (768px o más), ignoramos el efecto "ch" */
+    .tabBase.ch td,
+    .tabBase.ch th {
+        font-size: 16px !important; /* Mantenemos tamaño legible en PC */
+        padding: 6px 4px;           /* Padding cómodo para mouse */
+    }
 }
 
 

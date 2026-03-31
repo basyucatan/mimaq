@@ -10,16 +10,16 @@
                 </div>
                 <div class="cardPrin-body">
                     <div class="row" wire:ignore>
-                        <div class="col-md-4">
+                        <div class="col-6 col-md-4">
                             <div class="cardSec text-center">
-                                <span class="fw-bold contador" data-target="{{ $obrasVigentes }}" data-sufijo=" 🏗️">0</span>
-                                <small>Obras vigentes</small>
+                                <span class="fw-bold contador" data-target="{{ $obrasVigentes }}" data-sufijo=" 🏗️ Obras">0</span>
+                                <small>vigentes</small>
                             </div>
                         </div>                         
-                        <div class="col-md-4">
+                        <div class="col-6 col-md-4">
                             <div class="cardSec text-center">
-                                <span class="fw-bold contador" data-target="{{ $ocMes }}" data-sufijo=" 🧾">0</span>
-                                <small>Compras {{ now()->translatedFormat('F Y') }}</small>
+                                <span class="fw-bold contador" data-target="{{ $ocMes }}" data-sufijo=" 🧾 Compras">0</span>
+                                <small>{{ now()->translatedFormat('F Y') }}</small>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -31,12 +31,11 @@
                     </div>
                     <div class="cardSec mt-1">
                         <div class="cardSec-header">Explorador de Gastos</div>                 
-                            <div class="text-center px-3 py-1 bg-white rounded-2 border shadow-sm">
-                                <span class="d-block text-success text-uppercase fw-bolder" style="font-size: 0.7rem;">Total</span>
-                                <span class="fw-bolder text-success fs-4" style="line-height: 1;">
-                                    ${{ number_format($granTotal, 2) }}
-                                </span>
-                            </div>
+                        <div class="d-flex justify-content-center bg-white">
+                            <span class="fw-bolder text-success fs-4">
+                                $ {{ number_format($granTotal, 2) }}
+                            </span>
+                        </div>
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label class="etiBase"><small>Filtrar por Obra</small></label>
@@ -58,7 +57,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="etiBase"><small>Periodo (Mes/Año)</small></label>
-                                    <input type="month" wire:model.live="filtroMes" class="inpSolo">
+                                    <input type="month" wire:model.live="filtroMes" class="form-control">
                                 </div>
                                 <div class="col-md-1">
                                     <button wire:click="verTodo" class="bot botVerde">Ver todo</button>
@@ -67,8 +66,7 @@
                             <div class="d-flex justify-content-end mb-2">
                                 {{ $resultados->links() }}
                             </div> 
-                            </div>
-                            <div class="table-responsive" style="max-height: 50vh;">
+                            <div class="table-responsive" style="max-height: 45vh;">
                                 <table class="table tabBase ch">
                                     <thead>
                                         <tr>
@@ -103,7 +101,7 @@
                                         <tfoot class="sticky-bottom bg-dark text-white">
                                             <tr class="table-secondary text-dark">
                                                 <td colspan="3" class="text-end small fw-bold">SubTotal</td>
-                                                <td class="text-end small">${{ number_format($resultados->getCollection()->sum('monto'), 2) }}</td>
+                                                <td class="text-end small fw-bold">${{ number_format($resultados->getCollection()->sum('monto'), 2) }}</td>
                                             </tr>
                                         </tfoot>
                                     @endif

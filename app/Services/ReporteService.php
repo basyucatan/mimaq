@@ -96,5 +96,5 @@ class ReporteService
                 'monto' => (float)$oc->total
             ];
         });
-    }
+    } 
 }
