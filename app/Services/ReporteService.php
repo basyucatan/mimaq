@@ -71,28 +71,40 @@ class ReporteService
             });
     }   
   
-    public function obtenerGastos($IdObra = null, $IdDivision = null, $mesAnio = null)
-    {
-        $query = Ocompra::where('estatus', '!=', 'cancelado')->with(['Obra.Cliente', 'division']);
-        if ($IdObra) {
-            $query->where('IdObra', $IdObra);
-        }
-        if ($IdDivision) {
-            $query->where('IdDivision', $IdDivision);
-        }
-        if ($mesAnio) {
-            $fecha = \Carbon\Carbon::parse($mesAnio . '-01');
-            $query->whereBetween('fechaHSol', [$fecha->copy()->startOfMonth(), $fecha->copy()->endOfMonth()]);
-        }
-        return $query->get()->map(function($oc) {
-            return [
-                'fecha' => $oc->fechaHSol,
-                'folio' => $oc->id,
-                'concepto' => ($oc->Obra->obra ?? '') . ' /' . ($oc->Obra->Cliente->empresa ?? '') . ' -' . ($oc->Solicito->name ?? ''),
-                'division' => $oc->division->division ?? 'S/D',
-                'color' => $oc->division->adicionales['colorHex'] ?? '#6c757d',
-                'monto' => (float)$oc->total
-            ];
-        })->sortByDesc('fecha');
+public function obtenerGastos($IdObra = null, $IdDivision = null, $mesAnio = null, $porPagina = 15)
+{
+    $query = Ocompra::where('estatus', '!=', 'cancelado')
+        ->with(['Obra.Cliente', 'division'])
+        ->orderBy('fechaHSol', 'desc');
+
+    if ($IdObra) {
+        $query->where('IdObra', $IdObra);
     }
+
+    if ($IdDivision) {
+        $query->where('IdDivision', $IdDivision);
+    }
+
+    if ($mesAnio) {
+        $fecha = \Carbon\Carbon::parse($mesAnio . '-01');
+        $query->whereBetween('fechaHSol', [$fecha->copy()->startOfMonth(), $fecha->copy()->endOfMonth()]);
+    }
+
+    // Cambiamos get() por paginate() y map() por through()
+    return $query->paginate($porPagina)->through(function($oc) {
+        $colorFondo = $oc->division->adicionales['colorHex'] ?? '#6c757d';
+        $empresa = $oc->Obra->Cliente->empresa ?? '';
+        $empresaCorta = \Illuminate\Support\Str::words($empresa, 2, '');
+
+        return [
+            'fecha' => $oc->fechaHSol,
+            'folio' => $oc->id,
+            'concepto' => ($oc->Obra->obra ?? '') . ' /' . $empresaCorta . ' -' . ($oc->Solicito->name ?? ''),
+            'division' => $oc->division->division ?? 'S/D',
+            'color' => $colorFondo,
+            'colorTexto' => Util::colorTxtHex($colorFondo),
+            'monto' => (float)$oc->total
+        ];
+    });
+}
 }

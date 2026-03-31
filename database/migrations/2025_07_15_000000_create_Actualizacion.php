@@ -11,8 +11,5 @@ return new class extends Migration
         //     $table->string('razonSocial', 200)->nullable()->change();
         //     $table->string('rfc', 20)->nullable()->change();
         // });
-        Schema::table('divisions', function (Blueprint $table) {
-            $table->json('adicionales')->nullable();
-        });
     }    
 };

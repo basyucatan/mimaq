@@ -20,6 +20,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('IdNegocio')->constrained('negocios')->onDelete('cascade');
             $table->string('division',50);
+            $table->json('adicionales')->nullable();
         });        
         Schema::create('divscajas', function (Blueprint $table) {
             $table->id();

@@ -35,21 +35,21 @@
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label class="etiBase"><small>Filtrar por Obra</small></label>
-                                    <select wire:model.live="filtroObra" class="inpSolo">
-                                        <option value="">Todas las obras</option>
-                                        @foreach ($listaObras as $o)
-                                            <option value="{{ $o->id }}">{{ $o->obra }}</option>
+                                    <select wire:model.lazy="IdObra" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($obras as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
                                         @endforeach
-                                    </select>
+                                    </select>                                    
                                 </div>
                                 <div class="col-md-3">
                                     <label class="etiBase"><small>División</small></label>
-                                    <select wire:model.live="filtroDivision" class="inpSolo">
-                                        <option value="">Todas</option>
-                                        @foreach ($listaDivisiones as $d)
-                                            <option value="{{ $d->id }}">{{ $d->division }}</option>
+                                    <select wire:model.lazy="IdDivision" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($divisions as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
                                         @endforeach
-                                    </select>
+                                    </select> 
                                 </div>
                                 <div class="col-md-4">
                                     <label class="etiBase"><small>Periodo (Mes/Año)</small></label>
@@ -57,36 +57,44 @@
                                 </div>
                                 <div class="col-md-1">
                                     <button wire:click="$set('filtroObra', ''); $set('filtroDivision', '');"
-                                        class="bot botNegro">Ver todo</button>
+                                        class="bot botVerde">Ver todo</button>
                                 </div>
                             </div>
-
+                            <div class="row">
+                                <div class="col-4 text-end fw-bold">
+                                    ${{ number_format($granTotal, 2) }}
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex justify-content-end mb-2">
+                                        {{ $resultados->links() }}
+                                    </div> 
+                                </div>
+                            </div>
                             <div class="table-responsive" style="max-height: 50vh;">
                                 <table class="table tabBase ch">
                                     <thead>
                                         <tr>
                                             <th>Fecha</th>
                                             <th>Obra (Cliente)</th>
-                                            <th>División</th>
+                                            <th>Div</th>
                                             <th class="text-end">Monto</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php $granTotal = 0; @endphp
                                         @forelse($resultados as $res)
                                             <tr>
                                                 <td>{{ Util::formatFecha($res['fecha'], 'Corta') }}</td>
-                                                <td style="max-width:150px;"><small>{{ $res['concepto'] }}</small></td>
+                                                <td style="max-width:110px;"><small>{{ $res['concepto'] }}</small></td>
                                                 <td>
-                                                    <span class="badge" style="background-color: {{ $res['color'] }}; 
+                                                    <span class="badge" style="background-color: {{ $res['color'] }};
                                                         color: {{ Util::colorTxtHex($res['color']) }};">
-                                                        {{ $res['division'] }}
+                                                        <span class="d-md-none">{{ substr($res['division'], 0, 3) }}</span>
+                                                        <span class="d-none d-md-inline">{{ $res['division'] }}</span>
                                                     </span>
                                                 </td>
                                                 <td class="text-end">${{ number_format($res['monto'], 2) }}
                                                 </td>
                                             </tr>
-                                            @php $granTotal += $res['monto']; @endphp
                                         @empty
                                             <tr>
                                                 <td colspan="4">Sin datos</td>
@@ -95,9 +103,9 @@
                                     </tbody>
                                     @if ($resultados->count() > 0)
                                         <tfoot class="sticky-bottom bg-dark text-white">
-                                            <tr>
-                                                <td colspan="2" class="text-end fw-bold">Total</td>
-                                                <td colspan="2" class="text-end fw-bold">${{ number_format($granTotal, 2) }}</td>
+                                            <tr class="table-secondary text-dark">
+                                                <td colspan="3" class="text-end small fw-bold">SubTotal</td>
+                                                <td class="text-end small">${{ number_format($resultados->getCollection()->sum('monto'), 2) }}</td>
                                             </tr>
                                         </tfoot>
                                     @endif
