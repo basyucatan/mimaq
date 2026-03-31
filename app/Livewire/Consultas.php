@@ -35,45 +35,39 @@ class Consultas extends Component
     public function updatingIdObra() { $this->resetPage(); }
     public function updatingIdDivision() { $this->resetPage(); }
     public function updatingFiltroMes() { $this->resetPage(); }
-  
-public function render()
-{
-    $service = new ReporteService();
-
-    $queryTotales = \App\Models\Ocompra::where('estatus', '!=', 'cancelado');
-
-    // Usamos filled() o verificamos que no sea vacío para evitar filtrar por ""
-    if (!empty($this->IdObra)) $queryTotales->where('IdObra', $this->IdObra);
-    if (!empty($this->IdDivision)) $queryTotales->where('IdDivision', $this->IdDivision);
-    
-    if ($this->filtroMes) {
-        $fecha = \Carbon\Carbon::parse($this->filtroMes . '-01');
-        $queryTotales->whereBetween('fechaHSol', [
-            $fecha->copy()->startOfMonth()->format('Y-m-d 00:00:00'), 
-            $fecha->copy()->endOfMonth()->format('Y-m-d 23:59:59')
-        ]);
+    public function verTodo()
+    {
+        $this->IdObra = '';
+        $this->IdDivision = '';
+        $this->filtroMes = now()->format('Y-m');
+        $this->resetPage();
     }
 
-    // Calculamos el Gran Total
-    $granTotal = $queryTotales->get()->sum(function($oc) {
-        $descuento = $oc->subtotal * ($oc->porDescuento ?? 0) / 100;
-        $base = $oc->subtotal - $descuento;
-        $iva = $base * ($oc->tasaIva ?? 0);
-        return $base + $iva;
-    });
-
-    $resultados = $service->obtenerGastos(
-        $this->IdObra, 
-        $this->IdDivision, 
-        $this->filtroMes,
-        15
-    );
-
-    return view('livewire.consultas.view', [
-        'resultados' => $resultados,
-        'granTotal' => $granTotal
-    ]);
-}
+    public function render()
+    {
+        $service = new ReporteService();
+        $queryTotales = \App\Models\Ocompra::where('estatus', '!=', 'cancelado');
+        if (!empty($this->IdObra)) $queryTotales->where('IdObra', $this->IdObra);
+        if (!empty($this->IdDivision)) $queryTotales->where('IdDivision', $this->IdDivision);
+        if ($this->filtroMes) {
+            $fecha = \Carbon\Carbon::parse($this->filtroMes . '-01');
+            $queryTotales->whereBetween('fechaHSol', [
+                $fecha->copy()->startOfMonth()->format('Y-m-d 00:00:00'), 
+                $fecha->copy()->endOfMonth()->format('Y-m-d 23:59:59')
+            ]);
+        }
+        $granTotal = $queryTotales->get()->sum(function($oc) {
+            $descuento = $oc->subtotal * ($oc->porDescuento ?? 0) / 100;
+            $base = $oc->subtotal - $descuento;
+            $iva = $base * ($oc->tasaIva ?? 0);
+            return $base + $iva;
+        });
+        $resultados = $service->obtenerGastos($this->IdObra, $this->IdDivision, $this->filtroMes,8);
+        return view('livewire.consultas.view', [
+            'resultados' => $resultados,
+            'granTotal' => $granTotal
+        ]);
+    }
     public function paginationView()
     {
         return 'livewire.paginacionBase';

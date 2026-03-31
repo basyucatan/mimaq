@@ -30,8 +30,13 @@
                         </div>
                     </div>
                     <div class="cardSec mt-1">
-                        <div class="cardSec-header">Explorador de Gastos</div>
-                        <div class="cardSec-body">
+                        <div class="cardSec-header">Explorador de Gastos</div>                 
+                            <div class="text-center px-3 py-1 bg-white rounded-2 border shadow-sm">
+                                <span class="d-block text-success text-uppercase fw-bolder" style="font-size: 0.7rem;">Total</span>
+                                <span class="fw-bolder text-success fs-4" style="line-height: 1;">
+                                    ${{ number_format($granTotal, 2) }}
+                                </span>
+                            </div>
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label class="etiBase"><small>Filtrar por Obra</small></label>
@@ -56,19 +61,12 @@
                                     <input type="month" wire:model.live="filtroMes" class="inpSolo">
                                 </div>
                                 <div class="col-md-1">
-                                    <button wire:click="$set('filtroObra', ''); $set('filtroDivision', '');"
-                                        class="bot botVerde">Ver todo</button>
+                                    <button wire:click="verTodo" class="bot botVerde">Ver todo</button>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-4 text-end fw-bold">
-                                    ${{ number_format($granTotal, 2) }}
-                                </div>
-                                <div class="col-8">
-                                    <div class="d-flex justify-content-end mb-2">
-                                        {{ $resultados->links() }}
-                                    </div> 
-                                </div>
+                            <div class="d-flex justify-content-end mb-2">
+                                {{ $resultados->links() }}
+                            </div> 
                             </div>
                             <div class="table-responsive" style="max-height: 50vh;">
                                 <table class="table tabBase ch">
