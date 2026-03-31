@@ -13,8 +13,9 @@ class Division extends Model
 
     protected $table = 'divisions';
 
-    protected $fillable = ['IdNegocio','division'];
-	
+    protected $fillable = ['IdNegocio','division', 'adicionales'];
+	protected $casts = ['adicionales' => 'array'];
+    
     public function divsbodegas()
     {
         return $this->hasMany('App\Models\Divsbodega', 'IdDivision', 'id');

@@ -16,12 +16,20 @@
                                     <input type="hidden" wire:model="selected_id">
                                 @endif
                                 <div class="col-md-6">
-                                    <label for="division" class="etiBase">Division</label>
-                                    <input wire:model="division" type="text" class="inpBase" id="division">
+                                    <label class="etiBase">Division</label>
+                                    <input wire:model="division" type="text" class="inpBase">
                                     @error('division')
                                         <span class="error text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+                                <div class="col-md-6">
+                                    <label class="etiBase">Color</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input wire:model="colorHex" type="color" class="form-control"
+                                            style="width: 50px; height: 38px; padding: 0;" />
+                                    </div>
+                                    @error('colorHex')<span class="error text-danger">{{ $message }}</span>@enderror
+                                </div>                              
                             </div>
                         </form>
                     </div>

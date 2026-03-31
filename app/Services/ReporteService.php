@@ -73,33 +73,26 @@ class ReporteService
   
     public function obtenerGastos($IdObra = null, $IdDivision = null, $mesAnio = null)
     {
-        $query = Ocompra::where('estatus', '!=', 'cancelado')
-            ->with(['Obra.Cliente', 'division']);
-
+        $query = Ocompra::where('estatus', '!=', 'cancelado')->with(['Obra.Cliente', 'division']);
         if ($IdObra) {
             $query->where('IdObra', $IdObra);
         }
-
         if ($IdDivision) {
             $query->where('IdDivision', $IdDivision);
         }
-
         if ($mesAnio) {
             $fecha = \Carbon\Carbon::parse($mesAnio . '-01');
             $query->whereBetween('fechaHSol', [$fecha->copy()->startOfMonth(), $fecha->copy()->endOfMonth()]);
         }
-
         return $query->get()->map(function($oc) {
             return [
                 'fecha' => $oc->fechaHSol,
-                'folio' => $oc->id, // O tu campo de folio
-                'concepto' => ($oc->Obra->obra ?? '') 
-                    . ' |' . ($oc->Obra->Cliente->empresa ?? '')
-                    . ' (' . ($oc->Solicito->name ?? '')
-                     . ')',
+                'folio' => $oc->id,
+                'concepto' => ($oc->Obra->obra ?? '') . ' /' . ($oc->Obra->Cliente->empresa ?? '') . ' -' . ($oc->Solicito->name ?? ''),
                 'division' => $oc->division->division ?? 'S/D',
+                'color' => $oc->division->adicionales['colorHex'] ?? '#6c757d',
                 'monto' => (float)$oc->total
             ];
         })->sortByDesc('fecha');
-    }    
+    }
 }

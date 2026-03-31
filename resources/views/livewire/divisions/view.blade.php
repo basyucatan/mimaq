@@ -23,15 +23,17 @@
                             <thead>
                                 <tr>
                                     <th>Division</th>
+                                    <th>Color</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($divisions as $row)
                                     <tr>
-
                                         <td>{{ $row->division }}</td>
-
+                                        <td>
+                                            <span class="cuadroColor" style="background-color: {{ $row->adicionales['colorHex'] ?? '#fff' }};"></span>
+                                        </td>                                                                                                                    
                                         <td width="60">
                                             <div class="d-flex justify-content-around align-items-center gap-1">
                                                 <button wire:click="edit({{ $row->id }})" class="bot botNaranja"

@@ -264,5 +264,16 @@ class Util
         $b = $m[3] ?? 255;
         return (0.299*$r + 0.587*$g + 0.114*$b) > 186 ? '#000000' : '#ffffff';
     }
+    public static function colorTxtHex($fondoHex)
+    {
+        $hex=str_replace('#','',$fondoHex);
 
+        $r=hexdec(substr($hex,0,2));
+        $g=hexdec(substr($hex,2,2));
+        $b=hexdec(substr($hex,4,2));
+
+        $l=(0.299*$r+0.587*$g+0.114*$b)/255;
+
+        return $l>0.5?'#000':'#fff';
+    }
 }

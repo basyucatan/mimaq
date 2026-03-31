@@ -36,11 +36,10 @@
             <div class="cardSec-body">
                 <ul class="navbar-nav pe-3">
                     <li class="nav-item custom-dropdown-item">
-                        <a href="#" class="nav-link menu-trigger">💸 Admin</a>
+                        <a href="#" class="nav-link menu-trigger">💼 Admin</a>
                         <ul class="submenu d-none list-unstyled ps-2 border-start">
                             <li><a href="{{ url('/ocompras') }}" class="nav-link small">🛒 Orden de Compra</a></li>
                             <li><a href="{{ url('/recepcionoc') }}" class="nav-link small">📥 Recepción OC</a></li>
-                            <li class="border-top"><a href="{{ url('/kardex') }}" class="nav-link small">🗂️ Kardex</a></li>
                         </ul>                        
                     </li>
                 </ul>
@@ -55,9 +54,10 @@
                     </ul>
                 </ul>  
                 <ul class="navbar-nav pe-3">
-                    <a href="#" class="nav-link menu-trigger">🧱 Consultas y Reportes</a>
+                    <a href="#" class="nav-link menu-trigger">🔎 Consultas y Reportes</a>
                     <ul class="submenu d-none list-unstyled ps-3 border-start">
-                        <li><a href="{{ url('/consultas') }}" class="nav-link small">🔎 Compras</a></li>
+                        <li><a href="{{ url('/consultas') }}" class="nav-link small">💸 Compras</a></li>
+                        <li class="border-top"><a href="{{ url('/kardex') }}" class="nav-link small">🗂️ Kardex</a></li>
                     </ul>
                 </ul>                  
                 <ul class="navbar-nav pe-3">
@@ -74,9 +74,9 @@
                             <li class="nav-item">
                                 <a href="#" class="nav-link menu-trigger">🧰 Configuración</a>
                                 <ul class="submenu d-none list-unstyled ps-3 border-start">
-                                    <li><a href="{{ url('/negocios') }}" class="nav-link small">🏠 Mi Empresa</a></li>
-                                    <li><a href="{{ url('/divisions') }}" class="nav-link small">📌 Divisiones</a></li>
-                                    <li><a href="{{ url('/divsbodegas') }}" class="nav-link small">📌 Bodegas</a></li>
+                                    <li><a href="{{ url('/negocios') }}" class="nav-link small">⭐ Mi Empresa</a></li>
+                                    <li><a href="{{ url('/divisions') }}" class="nav-link small">📚 Divisiones</a></li>
+                                    <li><a href="{{ url('/divsbodegas') }}" class="nav-link small">🏚️ Bodegas</a></li>
                                     <li><a href="{{ url('/unidads') }}" class="nav-link small">🚚 Unidades</a></li>
                                     <li><a href="{{ url('/colors') }}" class="nav-link small">🌈 Colores</a></li>
                                     <li><a href="{{ url('/colorables') }}" class="nav-link small">🖌️ Colorables</a>

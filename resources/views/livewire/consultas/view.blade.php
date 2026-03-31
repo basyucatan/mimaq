@@ -75,9 +75,14 @@
                                         @php $granTotal = 0; @endphp
                                         @forelse($resultados as $res)
                                             <tr>
-                                                <td>{{ App\Models\Util::formatFecha($res['fecha'], 'Corta') }}</td>
-                                                <td><small>{{ $res['concepto'] }}</small></td>
-                                                <td><span class="badge bg-secondary">{{ $res['division'] }}</span></td>
+                                                <td>{{ Util::formatFecha($res['fecha'], 'Corta') }}</td>
+                                                <td style="max-width:150px;"><small>{{ $res['concepto'] }}</small></td>
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $res['color'] }}; 
+                                                        color: {{ Util::colorTxtHex($res['color']) }};">
+                                                        {{ $res['division'] }}
+                                                    </span>
+                                                </td>
                                                 <td class="text-end">${{ number_format($res['monto'], 2) }}
                                                 </td>
                                             </tr>

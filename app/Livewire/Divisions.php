@@ -14,7 +14,9 @@ class Divisions extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalDivision=false, $selected_id, $keyWord, $IdNegocio=1, $division;
+    public $verModalDivision=false, $selected_id, $keyWord, 
+        $colorHex, $adicionales= [], 
+        $IdNegocio=1, $division;
 	
     public function updatedKeyWord()
 	{
@@ -55,6 +57,7 @@ class Divisions extends Component
     {
         $this->selected_id = $id;
 		$this->fill(Division::findOrFail($id)->toArray());
+        $this->colorHex = $this->adicionales['colorHex'] ?? '#fff';
         $this->verModalDivision = true;
     }
     public function create()
@@ -68,12 +71,13 @@ class Divisions extends Component
 		'IdNegocio' => 'required',
 		'division' => 'required',
         ]);
-
+        $this->adicionales['colorHex'] = $this->colorHex;
         Division::updateOrCreate(
 			['id' => $this->selected_id],
 			[
 				'IdNegocio' => $this-> IdNegocio,
-				'division' => $this-> division
+				'division' => $this-> division,
+				'adicionales' => $this->adicionales
 			]
 		);
         $this->resetInput();
