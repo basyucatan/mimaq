@@ -1,27 +1,22 @@
-@if($verModal{{modelName}})
-    <div class="modal-overlay"> 
-        <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" style="width: 80%;" wire:ignore.self>
-            <div class="modal-content">
-                <div class="cardPrin" style="cursor: move;">
-                    <div class="cardPrin-header d-flex justify-content-between align-items-center">
-                        <h5 class="m-0">
-                            {{ $selected_id ? 'Editar {{modelTitle}}' : 'Crear {{modelTitle}}' }}
-                        </h5>
-                        <button wire:click="cancel" type="button" class="btn-close" aria-label="Cerrar"></button>
-                    </div>
-                    <div class="cardPrin-body" style="padding: 0 20px; max-height: 400px; overflow-y: auto;">
-                        <form>
-                            <div class="row">
-                                @if ($selected_id)
-                                    <input type="hidden" wire:model="selected_id">
-                                @endif{{form}}</div></form>
-                    </div>
-                    <div class="cardPrin-footer mt-3 d-flex justify-content-end gap-2">
-                        <a wire:click.prevent="cancel()" class="bot botNegro">Cerrar</a>
-                        <a wire:click.prevent="save()" class="bot botVerde">Guardar</a>
-                    </div>
-                </div>
+<!-- Modal -->
+<div wire:ignore.self class="modal fade" id="DataModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="DataModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DataModalLabel">{{ $selected_id ? 'Update {{modelTitle}}' : 'Create {{modelTitle}}' }}</h5>
+                <button wire:click.prevent="cancel()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+           <div class="modal-body">
+				<form>
+                @if ($selected_id)
+                    <input type="hidden" wire:model="selected_id">
+                @endif{{form}}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                <button type="button" wire:click.prevent="save()" class="btn btn-primary">{{ $selected_id ? 'Update' : 'Create' }}</button>
             </div>
         </div>
     </div>
-@endif
+</div>

@@ -6,29 +6,23 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\{{modelName}};
 use Livewire\Attributes\Computed;
-use App\Models\Util;
-use Illuminate\Support\Facades\DB;
 
 class {{modelName}}s extends Component
 {
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModal{{modelName}}=false, $selected_id, $keyWord, {{updatefield}};
-	
-    public function updatedKeyWord()
-	{
-		$this->resetPage();
-	}
+    public $selected_id, $keyWord, {{updatefield}};
+
     #[Computed]
 	public function filtered{{modelName}}s()
 	{
 		$keyWord = '%' . $this->keyWord . '%';
-		return {{modelName}}::Where('id','>',0)
+		return {{modelName}}::latest()
 			->where(function ($query) use ($keyWord) {
 				$query{{search}};
 			})
-			->paginate(12);
+			->paginate(10);
 	}
 
 	public function render()
@@ -40,38 +34,30 @@ class {{modelName}}s extends Component
 	
     public function cancel()
     {
-        $this->resetInput();
-        $this->verModal{{modelName}} = false;
+        $this->reset();
     }
 
-    public function resetInput()
+    public function save()
     {
+        $this->validate([{{rules}}
+        ]);
+
+        Flight::updateOrCreate(
+			['id' => $this->selected_id],
+			[{{addfields}}
+			]
+		);
+
+        $message = $this->selected_id ? '{{modelName}} Successfully updated.' : '{{modelName}} Successfully created.';
+		$this->dispatch('closeModal');
         $this->reset();
+		session()->flash('message', $message);
     }
 
     public function edit($id)
     {
         $this->selected_id = $id;
 		$this->fill({{modelName}}::findOrFail($id)->toArray());
-        $this->verModal{{modelName}} = true;
-    }
-    public function create()
-    {
-        $this->resetInput();
-        $this->verModal{{modelName}} = true;
-    }    
-    public function save()
-    {
-        $this->validate([{{rules}}
-        ]);
-
-        {{modelName}}::updateOrCreate(
-			['id' => $this->selected_id],
-			[{{addfields}}
-			]
-		);
-        $this->resetInput();
-        $this->verModal{{modelName}} = false;
     }
 
     public function destroy($id)

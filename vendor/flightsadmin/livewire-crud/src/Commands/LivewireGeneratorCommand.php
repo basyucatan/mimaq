@@ -373,6 +373,7 @@ abstract class LivewireGeneratorCommand extends Command
         $softDeletesNamespace = $softDeletes = '';
 
         foreach ($this->getColumns() as $value) {
+            $properties .= "\n * @property $$value->Field";
 
             if ($value->Null == 'NO') {
                 $rulesArray[$value->Field] = 'required';

@@ -1,57 +1,61 @@
 @section('title', __('{{modelTitle}}s'))
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="cardPrin">
-                <div class="cardPrin-header">
-                    <div>
-                        {{modelTitle}}s
-                    </div>
-                    <div>
-                        <input wire:model.live="keyWord" type="text" class="inpSolo" placeholder="Buscar">
-                    </div>
-                    <div>
-                        <button class="bot botVerde" wire:click="create" title="Nuevo {{modelTitle}}">
-                            <i class="bi bi-file-earmark-plus"></i>
-                        </button>                   
-                    </div>                
-                </div>
-                <div class="cardPrin-body">
-                    @include('livewire.{{modelNamePluralLowerCase}}.modals')
-                    <div class="table-responsive">
-                        <table class="table tabBase ch">
-                            <thead>
-                                <tr>{{tableHeader}}<th>Acciones</th></tr>
-                            </thead>
-                            <tbody>
-                                @forelse(${{modelNamePluralLowerCase}} as $row)
-                                    <tr>
-                                        {{tableBody}}
-                                        <td width="60">
-                                            <div class="d-flex justify-content-around align-items-center gap-1">
-                                                <button wire:click="edit({{ $row->id }})"
-                                                        class="bot botNaranja"
-                                                        title="Editar">
-                                                    <i class="bi-pencil-square"></i>
-                                                </button>
-                                                <button wire:click="destroy({{ $row->id }})"
-                                                        class="bot botRojo"
-                                                        onclick="confirm('¿Estás seguro de eliminar este registro?') || event.stopImmediatePropagation()">
-                                                    <i class="bi-trash3-fill"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                @endforelse
-                            </tbody>
-                        </table>
-                        <div class="float-end">
-                            {{ ${{modelNamePluralLowerCase}}->links() }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row justify-content-center">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<div style="display: flex; justify-content: space-between; align-items: center;">
+						<div class="float-left">
+							<h4><i class="bi-house-check-fill text-info"></i>
+							{{modelTitle}} Listing </h4>
+						</div>
+						@if (session()->has('message'))
+						<div wire:poll.4s class="btn btn-sm btn-success" style="margin-top:0px; margin-bottom:0px;"> {{ session('message') }} </div>
+						@endif
+						<div>
+							<input wire:model.live='keyWord' type="text" class="form-control" name="search" id="search" placeholder="Search {{modelTitle}}s">
+						</div>
+						<div class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#DataModal">
+						<i class="bi-plus-lg"></i>  Add {{modelTitle}}s
+						</div>
+					</div>
+				</div>
+				
+				<div class="card-body">
+						@include('livewire.{{modelNamePluralLowerCase}}.modals')
+				<div class="table-responsive">
+					<table class="table table-bordered table-sm">
+						<thead class="thead">
+							<tr> 
+								<td>#</td> {{tableHeader}}								<td>ACTIONS</td>
+							</tr>
+						</thead>
+						<tbody>
+							@forelse(${{modelNamePluralLowerCase}} as $row)
+							<tr>
+								<td>{{ $loop->iteration }}</td> {{tableBody}}								<td width="90">
+									<div class="dropdown">
+										<a class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+											Actions
+										</a>
+										<ul class="dropdown-menu">
+											<li><a data-bs-toggle="modal" data-bs-target="#DataModal" class="dropdown-item" wire:click="edit({{$row->id}})"><i class="bi-pencil-square"></i> Edit </a></li>
+											<li><a class="dropdown-item" onclick="confirm('Confirm Delete {{modelTitle}} id {{$row->id}}? \nDeleted {{modelTitle}}s cannot be recovered!')||event.stopImmediatePropagation()" wire:click="destroy({{$row->id}})"><i class="bi-trash3-fill"></i> Delete </a></li>  
+										</ul>
+									</div>								
+								</td>
+							</tr>
+							@empty
+							<tr>
+								<td class="text-center" colspan="100%">No data Found </td>
+							</tr>
+							@endforelse
+						</tbody>
+					</table>						
+					<div class="float-end">{{ ${{modelNamePluralLowerCase}}->links() }}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
