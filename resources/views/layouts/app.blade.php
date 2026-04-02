@@ -18,36 +18,14 @@
     @stack('styles')
 </head>
 
-<body style="overflow-y: hidden; height: 100%; margin: 0;">
-    <div id="app">
-        @include('layouts.sidebar')
-        <div id="vistaPrin">
-            <div id="contenido">
-                @yield('content')
-            </div>
-        </div>
-        <div id="contenido">
-            {{ $slot ?? '' }}
-        </div>        
-    </div>
-
-<!-- Leaflet -->
-<link rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-{{-- chart js --}}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<body>
+    @include('layouts.sidebar')
+    <main style="width: 100%; overflow-y: auto; padding-top: 60px;">
+        @yield('content')
+    </main>
     @livewireScripts    
     @stack('scripts')
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/jsBase.js') }}"></script>
-    
-<script src="https://unpkg.com/@popperjs/core@2"></script>
-<script src="https://unpkg.com/tippy.js@6"></script>
-<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css"/>
-
 </body>
-
 </html>

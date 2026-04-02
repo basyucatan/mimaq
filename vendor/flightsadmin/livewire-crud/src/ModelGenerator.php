@@ -69,19 +69,7 @@ class ModelGenerator
         list($model, $relationName) = $this->_getModelName($table, $relation);
         $relClass = ucfirst($relation);
 
-        switch ($relation) {
-            case 'hasOne':
-                $this->properties .= "\n * @property $model $$relationName";
-                break;
-            case 'hasMany':
-                $this->properties .= "\n * @property ".$model."[] $$relationName";
-                break;
-        }
-
         return '
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\\'.$relClass.'
-     */
     public function '.$relationName.'()
     {
         return $this->'.$relation.'(\''.$this->modelNamespace.'\\'.$model.'\', \''.$foreign_key.'\', \''.$local_key.'\');

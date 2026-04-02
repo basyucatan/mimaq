@@ -9,7 +9,12 @@ return new class extends Migration
     {
         Schema::table('roles', function (Blueprint $table) {
                 $table->tinyInteger('nivel')->default(1);
-            });         
+            });  
+        Schema::create('clases', function (Blueprint $table) {
+            $table->id();
+            $table->string('clase',20);
+            $table->json('adicionales')->nullable();
+        });                    
 
     }
  

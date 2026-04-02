@@ -1,22 +1,17 @@
 @if ($verModalUser)
     <div class="modal-overlay">
-        <div class="modal-dialog" style="width: 80%;">
+        <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" wire:ignore.self>            
             <div class="modal-content">
-                <div class="cardPrin">
-                    <div class="cardPrin-header d-flex justify-content-between align-items-center">
-                        <h5 class="m-0">
-                            {{ $selected_id ? 'Editar User' : 'Crear User' }}
-                        </h5>
-                        <button wire:click="cancel" type="button" class="btn-close" aria-label="Cerrar"></button>
+                <div class="cardPrin" style="cursor: move;">
+                    <div class="cardPrin-header">
+                        <span>{{ $selected_id ? 'Editar Usuario' : 'Crear Usuario' }}</span>
                     </div>
-                    <div class="cardPrin-body" style="padding: 0 20px; max-height: 400px; overflow-y: auto;">
+                    <div class="cardPrin-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">
                         <form>
                             <div class="row g-1">
-                                @if ($selected_id)
-                                    <input type="hidden" wire:model="selected_id">
-                                @endif
+                                @if ($selected_id)<input type="hidden" wire:model="selected_id">@endif
                                 <div class="col-md-6">
-                                    <label for="name" class="etiBase">Name</label>
+                                    <label for="name" class="etiBase">Nombre</label>
                                     <input wire:model.live="name" type="text" class="inpBase" id="name">
                                     @error('name')
                                         <span class="error text-danger">{{ $message }}</span>
