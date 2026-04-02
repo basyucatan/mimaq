@@ -35,22 +35,23 @@ html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color:
     border-top: 1px solid rgba(0,0,0,0.2);
     font-size: 0.9rem;
 }
-.cardSec-header {
-    color: black;
-    background: linear-gradient(to right, white, var(--primarioC));
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    box-shadow: inset 0 1px 2px rgba(255,255,255,0.2);
-    font-weight: bold;
-    font-size: 14px;
+.cardSec-header{
+    color:#ffffff;
+    background:linear-gradient(135deg,var(--primarioC),#1e293b);
+    border-bottom:1px solid rgba(0,0,0,0.2);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);
+    font-weight:600;
+    font-size:14px;
 }
-.cardSec-footer {
-    color: rgba(255,255,255,0.85);
-    background: linear-gradient(135deg, lightgray, white);
-    border-top: 1px solid rgba(0,0,0,0.2);
-    font-size: 0.9rem;
+
+.cardSec-footer{
+    color:#1f2937;
+    background:linear-gradient(135deg,#f8fafc,#e2e8f0);
+    border-top:1px solid #e5e7eb;
+    font-size:0.9rem;
     display:flex;
     justify-content:flex-end;
-    gap:0.5rem;    
+    gap:0.5rem;
 }
 /* formularios */
 .inpSolo,.etiBase,.inpBase,.etiChico,.inpChico {
