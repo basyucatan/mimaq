@@ -19,10 +19,30 @@ Route::middleware("auth")->group(function () {
     Route::view('permisos', 'livewire.permissions.index');
     Route::view('gestionPermisos', 'livewire.gestionPermisos.index');    
 
+    Route::view('temp', 'livewire.arbolfacturas.index');
+
     Route::view('welcome', 'livewire.welcome.index');
     Route::view('mensajes', 'livewire.mensajes.index');
-
     Route::view('catalogos', 'livewire.catalogos.index');
     
+    Route::view('arancels', 'livewire.arancels.index');
     Route::view('clases', 'livewire.clases.index');
+    Route::view('deptos', 'livewire.deptos.index');
+    Route::view('estilos', 'livewire.estilos.index');
+    Route::view('formas', 'livewire.formas.index');
+    Route::view('materials', 'livewire.materials.index');
+    Route::view('origens', 'livewire.origens.index');
+    Route::view('permisos', 'livewire.permisos.index');
+    Route::view('sizes', 'livewire.sizes.index');
+    Route::view('tipos', 'livewire.tipos.index');
+    Route::view('unidads', 'livewire.unidads.index');
+
+    Route::view('pedimentos', 'livewire.pedimentos.index');
+    Route::view('facimports', 'livewire.facimports.index');
+    Route::view('clientes', 'livewire.clientes.index');
+    Route::view('ordens', 'livewire.ordens.index');
+    Route::view('lotes', 'livewire.lotes.index');
+    Route::view('lotesfolios', 'livewire.lotesfolios.index');
+    Route::view('lotesfoliosmats', 'livewire.lotesfoliosmats.index');
+
 });

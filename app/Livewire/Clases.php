@@ -14,8 +14,9 @@ class Clases extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalClase=false, $selected_id, $keyWord, $clase, $adicionales;
+    public $verModalClase=false, $selected_id, $keyWord, $IdTipo, $IdArancel, $clase, $claseI;
 	
+	public $adicionales = [];
     public function updatedKeyWord()
 	{
 		$this->resetPage();
@@ -27,8 +28,10 @@ class Clases extends Component
 		return Clase::Where('id','>',0)
 			->where(function ($query) use ($keyWord) {
 				$query
+						->orWhere('IdTipo', 'LIKE', $keyWord)
+						->orWhere('IdArancel', 'LIKE', $keyWord)
 						->orWhere('clase', 'LIKE', $keyWord)
-						->orWhere('adicionales', 'LIKE', $keyWord);
+						->orWhere('claseI', 'LIKE', $keyWord);
 			})
 			->paginate(12);
 	}
@@ -65,14 +68,19 @@ class Clases extends Component
     public function save()
     {
         $this->validate([
+		'IdTipo' => 'required',
+		'IdArancel' => 'required',
 		'clase' => 'required',
+		'claseI' => 'required',
         ]);
 
         Clase::updateOrCreate(
 			['id' => $this->selected_id],
 			[
+				'IdTipo' => $this-> IdTipo,
+				'IdArancel' => $this-> IdArancel,
 				'clase' => $this-> clase,
-				'adicionales' => $this-> adicionales
+				'claseI' => $this-> claseI
 			]
 		);
         $this->resetInput();

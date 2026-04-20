@@ -33,6 +33,8 @@ return [
          */
         'unwantedColumns' => [
             'id',
+            'IdAccess',
+            'adicionales',
             'password',
             'email_verified_at',
             'remember_token',

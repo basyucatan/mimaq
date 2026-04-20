@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\{{modelName}};
 use Livewire\Attributes\Computed;
-use App\Models\Util;
+use App\Models\{Util};
 use Illuminate\Support\Facades\DB;
 
 class {{modelName}}s extends Component
@@ -15,7 +15,10 @@ class {{modelName}}s extends Component
 
 	protected $paginationTheme = 'bootstrap';
     public $verModal{{modelName}}=false, $selected_id, $keyWord, {{updatefield}};
-	
+	{{arrayProperties}}
+    public function mount()
+    {
+    }    
     public function updatedKeyWord()
 	{
 		$this->resetPage();

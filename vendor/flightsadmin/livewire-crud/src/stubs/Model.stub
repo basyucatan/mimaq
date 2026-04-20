@@ -14,5 +14,6 @@ class {{modelName}} extends Model
     protected $table = '{{modelNamePluralLowerCase}}';
 
     protected $fillable = [{{fillable}}];
+    {{casts}}
 	{{relations}}
 }

@@ -89,7 +89,19 @@ class LivewireCrudGenerator extends LivewireGeneratorCommand
         }
 
         // Replacements
-        $replace = array_merge($this->buildReplacements(), $this->modelReplacements());
+        // $replace = array_merge($this->buildReplacements(), $this->modelReplacements());
+        //casts (pepe)
+        $casts = [];
+        foreach ($this->getColumns() as $col) {
+            if ($col->Field === 'adicionales') {
+                $casts[] = "'{$col->Field}' => 'array'";
+            }
+        }
+        $castsString = '';
+        if (!empty($casts)) {
+            $castsString = "protected \$casts = [\n        " . implode(",\n        ", $casts) . "\n    ];";
+        }
+        $replace = array_merge($this->buildReplacements(),$this->modelReplacements(),['{{casts}}' => $castsString]);
 
         // Templates
         $modelTemplate = str_replace(

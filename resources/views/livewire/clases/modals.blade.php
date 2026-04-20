@@ -14,13 +14,21 @@
                                 @endif
 
                                 <div class="col-md-6">
+                                    <label for="IdTipo" class="etiBase">Idtipo</label>
+                                    <input wire:model="IdTipo" type="text" class="inpBase"  onfocus="this.select()" id="IdTipo">@error('IdTipo') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>                            
+                                <div class="col-md-6">
+                                    <label for="IdArancel" class="etiBase">Idarancel</label>
+                                    <input wire:model="IdArancel" type="text" class="inpBase"  onfocus="this.select()" id="IdArancel">@error('IdArancel') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>                            
+                                <div class="col-md-6">
                                     <label for="clase" class="etiBase">Clase</label>
                                     <input wire:model="clase" type="text" class="inpBase"  onfocus="this.select()" id="clase">@error('clase') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
+                                </div>                            
                                 <div class="col-md-6">
-                                    <label for="adicionales" class="etiBase">Adicionales</label>
-                                    <input wire:model="adicionales" type="text" class="inpBase"  onfocus="this.select()" id="adicionales">@error('adicionales') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
+                                    <label for="claseI" class="etiBase">Clasei</label>
+                                    <input wire:model="claseI" type="text" class="inpBase"  onfocus="this.select()" id="claseI">@error('claseI') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>                            
 
                             </div>
                         </form>

@@ -3,7 +3,7 @@
     --primarioC: #60a5fa;
 }
 html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color: black;}
-/* cards */
+
 .cardPrin, .cardSec {
     display: flex;
     flex-direction: column;
@@ -15,11 +15,14 @@ html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color:
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 .cardPrin-header,
-.cardPrin-footer {
+.cardPrin-footer,
+.cardSec-header,
+.cardSec-footer{
     display: flex;
     justify-content: space-between;
     padding: 0.4rem 0.7rem;
     align-items: center;
+    gap:0.5rem;
 }
 .cardPrin-header {
     color: white;
@@ -41,17 +44,13 @@ html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color:
     border-bottom:1px solid rgba(0,0,0,0.2);
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);
     font-weight:600;
-    font-size:14px;
+    font-size:14px;    
 }
-
 .cardSec-footer{
     color:#1f2937;
     background:linear-gradient(135deg,#f8fafc,#e2e8f0);
     border-top:1px solid #e5e7eb;
     font-size:0.9rem;
-    display:flex;
-    justify-content:flex-end;
-    gap:0.5rem;
 }
 /* formularios */
 .inpSolo,.etiBase,.inpBase,.etiChico,.inpChico {
@@ -113,6 +112,10 @@ html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color:
     top: 0;
     height: 50%;
     background: linear-gradient(180deg, rgb(255, 255, 255), rgba(255, 255, 255, 0.485) 40%, transparent);
+}
+.botChico{
+    padding:1px 6px;
+    font-size:0.8rem;
 }
 .bot:hover, .bot:focus-visible  { background: steelblue;}
 .botNegro   { background: black; }

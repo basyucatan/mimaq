@@ -7,7 +7,7 @@
                         <span>{{ $selected_id ? 'Editar {{modelTitle}}' : 'Crear {{modelTitle}}' }}</span>
                     </div>
                     <div class="cardPrin-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">
-                        <form>
+                        <form gy-2>
                             <div class="row">
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">

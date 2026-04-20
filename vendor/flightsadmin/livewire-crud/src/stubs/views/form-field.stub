@@ -1,4 +1,5 @@
                                 <div class="col-md-6">
                                     <label for="{{column}}" class="etiBase">{{title}}</label>
-                                    <input wire:model="{{column}}" type="{{type}}" class="inpBase"  onfocus="this.select()" id="{{column}}">@error('{{column}}') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
+                                    <input wire:model="{{column}}" type="{{type}}" class="inpBase"  onfocus="this.select()">
+                                    @error('{{column}}') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>                            

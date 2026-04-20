@@ -27,7 +27,7 @@
                                         {{ $row->clase }}
                                     </div>
                                     <div class="cardSec-body">
-                                        {{ $row->clase }} | {{ $row->adicionales }}
+                                        {{ $row->IdTipo }} | {{ $row->IdArancel }} | {{ $row->clase }} | {{ $row->claseI }}
                                     </div>
                                     <div class="cardSec-footer">
                                         <button wire:click="edit({{ $row->id }})"

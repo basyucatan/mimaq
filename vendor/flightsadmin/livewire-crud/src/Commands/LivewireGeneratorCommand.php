@@ -397,18 +397,18 @@ abstract class LivewireGeneratorCommand extends Command
         };
 
         $fillable = function () {
-
-            /** @var array $filterColumns Exclude the unwanted columns */
             $filterColumns = $this->getFilteredColumns();
-
-            // Add quotes to the unwanted columns for fillable
+            // 👇 agregar adicionales si existe en la tabla
+            foreach ($this->getColumns() as $col) {
+                if ($col->Field === 'adicionales' && !in_array('adicionales', $filterColumns)) {
+                    $filterColumns[] = 'adicionales';
+                }
+            }
             array_walk($filterColumns, function (&$value) {
                 $value = "'" . $value . "'";
             });
-
-            // CSV format
             return implode(',', $filterColumns);
-        };
+        };        
 
         $updatefield = function () {
 
@@ -496,7 +496,14 @@ abstract class LivewireGeneratorCommand extends Command
         };
 
         list($relations, $properties) = (new ModelGenerator($this->table, $properties, $this->modelNamespace))->getEloquentRelations();
-
+        $arrayProperties = '';
+        foreach ($this->getColumns() as $col) {
+        $type = strtolower($col->Type);
+        $isJsonLike = str_contains($type, 'json') || str_contains($type, 'longtext');
+        if ($isJsonLike) {
+            $arrayProperties .= "\n\tpublic \${$col->Field} = [];";
+        }
+        }
         return [
             '{{fillable}}' => $fillable(),
             '{{updatefield}}' => $updatefield(),
@@ -508,6 +515,7 @@ abstract class LivewireGeneratorCommand extends Command
             '{{search}}' => $keyWord(),
             '{{relations}}' => $relations,
             '{{properties}}' => $properties,
+            '{{arrayProperties}}' => $arrayProperties,
             '{{softDeletesNamespace}}' => $softDeletesNamespace,
             '{{softDeletes}}' => $softDeletes,
         ];

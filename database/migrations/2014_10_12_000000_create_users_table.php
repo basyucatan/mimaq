@@ -11,12 +11,14 @@ return new class extends Migration
     {         
         Schema::create('deptos', function (Blueprint $table) {
             $table->id();
-            $table->string('depto',20);
+            $table->string('depto',20)->unique();
+            $table->smallInteger('orden')->nullable();
+            $table->enum('tipo', ['produccion', 'admin'])->default('produccion');
         });                          
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdDepto')->nullable()->constrained('deptos')->nullOnDelete();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('telefono')->unique();
             $table->string('email')->unique();
             $table->string('password');
@@ -28,23 +30,21 @@ return new class extends Migration
     }
     private function insertarDatos(): void
     {
-        DB::table('deptos')->insert([
-            ['id' => 1, 'depto' => 'Compras'],
-            ['id' => 2, 'depto' => 'AlmacenMP'],
-            ['id' => 3, 'depto' => 'Retales'],
-            ['id' => 4, 'depto' => 'Corte'],
-            ['id' => 5, 'depto' => 'Ensamble'],
-            ['id' => 6, 'depto' => 'AlmacénPT'],
-            ['id' => 7, 'depto' => 'Instalación'],
-            ['id' => 8, 'depto' => 'Entregas'],
-            ['id' => 9, 'depto' => 'Administración'],
-        ]);
-    }    
-    public function down(): void
-    {
-        Schema::dropIfExists('deptos');
-        Schema::dropIfExists('users');
-    }
+        $deptos = [ 'Boveda','Control','Tombola', 'Limpieza', 'Prepulido', 'Lavado1', 'Engarce1', 'Lapa', 'Lav.Lapa', 
+            'Joyeria', 'Pulido', 'Lavado2', 'QC1', 'Engarce2', 'Rhodio', 'QC2', 'Empaque', 'Admin'];
+        $orden = 10;
+        $data = array_map(function ($depto) use (&$orden) {
+            $item = [
+                'depto' => $depto,
+                'tipo' => $depto === 'Admin' ? 'admin' : 'produccion',
+                'orden' => $orden
+            ];
+            $orden += 10;
+            return $item;
+        }, $deptos);
+
+        DB::table('deptos')->insert($data);
+    }   
 };
 
 // Schema::create('etapas', function (Blueprint $table) {
@@ -53,7 +53,7 @@ return new class extends Migration
 //     $table->smallInteger('small_integer_column'); // entero  -32,768 a 32,767
 //     $table->integer('integer_column'); // entero -2,147,483,648 a 2,147,483,647
 //     $table->bigInteger('big_integer_column'); // entero -9,223,372,036,854,775,808 a 9,223,372,036,854,775,807
-//     $table->float('float_column', 8, 2); // reak (8 dígitos, 2 decimales)
+//     $table->float('float_column', 8, 2); // real (8 dígitos, 2 decimales)
 //     $table->double('double_column', 15, 8); // real (15 dígitos, 8 decimales)
 //     $table->decimal('decimal_column', 10, 2); // decimal (10 dígitos, 2 decimales): -999,999.99 a 999,999.99
 //     $table->boolean('boolean_column')->default(true); 
