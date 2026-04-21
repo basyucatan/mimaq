@@ -3,7 +3,7 @@
         <div class="flex-grow-1 me-2 position-relative">
             <input wire:model.lazy="keyWord" class="inpSolo w-100" onfocus="this.select()" placeholder="Buscar...">
             @if($keyWord)
-                <span wire:click="limpiarBusqueda" class="bot botNaranja botChico" 
+                <span wire:click="limpiarBusqueda" class="bot botNegro botChico" 
                 style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); 
                 cursor: pointer;">X</span>
             @endif

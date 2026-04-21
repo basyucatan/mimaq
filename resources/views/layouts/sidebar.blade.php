@@ -5,7 +5,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             @auth
-                <a class="bot botNegro" href="#" title="Inicio" style="font-size: 20px;">🪪</a>
+                <a class="bot botNegro" href="{{ url('/facimports') }}" title="Inicio" style="font-size: 20px;">🪪</a>
             @endauth
         </div>
         <div class="mx-auto">

@@ -17,7 +17,11 @@ class Material extends Model
     protected $casts = [
         'adicionales' => 'array'
     ];
-	
+    public function getPesoG($valor)
+    {
+        $factor = $this->unidadP ? $this->unidadP->factorC : 1;
+        return $valor * $factor;
+    }	
     public function clase()
     {
         return $this->hasOne('App\Models\Clase', 'id', 'IdClase');

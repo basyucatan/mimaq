@@ -37,6 +37,8 @@ return new class extends Migration
             $table->decimal('pesoG',10,4);
             $table->foreignId('IdSize')->nullable()->constrained('sizes')->nullOnDelete();
             $table->foreignId('IdForma')->nullable()->constrained('formas')->nullOnDelete();
+            $table->foreignId('IdEstilo')->nullable()->constrained('estilos')->nullOnDelete();
+            $table->string('estiloY',20)->nullable();
             $table->json('adicionales')->nullable();
         });        
         Schema::create('ordens', function (Blueprint $table) {

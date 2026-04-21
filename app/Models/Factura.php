@@ -17,10 +17,24 @@ class Factura extends Model
     protected $casts = [
         'adicionales' => 'array'
     ];
-	
-    public function facturasdets()
+    public function getNextIdEntradaMex()
     {
-        return $this->hasMany('App\Models\Facimportsdet', 'IdFacturo', 'id');
+        $prefijo = $this->factura . '-';
+        $ultimoRegistro = $this->facimportsdets()
+            ->where('IdEntradaMex', 'LIKE', $prefijo . '%')
+            ->orderByRaw('CAST(SUBSTRING_INDEX(IdEntradaMex, "-", -1) AS UNSIGNED) DESC')
+            ->first();
+        if ($ultimoRegistro && strpos($ultimoRegistro->IdEntradaMex, '-') !== false) {
+            $partes = explode('-', $ultimoRegistro->IdEntradaMex);
+            $consecutivo = (int) end($partes) + 1;
+        } else {
+            $consecutivo = 1;
+        }
+        return $prefijo . $consecutivo;
+    }	
+    public function facimportsdets()
+    {
+        return $this->hasMany('App\Models\Facimportsdet', 'IdFactura', 'id');
     }
     
     public function pedimento()
