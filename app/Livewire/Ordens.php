@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Orden;
 use Livewire\Attributes\Computed;
-use App\Models\Util;
+use App\Models\{Util};
 use Illuminate\Support\Facades\DB;
 
 class Ordens extends Component
@@ -14,9 +14,13 @@ class Ordens extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalOrden=false, $selected_id, $keyWord, $IdCliente, $orden, $estatus, $fechaVen;
+    public $verModalOrden=false, $selected_id, $keyWord, $IdCliente, $orden, $estatus, $fechaVen, $alertas;
 	
+	public $alertas = [];
 	public $adicionales = [];
+    public function mount()
+    {
+    }    
     public function updatedKeyWord()
 	{
 		$this->resetPage();
@@ -31,7 +35,8 @@ class Ordens extends Component
 						->orWhere('IdCliente', 'LIKE', $keyWord)
 						->orWhere('orden', 'LIKE', $keyWord)
 						->orWhere('estatus', 'LIKE', $keyWord)
-						->orWhere('fechaVen', 'LIKE', $keyWord);
+						->orWhere('fechaVen', 'LIKE', $keyWord)
+						->orWhere('alertas', 'LIKE', $keyWord);
 			})
 			->paginate(12);
 	}
@@ -79,7 +84,8 @@ class Ordens extends Component
 				'IdCliente' => $this-> IdCliente,
 				'orden' => $this-> orden,
 				'estatus' => $this-> estatus,
-				'fechaVen' => $this-> fechaVen
+				'fechaVen' => $this-> fechaVen,
+				'alertas' => $this-> alertas
 			]
 		);
         $this->resetInput();

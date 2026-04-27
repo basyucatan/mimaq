@@ -25,7 +25,10 @@
                                 <tr>
 								<th>Idestilo</th>
 								<th>Cantidad</th>
-								<th>Clasei</th>
+								<th>Idmaterial</th>
+								<th>Idsize</th>
+								<th>Idforma</th>
+								<th>Estiloy</th>
 <th>Acciones</th></tr>
                             </thead>
                             <tbody>
@@ -34,7 +37,10 @@
                                         
 								<td>{{ $row->IdEstilo }}</td>
 								<td>{{ $row->cantidad }}</td>
-								<td>{{ $row->claseI }}</td>
+								<td>{{ $row->IdMaterial }}</td>
+								<td>{{ $row->IdSize }}</td>
+								<td>{{ $row->IdForma }}</td>
+								<td>{{ $row->estiloY }}</td>
 
                                         <td width="60">
                                             <div class="d-flex justify-content-around align-items-center gap-1">

@@ -1,7 +1,9 @@
 <div class="cardSec shadow-sm">
     <div class="cardSec-header d-flex justify-content-between align-items-center p-2">
         <div class="flex-grow-1 me-2 position-relative">
-            <input wire:model.lazy="keyWord" class="inpSolo w-100" onfocus="this.select()" placeholder="Buscar...">
+            <input wire:model.lazy="keyWord" class="inpSolo" 
+                wire:keydown.escape="$set('keyWord','')"
+                onfocus="this.select()" placeholder="Buscar...">
             @if($keyWord)
                 <span wire:click="limpiarBusqueda" class="bot botNegro botChico" 
                 style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); 

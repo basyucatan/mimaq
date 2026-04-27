@@ -112,6 +112,14 @@ class Util
                     $carbonDate->year % 100 // Obtiene los últimos dos dígitos del año
                 );
                 break;
+            case 'MM/DD/YY':
+                $fecha = sprintf(
+                    "%02d/%02d/%02d",
+                    $carbonDate->month,
+                    $carbonDate->day,
+                    $carbonDate->year % 100
+                );
+                break;                
             case 'abreviada': // S8Feb25|2331
                 $fecha = sprintf(
                     "%s%d%s%02dH%02d%02d",

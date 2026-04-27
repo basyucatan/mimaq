@@ -1,13 +1,20 @@
 <?php
 namespace App\Livewire;
 use Livewire\{Component, WithPagination};
-use App\Models\{Facimportsdet, Estilosdet};
+use App\Models\{Factura, Facimportsdet, Estilosdet};
 use Livewire\Attributes\Computed;
 use App\Traits\GestionFacImports;
 class Facimportsdets extends Component
 {
     use WithPagination, GestionFacImports;
     protected $paginationTheme = 'bootstrap';
+    protected $listeners = [
+        'IdFacturaElecta' => 'IdFacturaElecta',
+    ];
+    public function IdFacturaElecta()
+    {
+        $this->factura = Factura::find($this->IdFactura);
+    }    
     public function mount()
     {
         $this->getArrays();
@@ -36,62 +43,37 @@ class Facimportsdets extends Component
     {
         return view('livewire.facimportsdets.view', ['facimportsdets' => $this->filteredFacimportsdets]);
     }
-    public function save()
-    {
-        $this->validate([
-            'IdOrigen' => 'required', 'IdMaterial' => 'required',
-            'cantidad' => 'required', 'precioU' => 'required', 'pesoEnUMat' => 'required',
-        ]);
-        $this->guardar();
-        $this->cancel();
-    }
     public function generarConEstilo()
     {
         $this->validate(['IdEstilo' => 'required', 'cantidadEstilo' => 'required|numeric']);
-        $detalles = \App\Models\Estilosdet::where('IdEstilo', $this->IdEstilo)->get();
+        $detalles = Estilosdet::where('IdEstilo', $this->IdEstilo)->get();
+        $cantidadEstilo = $this->cantidadEstilo;
+        $orden = $this->orden;
+        $lote = $this->lote;
+        $adicionales = ['orden' => $this->orden ?? '','lote' => $this->lote ?? ''];
         $this->selected_id = null;
         foreach ($detalles as $det) {
             $this->IdMaterial = $det->IdMaterial;
+            $this->IdEstilo = $det->Estilo->id;
+            $this->estiloY = $det->estiloY;
+            $this->orden = $orden;
+            $this->lote = $lote;
             $this->IdOrigen = 2;
-            $this->cantidad = $this->cantidadEstilo * $det->cantidad;
+            $this->cantidad = $cantidadEstilo * $det->cantidad;
             $this->pesoEnUMat = 0;
             $this->precioU = 0;
-            $this->adicionales = ['orden' => $this->orden ?? '','lote' => $this->lote ?? ''];
-            $this->guardar();
+            $this->adicionales = $adicionales;
+            $this->save();
         }
-        $this->cancel();
-    }
-    public function edit($id)
-    {
-        $this->selected_id = $id;
-        $this->fill(Facimportsdet::findOrFail($id)->toArray());
-        $this->orden = $this->adicionales['orden'] ?? null;
-        $this->lote = $this->adicionales['lote'] ?? null;
-        $this->verModalFacimportsdet = true;
-    }
-    public function create()
-    {
-        $this->resetInput();
-        $this->verModalFacimportsdet = true;
     }
     public function crearEstilo()
     {
         $this->resetInput();
         $this->verModalEstilos = true;
-    }
-    public function cancel()
-    {
-        $this->resetInput();
-        $this->verModalFacimportsdet = false;
-        $this->verModalEstilos = false;
-        $this->verModalImpresiones = false;
-    }
+    }    
     public function paginationView()
     {
         return 'livewire.paginacionBase';
     }
-    public function destroy($id)
-    {
-        if ($id) Facimportsdet::where('id', $id)->delete();
-    }
+
 }

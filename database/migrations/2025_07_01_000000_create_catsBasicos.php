@@ -86,7 +86,7 @@ return new class extends Migration
             $table->foreignId('IdMaterial')->nullable()->constrained('materials')->nullOnDelete();
             $table->foreignId('IdSize')->nullable()->constrained('sizes')->nullOnDelete();
             $table->foreignId('IdForma')->nullable()->constrained('formas')->nullOnDelete();
-            $table->string('IdEstiloY',30)->nullable();
+            $table->string('estiloY',30)->nullable();
             $table->json('adicionales')->nullable();
         });  
         Schema::create('clientes', function (Blueprint $table) {

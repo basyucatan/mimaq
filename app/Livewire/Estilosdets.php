@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Estilosdet;
 use Livewire\Attributes\Computed;
-use App\Models\Util;
+use App\Models\{Util};
 use Illuminate\Support\Facades\DB;
 
 class Estilosdets extends Component
@@ -14,9 +14,12 @@ class Estilosdets extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalEstilosdet=false, $selected_id, $keyWord, $IdEstilo, $cantidad, $claseI;
+    public $verModalEstilosdet=false, $selected_id, $keyWord, $IdEstilo, $cantidad, $IdMaterial, $IdSize, $IdForma, $estiloY;
 	
 	public $adicionales = [];
+    public function mount()
+    {
+    }    
     public function updatedKeyWord()
 	{
 		$this->resetPage();
@@ -30,7 +33,10 @@ class Estilosdets extends Component
 				$query
 						->orWhere('IdEstilo', 'LIKE', $keyWord)
 						->orWhere('cantidad', 'LIKE', $keyWord)
-						->orWhere('claseI', 'LIKE', $keyWord);
+						->orWhere('IdMaterial', 'LIKE', $keyWord)
+						->orWhere('IdSize', 'LIKE', $keyWord)
+						->orWhere('IdForma', 'LIKE', $keyWord)
+						->orWhere('estiloY', 'LIKE', $keyWord);
 			})
 			->paginate(12);
 	}
@@ -69,7 +75,6 @@ class Estilosdets extends Component
         $this->validate([
 		'IdEstilo' => 'required',
 		'cantidad' => 'required',
-		'claseI' => 'required',
         ]);
 
         Estilosdet::updateOrCreate(
@@ -77,7 +82,10 @@ class Estilosdets extends Component
 			[
 				'IdEstilo' => $this-> IdEstilo,
 				'cantidad' => $this-> cantidad,
-				'claseI' => $this-> claseI
+				'IdMaterial' => $this-> IdMaterial,
+				'IdSize' => $this-> IdSize,
+				'IdForma' => $this-> IdForma,
+				'estiloY' => $this-> estiloY
 			]
 		);
         $this->resetInput();

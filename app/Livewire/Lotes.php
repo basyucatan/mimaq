@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Lote;
 use Livewire\Attributes\Computed;
-use App\Models\Util;
+use App\Models\{Util};
 use Illuminate\Support\Facades\DB;
 
 class Lotes extends Component
@@ -14,9 +14,13 @@ class Lotes extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalLote=false, $selected_id, $keyWord, $lote, $IdOrden;
+    public $verModalLote=false, $selected_id, $keyWord, $lote, $IdOrden, $alertas;
 	
+	public $alertas = [];
 	public $adicionales = [];
+    public function mount()
+    {
+    }    
     public function updatedKeyWord()
 	{
 		$this->resetPage();
@@ -29,7 +33,8 @@ class Lotes extends Component
 			->where(function ($query) use ($keyWord) {
 				$query
 						->orWhere('lote', 'LIKE', $keyWord)
-						->orWhere('IdOrden', 'LIKE', $keyWord);
+						->orWhere('IdOrden', 'LIKE', $keyWord)
+						->orWhere('alertas', 'LIKE', $keyWord);
 			})
 			->paginate(12);
 	}
@@ -74,7 +79,8 @@ class Lotes extends Component
 			['id' => $this->selected_id],
 			[
 				'lote' => $this-> lote,
-				'IdOrden' => $this-> IdOrden
+				'IdOrden' => $this-> IdOrden,
+				'alertas' => $this-> alertas
 			]
 		);
         $this->resetInput();

@@ -13,14 +13,14 @@ class Lote extends Model
 
     protected $table = 'lotes';
 
-    protected $fillable = ['lote','IdOrden','adicionales'];
+    protected $fillable = ['lote','IdOrden','alertas','adicionales'];
     protected $casts = [
         'adicionales' => 'array'
     ];
 	
-    public function lotesfolios()
+    public function folios()
     {
-        return $this->hasMany('App\Models\Lotesfolio', 'IdLote', 'id');
+        return $this->hasMany('App\Models\Folio', 'IdLote', 'id');
     }
     
     public function orden()

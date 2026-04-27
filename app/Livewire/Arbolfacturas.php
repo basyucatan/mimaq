@@ -5,9 +5,9 @@ use App\Models\Pedimento;
 use App\Models\Factura;
 class Arbolfacturas extends Component
 {
-    public $keyWord = '', $verModalFacimport = false, $verModalPedimento = false;
+    public $keyWord = '', $verModalFacimport = false, $verModalPedimento = false, $cerrado = false;
     public $selected_id, $factura, $IdPedimento, $fecha, $pedimento, 
-        $viadE, $guiaA, $nPaq,
+        $viadE, $guiaA, $nPaq, $estatus, 
         $regimen = 'IN', $tipoCambio;
     public $expandir = ['Pedimento' => [], 'Factura' => []], $adicionales=[];
 
@@ -65,16 +65,16 @@ class Arbolfacturas extends Component
         $this->tipoCambio = $registro->tipoCambio;
         $this->verModalPedimento = true;
     }
+
     public function editarFactura($id)
     {
         $registro = Factura::findOrFail($id);
+        $this->fill($registro->toArray());
         $this->selected_id = $id;
-        $this->factura = $registro->factura;
-        $this->IdPedimento = $registro->IdPedimento;
-        $this->fecha = $registro->fecha;
         $this->viadE = $registro->adicionales['viadE'] ?? null;
         $this->guiaA = $registro->adicionales['guiaA'] ?? null;
         $this->nPaq = $registro->adicionales['nPaq'] ?? null;
+        $this->cerrado = ($registro->estatus === 'cerrado');
         $this->verModalFacimport = true;
     }
     public function savePedimento()
@@ -90,6 +90,7 @@ class Arbolfacturas extends Component
         );
         $this->cancel();
     }
+
     public function saveFactura()
     {
         $this->validate([
@@ -110,9 +111,11 @@ class Arbolfacturas extends Component
             ['factura' => $this->factura, 
             'IdPedimento' => $this->IdPedimento, 
             'fecha' => $this->fecha, 
+            'estatus' => $this->cerrado ? 'cerrado' : 'abierto',
             'adicionales' => $this->adicionales, 
             'tipoCambio' => $this->tipoCambio]
         );
+        $this->dispatch('IdFacturaElecta',$this->selected_id);
         $this->cancel();
     }
     public function cancel()

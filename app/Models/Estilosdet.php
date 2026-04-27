@@ -13,7 +13,7 @@ class Estilosdet extends Model
 
     protected $table = 'estilosdets';
 
-    protected $fillable = ['IdEstilo','cantidad','claseI','adicionales'];
+    protected $fillable = ['IdEstilo','cantidad','IdMaterial','IdSize','IdForma','estiloY','adicionales'];
     protected $casts = [
         'adicionales' => 'array'
     ];
@@ -21,6 +21,26 @@ class Estilosdet extends Model
     public function estilo()
     {
         return $this->hasOne('App\Models\Estilo', 'id', 'IdEstilo');
+    }
+    
+    public function foliosmats()
+    {
+        return $this->hasMany('App\Models\Foliosmat', 'IdEstilosDet', 'id');
+    }
+    
+    public function forma()
+    {
+        return $this->hasOne('App\Models\Forma', 'id', 'IdForma');
+    }
+    
+    public function material()
+    {
+        return $this->hasOne('App\Models\Material', 'id', 'IdMaterial');
+    }
+    
+    public function size()
+    {
+        return $this->hasOne('App\Models\Size', 'id', 'IdSize');
     }
     
 }

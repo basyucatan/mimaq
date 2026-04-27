@@ -5,7 +5,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             @auth
-                <a class="bot botNegro" href="{{ url('/facimports') }}" title="Inicio" style="font-size: 20px;">🪪</a>
+                <a class="bot botNegro" href="{{ url('/temp') }}" title="Inicio" style="font-size: 20px;">🪪</a>
             @endauth
         </div>
         <div class="mx-auto">
@@ -37,17 +37,13 @@
                 <div class="cardSec-body" style="max-height: calc(100vh - 60px); overflow-y: auto;">
                     <ul class="navbar-nav pe-3">
                         <li class="nav-item custom-dropdown-item">
-                            <a href="#" class="nav-link menu-trigger">💼 Admin</a>
+                            <a href="#" class="nav-link menu-trigger">🧩 Admin</a>
                             <ul class="submenu d-none list-unstyled ps-2 border-start">
-                                <li><a href="{{ url('/pedimentos') }}" class="nav-link small">🛒 Pedimentos</a></li>
-                                <li><a href="{{ url('/facimports') }}" class="nav-link small">🛒 Importación</a></li>
-                                <li><a href="{{ url('/clientes') }}" class="nav-link small">🛒 Clientes</a></li>
-                                <li><a href="{{ url('/ordens') }}" class="nav-link small">🛒 Órdenes</a></li>
-                                <li><a href="{{ url('/lotes') }}" class="nav-link small">🛒 Lotes</a></li>
-                                <li><a href="{{ url('/lotesfolios') }}" class="nav-link small">🛒 Folios</a></li>
-                                <li><a href="{{ url('/lotesfoliosmats') }}" class="nav-link small">🛒 FoliosMats</a></li>
-                                <li><a href="{{ url('#') }}" class="nav-link small">🛒 API Go Aduanas</a></li>
-                            </ul>                        
+                                <li><a href="{{ url('/facimports') }}" class="nav-link small">🌍 Importación</a></li>
+                                <li><a href="{{ url('/recibirimports') }}" class="nav-link small">📥 Recepción de Import</a></li>
+                                <li><a href="{{ url('/adminfolios') }}" class="nav-link small">🏷️ Folios</a></li>
+                                <li><a href="{{ url('#') }}" class="nav-link small">🔌 API Go Aduanas</a></li>
+                            </ul>
                         </li>
                     </ul>                
                     <ul class="navbar-nav pe-3">
@@ -57,13 +53,14 @@
                                     <li class="nav-item">
                                         <a href="#" class="nav-link menu-trigger">🏢 Generales</a>
                                         <ul class="submenu d-none list-unstyled ps-3 border-start">
+                                            <li><a href="{{ url('/clientes') }}" class="nav-link small">👥 Clientes</a></li>
+                                            <li><a href="{{ url('/deptos') }}" class="nav-link small">🏬 Departamentos</a></li>
                                             <li><a href="{{ url('/unidads') }}" class="nav-link small">📐 Unidades</a></li>
                                             <li><a href="{{ url('/sizes') }}" class="nav-link small">📏 Sizes</a></li>
                                             <li><a href="{{ url('/formas') }}" class="nav-link small">🔷 Formas</a></li>
                                             <li><a href="{{ url('/origens') }}" class="nav-link small">🌐 Orígenes</a></li>
                                         </ul>
                                     </li>
-
                                     <li class="nav-item">
                                         <a href="#" class="nav-link menu-trigger">🧱 Materiales</a>
                                         <ul class="submenu d-none list-unstyled ps-3 border-start">
@@ -79,7 +76,6 @@
                                     <li class="nav-item">
                                         <a href="#" class="nav-link menu-trigger">⚙️ Configuración</a>
                                         <ul class="submenu d-none list-unstyled ps-3 border-start">
-                                            <li><a href="{{ url('/deptos') }}" class="nav-link small">🏬 Departamentos</a></li>
                                             <li><a href="{{ url('/users') }}" class="nav-link small">🧑‍💻 Usuarios</a></li>
                                             <li><a href="{{ url('/catalogos') }}" class="nav-link small">🧩 Config</a></li>
                                         </ul>

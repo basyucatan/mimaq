@@ -13,7 +13,7 @@ class Factura extends Model
 
     protected $table = 'facturas';
 
-    protected $fillable = ['factura','IdPedimento', 'fecha', 'tipoCambio','adicionales'];
+    protected $fillable = ['factura','IdPedimento', 'fecha', 'tipoCambio','estatus','adicionales'];
     protected $casts = [
         'adicionales' => 'array'
     ];
@@ -32,6 +32,13 @@ class Factura extends Model
         }
         return $prefijo . $consecutivo;
     }	
+  
+    public function getTotalAttribute()
+    {
+        $total = $this->facimportsdets->sum(function ($detalle) {
+            return $detalle->cantidad * $detalle->precioU;});
+        return $total;
+    }      
     public function facimportsdets()
     {
         return $this->hasMany('App\Models\Facimportsdet', 'IdFactura', 'id');

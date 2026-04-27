@@ -5,8 +5,17 @@
             <div class="cardPrin">
                 <div class="cardPrin-header">
                     <span>Lotes</span>
-                    <div>
-                        <input wire:model.live="keyWord" type="text" class="inpSolo"  onfocus="this.select()" placeholder="Buscar">
+                    <div class="me-2 position-relative" style="display:inline-block;">
+                        <input wire:model.lazy="keyWord" class="inpSolo" 
+                        wire:keydown.escape="$set('keyWord','')"
+                        onfocus="this.select()" placeholder="Search...">
+                        @if($keyWord)
+                            <span wire:click="$set('keyWord','')" 
+                                class="bot botNegro botChico"
+                                style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                X
+                            </span>
+                        @endif
                     </div>
                     <div>
                         <button class="bot botVerde" wire:click="create" title="Nuevo Lote">
@@ -25,6 +34,7 @@
                                 <tr>
 								<th>Lote</th>
 								<th>Idorden</th>
+								<th>Alertas</th>
 <th>Acciones</th></tr>
                             </thead>
                             <tbody>
@@ -33,16 +43,17 @@
                                         
 								<td>{{ $row->lote }}</td>
 								<td>{{ $row->IdOrden }}</td>
+								<td>{{ $row->alertas }}</td>
 
                                         <td width="60">
                                             <div class="d-flex justify-content-around align-items-center gap-1">
                                                 <button wire:click="edit({{ $row->id }})"
-                                                        class="bot botNaranja"
+                                                        class="bot botNaranja botChico"
                                                         title="Editar">
                                                     <i class="bi-pencil-square"></i>
                                                 </button>
                                                 <button wire:click="destroy({{ $row->id }})"
-                                                        class="bot botRojo"
+                                                        class="bot botRojo botChico"
                                                         onclick="confirm('¿Estás seguro de eliminar este registro?') || event.stopImmediatePropagation()">
                                                     <i class="bi-trash3-fill"></i>
                                                 </button>

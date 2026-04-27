@@ -1,3 +1,4 @@
+//Modales
 function dragModal(modal) {
     if (!modal) return;
     const encabezado = modal.querySelector('.cardPrin-header');
@@ -26,3 +27,23 @@ function dragModal(modal) {
         document.body.style.userSelect = '';
     });
 }
+
+//Sweet alert
+document.addEventListener('livewire:init', () => {
+    Livewire.on('sweetalert', (data) => {
+        if (Array.isArray(data) && data.length === 1 && typeof data[0] === 'object') {
+            data = data[0];
+        }
+        Swal.fire({
+            icon: data.icon ?? 'success',
+            title: data.text ?? '',
+            showConfirmButton: false,
+            timer: data.timer ?? 10000,
+            timerProgressBar: true,
+            target: document.body,
+            customClass: {
+                container: 'modalSweet'
+            }
+        });
+    });
+});

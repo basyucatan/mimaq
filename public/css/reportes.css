@@ -1,0 +1,73 @@
+body {
+    font-family: 'Helvetica', sans-serif;
+    font-size: 9pt;
+    margin: 0;
+    color: #1a1a1a;
+    counter-reset: page;
+}
+.cabecera {
+    width: 100%;
+    position: relative;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.logo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 45px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+th {
+    background: #001060;
+    color: #ffffff;
+    padding: 6px 5px;
+    text-transform: uppercase;
+    font-size: 8pt;
+    border: none;
+}
+td {
+    padding: 5px;
+    vertical-align: middle;
+    border: none;
+    border-bottom: 0.1pt solid #e0e0e0;
+}
+.gris {
+    background-color: #f1f8fe;
+}
+.derecha {
+    text-align: right;
+}
+.centro {
+    text-align: center;
+}
+.negrita {
+    font-weight: bold;
+}
+.grupo {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    padding: 5px;
+    border-top: 1pt solid #001060;
+    border-bottom: 0.5pt solid #ccc;
+}
+.total {
+    background-color: #f1f1f1;
+    font-weight: bold;
+    font-size: 9pt;
+}
+.linea-detalle {
+    font-size: 7.5pt;
+    color: #555;
+    font-style: italic;
+}
+@page {
+    margin: 15px 30px 45px 30px;
+}
+.pagina::after {
+    content: counter(page);
+}

@@ -2,7 +2,7 @@
 <div class="container-fluid p-2">
     <div class="cardPrin">
         <div class="card-header bg-success text-white fs-5 ps-2">
-            Facturas de importación
+            Import Invoices
         </div>
         <div class="cardPrin-body">
             <div class="row">
@@ -14,7 +14,7 @@
                         @livewire('facimportsdets', ['IdFactura' => $selected_id], key('dets-'.$selected_id))
                     @else
                         <div class="h-100 d-flex align-items-center justify-content-center border rounded bg-light text-muted">
-                            <span>✚ Seleccione una factura para ver sus partidas</span>
+                            <span>✔️ Select an invoice</span>
                         </div>
                     @endif
                 </div>
