@@ -14,12 +14,15 @@ class Estilosdets extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalEstilosdet=false, $selected_id, $keyWord, $IdEstilo, $cantidad, $IdMaterial, $IdSize, $IdForma, $estiloY;
+    public $verModalEstilosdet=false, $selected_id, $keyWord, $IdEstilo, 
+        $cantidad, $IdMaterial, $IdSize, $IdForma, $estiloY;
 	
-	public $adicionales = [];
-    public function mount()
-    {
-    }    
+	public $adicionales = [], $sizes = [], $formas = [], $materials = [];
+    public function mount(){
+        $this->materials = Util::getArray('materials');
+        $this->sizes = Util::getArray('sizes');
+        $this->formas = Util::getArray('formas');
+    }   
     public function updatedKeyWord()
 	{
 		$this->resetPage();
@@ -28,7 +31,7 @@ class Estilosdets extends Component
 	public function filteredEstilosdets()
 	{
 		$keyWord = '%' . $this->keyWord . '%';
-		return Estilosdet::Where('id','>',0)
+		return Estilosdet::Where('IdEstilo', $this->IdEstilo)
 			->where(function ($query) use ($keyWord) {
 				$query
 						->orWhere('IdEstilo', 'LIKE', $keyWord)
@@ -56,7 +59,7 @@ class Estilosdets extends Component
 
     public function resetInput()
     {
-        $this->reset();
+        $this->resetExcept('IdEstilo','materials','sizes','formas');
     }
 
     public function edit($id)
@@ -83,8 +86,8 @@ class Estilosdets extends Component
 				'IdEstilo' => $this-> IdEstilo,
 				'cantidad' => $this-> cantidad,
 				'IdMaterial' => $this-> IdMaterial,
-				'IdSize' => $this-> IdSize,
-				'IdForma' => $this-> IdForma,
+				'IdSize' => $this-> IdSize ? : null,
+				'IdForma' => $this-> IdForma ? : null,
 				'estiloY' => $this-> estiloY
 			]
 		);
