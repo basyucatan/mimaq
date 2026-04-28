@@ -9,40 +9,41 @@
                     <div class="d-flex gap-2">
                         <input wire:model.live="keyWord" type="text" class="inpSolo" placeholder="Buscar estilo...">
                         <button class="bot botVerde" wire:click="create"><i class="bi bi-plus-lg"></i></button>
+                        <button class="bot botVerde" wire:click="poblarFotos"><i class="bi bi-camera"></i></button>
                     </div>
                 </div>
-                <div class="cardSec-body" style="max-height: 75vh; overflow-y: auto;">
+                <div class="cardSec-body" style="max-height: 70vh; overflow-y: auto; overflow-x: hidden;">
                     <div class="row g-2">
                         @forelse($estilos as $row)
-                        <div class="col-12">
-                            <div class="cardSec {{ $selected_id == $row->id ? 'border-primary shadow-sm' : '' }}" 
-                                 wire:click="$set('selected_id', {{ $row->id }})" 
-                                 style="cursor: pointer;">
-<div class="cardSec-body d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center gap-2">
-        <div class="border rounded bg-white d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; overflow: hidden; flex-shrink: 0;">
-            @if($row->foto)
-                <img src="{{ asset('storage/estilos/' . $row->foto) }}?v={{ time() }}" class="img-fluid" alt="foto">
-            @else
-                <i class="bi bi-image text-muted"></i>
-            @endif
-        </div>
-        <div>
-            <h6 class="mb-0 fw-bold">{{ $row->estilo }}</h6>
-            <small class="text-muted">{{ $row->clase->clase ?? $row->IdClase }}</small>
-        </div>
-    </div>
-    <div class="btn-group">
-        <button wire:click.stop="edit({{ $row->id }})" class="bot botNaranja botChico">
-            <i class="bi bi-pencil"></i>
-        </button>
-        <button wire:click.stop="destroy({{ $row->id }})" class="bot botRojo botChico" onclick="confirm('¿Eliminar estilo?') || event.stopImmediatePropagation()">
-            <i class="bi bi-trash"></i>
-        </button>
-    </div>
-</div>
+                            <div class="col-12">
+                                <div class="cardSec {{ $selected_id == $row->id ? 'border-primary shadow-sm' : '' }}" 
+                                    wire:click="$set('selected_id', {{ $row->id }})" 
+                                    style="cursor: pointer;">
+                                    <div class="cardSec-body d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="border rounded bg-white d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; overflow: hidden; flex-shrink: 0;">
+                                                @if($row->foto)
+                                                    <img src="{{ asset('storage/estilos/' . $row->foto) }}?v={{ time() }}" class="img-fluid" alt="foto">
+                                                @else
+                                                    <i class="bi bi-image text-muted"></i>
+                                                @endif
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-bold">{{ $row->estilo }}</h6>
+                                                <small class="text-muted">{{ $row->clase->clase ?? $row->IdClase }}</small>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button wire:click.stop="edit({{ $row->id }})" class="bot botNaranja botChico">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button wire:click.stop="destroy({{ $row->id }})" class="bot botRojo botChico" onclick="confirm('¿Eliminar estilo?') || event.stopImmediatePropagation()">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
                         @empty
                         <div class="text-center p-4">No hay resultados</div>
                         @endforelse

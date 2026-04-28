@@ -101,18 +101,18 @@ class Estilos extends Component
         $this->resetInput();
         $this->verModalEstilo = false;
     }
-public function borrarFoto()
-{
-    if ($this->selected_id) {
-        $estilo = Estilo::find($this->selected_id);
-        if ($estilo && $estilo->foto) {
-            Util::borrarArchivo('estilos', $estilo->foto);
-            $estilo->update(['foto' => null]);
-            $this->foto = null;
+    public function borrarFoto()
+    {
+        if ($this->selected_id) {
+            $estilo = Estilo::find($this->selected_id);
+            if ($estilo && $estilo->foto) {
+                Util::borrarArchivo('estilos', $estilo->foto);
+                $estilo->update(['foto' => null]);
+                $this->foto = null;
+            }
         }
+        $this->fotoSubida = null;
     }
-    $this->fotoSubida = null;
-}
     public function paginationView()
     {
         return 'livewire.paginacionBase';
@@ -123,4 +123,28 @@ public function borrarFoto()
             Estilo::where('id', $id)->delete();
         }
     }
+public function poblarFotos()
+{
+    $ruta = storage_path('app/public/estilos');
+    $extensiones = ['jpg','jpeg','png','webp'];
+
+    $estilos = Estilo::all();
+
+    foreach ($estilos as $estilo) {
+        $nombreBase = trim($estilo->estilo);
+        $archivoEncontrado = null;
+
+        foreach ($extensiones as $ext) {
+            $nombreArchivo = $nombreBase.'.'.$ext;
+            if (file_exists($ruta.'/'.$nombreArchivo)) {
+                $archivoEncontrado = $nombreArchivo;
+                break;
+            }
+        }
+
+        if ($archivoEncontrado) {
+            $estilo->update(['foto'=>$archivoEncontrado]);
+        }
+    }
+}    
 }
