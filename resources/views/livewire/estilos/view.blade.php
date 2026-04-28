@@ -9,7 +9,6 @@
                     <div class="d-flex gap-2">
                         <input wire:model.live="keyWord" type="text" class="inpSolo" placeholder="Buscar estilo...">
                         <button class="bot botVerde" wire:click="create"><i class="bi bi-plus-lg"></i></button>
-                        <button class="bot botVerde" wire:click="poblarFotos"><i class="bi bi-camera"></i></button>
                     </div>
                 </div>
                 <div class="cardSec-body" style="max-height: 70vh; overflow-y: auto; overflow-x: hidden;">

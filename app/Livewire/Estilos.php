@@ -122,29 +122,5 @@ class Estilos extends Component
         if ($id) {
             Estilo::where('id', $id)->delete();
         }
-    }
-public function poblarFotos()
-{
-    $ruta = storage_path('app/public/estilos');
-    $extensiones = ['jpg','jpeg','png','webp'];
-
-    $estilos = Estilo::all();
-
-    foreach ($estilos as $estilo) {
-        $nombreBase = trim($estilo->estilo);
-        $archivoEncontrado = null;
-
-        foreach ($extensiones as $ext) {
-            $nombreArchivo = $nombreBase.'.'.$ext;
-            if (file_exists($ruta.'/'.$nombreArchivo)) {
-                $archivoEncontrado = $nombreArchivo;
-                break;
-            }
-        }
-
-        if ($archivoEncontrado) {
-            $estilo->update(['foto'=>$archivoEncontrado]);
-        }
-    }
-}    
+    }    
 }
