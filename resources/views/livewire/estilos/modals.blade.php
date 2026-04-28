@@ -27,40 +27,40 @@
                                 </select>
                                 @error('IdClase') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-<div class="col-12 mt-3" x-data="{ dragging: false }">
-    <div class="d-flex align-items-center gap-3 border p-2 rounded bg-light" @paste.window="const items = $event.clipboardData.items; for (let i = 0; i < items.length; i++) { if (items[i].type.indexOf('image') !== -1) { const blob = items[i].getAsFile(); @this.upload('fotoSubida', blob); } }">
-        <div class="border rounded d-flex align-items-center justify-content-center bg-white" style="width: 100px; height: 100px; overflow: hidden; flex-shrink: 0;">
-            @if ($fotoSubida)
-                <img src="{{ $fotoSubida->temporaryUrl() }}" class="img-fluid">
-            @elseif ($foto)
-                <img src="{{ asset('storage/estilos/' . $foto) }}?v={{ time() }}" class="img-fluid">
-            @else
-                <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
-            @endif
-        </div>
-        <div class="flex-grow-1">
-            <label class="etiBase">Foto del Estilo (JPG/PNG)</label>
-            <input type="file" wire:model="fotoSubida" class="form-control form-control-sm" accept="image/*" id="inputFoto">
-            <div wire:loading wire:target="fotoSubida" class="text-primary small">Procesando imagen...</div>
-            <div class="mt-1">
-                @if ($fotoSubida)
-                    <span class="badge bg-success">Nueva imagen lista</span>
-                    <button type="button" class="btn btn-sm text-danger" wire:click="$set('fotoSubida', null)">
-                        <i class="bi bi-x-circle"></i> Cancelar
-                    </button>
-                @elseif ($foto)
-                    <span class="text-muted small">Imagen actual: {{ $foto }}</span>
-                    <button type="button" class="btn btn-sm text-danger ms-2" wire:click="borrarFoto" onclick="confirm('¿Eliminar esta imagen permanentemente?') || event.stopImmediatePropagation()">
-                        <i class="bi bi-trash"></i> Quitar
-                    </button>
-                @else
-                    <span class="text-muted small">Puedes pegar (Ctrl+V) o seleccionar</span>
-                @endif
-            </div>
-        </div>
-    </div>
-    @error('fotoSubida') <span class="text-danger small">{{ $message }}</span> @enderror
-</div>
+                            <div class="col-12 mt-3" x-data="{ dragging: false }">
+                                <div class="d-flex align-items-center gap-3 border p-2 rounded bg-light" @paste.window="const items = $event.clipboardData.items; for (let i = 0; i < items.length; i++) { if (items[i].type.indexOf('image') !== -1) { const blob = items[i].getAsFile(); @this.upload('fotoSubida', blob); } }">
+                                    <div class="border rounded d-flex align-items-center justify-content-center bg-white" style="width: 100px; height: 100px; overflow: hidden; flex-shrink: 0;">
+                                        @if ($fotoSubida)
+                                            <img src="{{ $fotoSubida->temporaryUrl() }}" class="img-fluid">
+                                        @elseif ($foto)
+                                            <img src="{{ asset('storage/estilos/' . $foto) }}?v={{ time() }}" class="img-fluid">
+                                        @else
+                                            <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                                        @endif
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <label class="etiBase">Foto del Estilo (JPG/PNG)</label>
+                                        <input type="file" wire:model="fotoSubida" class="form-control form-control-sm" accept="image/*" id="inputFoto">
+                                        <div wire:loading wire:target="fotoSubida" class="text-primary small">Procesando imagen...</div>
+                                        <div class="mt-1">
+                                            @if ($fotoSubida)
+                                                <span class="badge bg-success">Nueva imagen lista</span>
+                                                <button type="button" class="btn btn-sm text-danger" wire:click="$set('fotoSubida', null)">
+                                                    <i class="bi bi-x-circle"></i> Cancelar
+                                                </button>
+                                            @elseif ($foto)
+                                                <span class="text-muted small">Imagen actual: {{ $foto }}</span>
+                                                <button type="button" class="btn btn-sm text-danger ms-2" wire:click="borrarFoto" onclick="confirm('¿Eliminar esta imagen permanentemente?') || event.stopImmediatePropagation()">
+                                                    <i class="bi bi-trash"></i> Quitar
+                                                </button>
+                                            @else
+                                                <span class="text-muted small">Puedes pegar (Ctrl+V) o seleccionar</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('fotoSubida') <span class="text-danger small">{{ $message }}</span> @enderror
+                            </div>
                         </div>
                     </form>
                 </div>

@@ -11,23 +11,12 @@
                             <div class="row">
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
-                                @endif
-
-                                <div class="col-md-6">
-                                    <label class="etiBase">Idfolio</label>
-                                    <input wire:model="IdFolio" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('IdFolio') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                @endif                           
                                 <div class="col-md-6">
                                     <label class="etiBase">Idfacimportsdet</label>
                                     <input wire:model="IdFacImportsDet" type="text" class="inpBase"  onfocus="this.select()">
                                     @error('IdFacImportsDet') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Idmaterial</label>
-                                    <input wire:model="IdMaterial" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('IdMaterial') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                </div>
                                 <div class="col-md-6">
                                     <label class="etiBase">Cantidad</label>
                                     <input wire:model="cantidad" type="text" class="inpBase"  onfocus="this.select()">
@@ -43,7 +32,6 @@
                                     <input wire:model="integrado" type="text" class="inpBase"  onfocus="this.select()">
                                     @error('integrado') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
-
                             </div>
                         </form>
                     </div>

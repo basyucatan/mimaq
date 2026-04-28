@@ -8,6 +8,7 @@
             <div class="row">
                 <div class="col-12 col-md-3">
                     @livewire('arbolfolios')
+                    @livewire('arbolboveda')
                 </div>
                 <div class="col-md-9">
                     @if($IdFolio)

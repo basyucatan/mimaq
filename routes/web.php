@@ -42,6 +42,7 @@ Route::middleware("auth")->group(function () {
     Route::view('clientes', 'livewire.clientes.index');
     Route::view('ordens', 'livewire.ordens.index');
     Route::view('lotes', 'livewire.lotes.index');
+    Route::view('kardex', 'livewire.kardex.index');
     Route::view('adminfolios', 'livewire.adminfolios.index');
 
 });
