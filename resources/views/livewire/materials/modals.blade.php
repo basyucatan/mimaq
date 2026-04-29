@@ -11,37 +11,53 @@
                             <div class="row">
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
-                                @endif
-
-                                <div class="col-md-6">
-                                    <label for="IdClase" class="etiBase">Idclase</label>
-                                    <input wire:model="IdClase" type="text" class="inpBase"  onfocus="this.select()" id="IdClase">@error('IdClase') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-                                <div class="col-md-6">
-                                    <label for="IdUnidad" class="etiBase">Idunidad</label>
-                                    <input wire:model="IdUnidad" type="text" class="inpBase"  onfocus="this.select()" id="IdUnidad">@error('IdUnidad') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-                                <div class="col-md-6">
-                                    <label for="IdUnidadP" class="etiBase">Idunidadp</label>
-                                    <input wire:model="IdUnidadP" type="text" class="inpBase"  onfocus="this.select()" id="IdUnidadP">@error('IdUnidadP') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                @endif                          
                                 <div class="col-md-6">
                                     <label for="material" class="etiBase">Material</label>
                                     <input wire:model="material" type="text" class="inpBase"  onfocus="this.select()" id="material">@error('material') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label for="materialI" class="etiBase">Materiali</label>
+                                    <label for="materialI" class="etiBase">Material (Inglés)</label>
                                     <input wire:model="materialI" type="text" class="inpBase"  onfocus="this.select()" id="materialI">@error('materialI') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label for="materialFiscal" class="etiBase">Materialfiscal</label>
+                                    <label for="materialFiscal" class="etiBase">Material (Fiscal)</label>
                                     <input wire:model="materialFiscal" type="text" class="inpBase"  onfocus="this.select()" id="materialFiscal">@error('materialFiscal') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
                                     <label for="abreviatura" class="etiBase">Abreviatura</label>
                                     <input wire:model="abreviatura" type="text" class="inpBase"  onfocus="this.select()" id="abreviatura">@error('abreviatura') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
-
+                                <div class="col-md-6">
+                                    <label class="etiBase">Clase</label>
+                                    <select wire:model="IdClase" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($clases as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('IdClase') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>                            
+                                <div class="col-md-6">
+                                    <label class="etiBase">Unidad</label>
+                                    <select wire:model="IdUnidad" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($unidads as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('IdUnidad') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="etiBase">Unidad de Peso</label>
+                                    <select wire:model="IdUnidadP" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($unidads as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('IdUnidadP') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
                             </div>
                         </form>
                     </div>

@@ -13,7 +13,7 @@ class Clase extends Model
 
     protected $table = 'clases';
 
-    protected $fillable = ['IdTipo','IdArancel','clase','claseI','adicionales'];
+    protected $fillable = ['IdAccess','IdTipo','IdArancel','clase','claseI','adicionales'];
     protected $casts = [
         'adicionales' => 'array'
     ];

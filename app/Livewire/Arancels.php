@@ -8,14 +8,21 @@ use App\Models\Arancel;
 use Livewire\Attributes\Computed;
 use App\Models\Util;
 use Illuminate\Support\Facades\DB;
-
 class Arancels extends Component
 {
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
     public $verModalArancel=false, $selected_id, $keyWord, $arancel, $arancelUSA, $descripcion, $IdPermiso;
-	
+    public $permisos = [];
+    public function mount()
+    {
+        $this->permisos = DB::table('permisos')
+            ->select(DB::raw("CONCAT(permiso, ' | ',fecha) AS permiso"), 'id')
+            ->orderBy('fecha', 'desc')
+            ->pluck('permiso', 'id')
+            ->toArray();
+    }
     public function updatedKeyWord()
 	{
 		$this->resetPage();
@@ -34,25 +41,21 @@ class Arancels extends Component
 			})
 			->paginate(12);
 	}
-
 	public function render()
 	{
 		return view('livewire.arancels.view', [
 			'arancels' => $this->filteredArancels,
 		]);
 	}
-	
     public function cancel()
     {
         $this->resetInput();
         $this->verModalArancel = false;
     }
-
     public function resetInput()
     {
-        $this->reset();
+        $this->resetExcept('permisos');
     }
-
     public function edit($id)
     {
         $this->selected_id = $id;

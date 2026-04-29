@@ -14,9 +14,15 @@ class Materials extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalMaterial=false, $selected_id, $keyWord, $IdClase, $IdUnidad, $IdUnidadP, $material, $materialI, $materialFiscal, $abreviatura;
-	
+    public $verModalMaterial=false, $selected_id, $keyWord, $IdClase, $IdUnidad, $IdUnidadP, 
+		$material, $materialI, $materialFiscal, $abreviatura;
+	public $clases = [], $unidads = [];
 	public $adicionales = [];
+    public function mount()
+    {
+        $this->clases = Util::getArray('clases');
+        $this->unidads = Util::getArray('unidads');
+    } 	
     public function updatedKeyWord()
 	{
 		$this->resetPage();
@@ -28,12 +34,12 @@ class Materials extends Component
 		return Material::Where('id','>',0)
 			->where(function ($query) use ($keyWord) {
 				$query
-						->orWhere('IdClase', 'LIKE', $keyWord)
-						->orWhere('IdUnidad', 'LIKE', $keyWord)
-						->orWhere('IdUnidadP', 'LIKE', $keyWord)
 						->orWhere('material', 'LIKE', $keyWord)
 						->orWhere('materialI', 'LIKE', $keyWord)
 						->orWhere('materialFiscal', 'LIKE', $keyWord)
+						->orWhereHas('Clase', function($qE) use ($keyWord) {
+							$qE->where('IdAccess', 'like', $keyWord);
+						})						
 						->orWhere('abreviatura', 'LIKE', $keyWord);
 			})
 			->paginate(12);
@@ -54,7 +60,7 @@ class Materials extends Component
 
     public function resetInput()
     {
-        $this->reset();
+        $this->resetExcept('clases','unidads');
     }
 
     public function edit($id)

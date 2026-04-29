@@ -14,7 +14,7 @@ class Lotes extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalLote=false, $selected_id, $keyWord, $lote, $IdOrden, $alertas;
+    public $verModalLote=false, $selected_id, $keyWord, $lote, $IdOrden;
 	
 	public $alertas = [];
 	public $adicionales = [];

@@ -12,15 +12,31 @@
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
                                 @endif
-
                                 <div class="col-md-6">
-                                    <label for="IdTipo" class="etiBase">Idtipo</label>
-                                    <input wire:model="IdTipo" type="text" class="inpBase"  onfocus="this.select()" id="IdTipo">@error('IdTipo') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                    <label class="etiBase">Código</label>
+                                    <input wire:model="IdAccess" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('IdAccess') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>                                  
                                 <div class="col-md-6">
-                                    <label for="IdArancel" class="etiBase">Idarancel</label>
-                                    <input wire:model="IdArancel" type="text" class="inpBase"  onfocus="this.select()" id="IdArancel">@error('IdArancel') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                    <label class="etiBase">Tipo</label>
+                                    <select wire:model="IdTipo" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($tipos as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('IdTipo') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>                          
+                                <div class="col-md-6">
+                                    <label class="etiBase">Fracción Arancelaria</label>
+                                    <select wire:model="IdArancel" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($arancels as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('IdArancel') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>                           
                                 <div class="col-md-6">
                                     <label for="clase" class="etiBase">Clase</label>
                                     <input wire:model="clase" type="text" class="inpBase"  onfocus="this.select()" id="clase">@error('clase') <span class="error text-danger">{{ $message }}</span> @enderror

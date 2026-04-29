@@ -26,7 +26,6 @@ class Material extends Model
     {
         return $this->hasOne('App\Models\Clase', 'id', 'IdClase');
     }
-    
     public function estilosdets()
     {
         return $this->hasMany('App\Models\Estilosdet', 'IdMaterial', 'id');

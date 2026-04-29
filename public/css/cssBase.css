@@ -1,6 +1,6 @@
 :root {
     --primarioO: #00329e;
-    --primarioC: #60a5fa;
+    --primarioC: #63befa;
 }
 html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color: black;}
 
@@ -8,11 +8,17 @@ html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color:
     display: flex;
     flex-direction: column;
     width: 100%;
-    background: #f1f5f9;
+    background: #f0f0f0;
     border: 1px solid rgba(0,0,0,0.15);
     border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.cardSec-body {
+    min-height: 10%;
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 5px;
 }
 .cardPrin-header,
 .cardPrin-footer,
@@ -33,22 +39,20 @@ html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color:
     font-size: 16px;
 }
 .cardPrin-footer {
-    color: rgba(255,255,255,0.85);
     background: linear-gradient(135deg, var(--primarioC), #1a202c);
     border-top: 1px solid rgba(0,0,0,0.2);
     font-size: 0.9rem;
 }
 .cardSec-header{
-    color:#ffffff;
-    background:linear-gradient(135deg,var(--primarioC),#1e293b);
+    color: white;
+    background:linear-gradient( 135deg, black,var(--primarioC));
     border-bottom:1px solid rgba(0,0,0,0.2);
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);
     font-weight:600;
     font-size:12px;    
 }
 .cardSec-footer{
-    color:#1f2937;
-    background:linear-gradient(135deg,#f8fafc,#e2e8f0);
+    background:linear-gradient(0deg, var(--primarioC),#fff);
     border-top:1px solid #e5e7eb;
     font-size:0.9rem;
 }

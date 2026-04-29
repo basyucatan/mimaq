@@ -6,10 +6,19 @@
             <div class="cardSec">
                 <div class="cardSec-header d-flex justify-content-between align-items-center">
                     <span class="fw-bold">Estilos</span>
-                    <div class="d-flex gap-2">
-                        <input wire:model.live="keyWord" type="text" class="inpSolo" placeholder="Buscar estilo...">
-                        <button class="bot botVerde" wire:click="create"><i class="bi bi-plus-lg"></i></button>
-                    </div>
+                    <div class="me-2 position-relative" style="display:inline-block;">
+                        <input wire:model.lazy="keyWord" class="inpSolo" 
+                        wire:keydown.escape="$set('keyWord','')"
+                        onfocus="this.select()" placeholder="Search...">
+                        @if($keyWord)
+                            <span wire:click="$set('keyWord','')" 
+                                class="bot botNegro botChico"
+                                style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                X
+                            </span>
+                        @endif
+                    </div>                    
+                    <button class="bot botVerde" wire:click="create"><i class="bi bi-plus-lg"></i></button>
                 </div>
                 <div class="cardSec-body" style="max-height: 70vh; overflow-y: auto; overflow-x: hidden;">
                     <div class="row g-2">

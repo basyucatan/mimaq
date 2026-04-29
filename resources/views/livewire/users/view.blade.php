@@ -5,9 +5,18 @@
             <div class="cardPrin">
                 <div class="cardPrin-header">
                     <span>Users</span>
-                    <div>
-                        <input wire:model.live="keyWord" type="text" class="inpSolo" placeholder="Buscar">
-                    </div>
+                    <div class="me-2 position-relative" style="display:inline-block;">
+                        <input wire:model.lazy="keyWord" class="inpSolo" 
+                        wire:keydown.escape="$set('keyWord','')"
+                        onfocus="this.select()" placeholder="Search...">
+                        @if($keyWord)
+                            <span wire:click="$set('keyWord','')" 
+                                class="bot botNegro botChico"
+                                style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                X
+                            </span>
+                        @endif
+                    </div> 
                     <button class="bot botVerde" wire:click="create">
                         <i class="bi bi-file-earmark-plus"></i>
                     </button>

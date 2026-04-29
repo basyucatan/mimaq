@@ -26,10 +26,15 @@
                                     <input wire:model="descripcion" type="text" class="inpBase"  onfocus="this.select()" id="descripcion">@error('descripcion') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label for="IdPermiso" class="etiBase">Idpermiso</label>
-                                    <input wire:model="IdPermiso" type="text" class="inpBase"  onfocus="this.select()" id="IdPermiso">@error('IdPermiso') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-
+                                    <label class="etiBase">Permiso</label>
+                                    <select wire:model="IdPermiso" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($permisos as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('IdPermiso') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
                             </div>
                         </form>
                     </div>

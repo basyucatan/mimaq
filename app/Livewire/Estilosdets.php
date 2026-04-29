@@ -7,8 +7,6 @@ use Livewire\WithPagination;
 use App\Models\Estilosdet;
 use Livewire\Attributes\Computed;
 use App\Models\{Util};
-use Illuminate\Support\Facades\DB;
-
 class Estilosdets extends Component
 {
     use WithPagination;

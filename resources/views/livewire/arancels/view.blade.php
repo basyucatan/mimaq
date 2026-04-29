@@ -5,8 +5,17 @@
             <div class="cardPrin">
                 <div class="cardPrin-header">
                     <span>Arancels</span>
-                    <div>
-                        <input wire:model.live="keyWord" type="text" class="inpSolo"  onfocus="this.select()" placeholder="Buscar">
+                    <div class="me-2 position-relative" style="display:inline-block;">
+                        <input wire:model.lazy="keyWord" class="inpSolo" 
+                        wire:keydown.escape="$set('keyWord','')"
+                        onfocus="this.select()" placeholder="Search...">
+                        @if($keyWord)
+                            <span wire:click="$set('keyWord','')" 
+                                class="bot botNegro botChico"
+                                style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                X
+                            </span>
+                        @endif
                     </div>
                     <div>
                         <button class="bot botVerde" wire:click="create" title="Nuevo Arancel">
@@ -14,7 +23,7 @@
                         </button>                   
                     </div>                
                 </div>
-                <div class="cardPrin-body">    
+                <div class="cardPrin-body" style="max-height: 75vh; overflow-y: auto; overflow-x: hidden;">
                     <div class="d-flex justify-content-end mb-2">
                         {{ $arancels->links() }}
                     </div>                               
@@ -27,7 +36,9 @@
                                         {{ $row->arancel }}
                                     </div>
                                     <div class="cardSec-body">
-                                        {{ $row->arancel }} | {{ $row->arancelUSA }} | {{ $row->descripcion }} | {{ $row->IdPermiso }}
+                                        <strong>{{ $row->descripcion }}</strong><br>
+                                        Fracción en USA: <strong>{{ $row->arancelUSA }}</strong>, 
+                                        Permiso: <strong>{{ $row->Permiso->permiso }}</strong>
                                     </div>
                                     <div class="cardSec-footer">
                                         <button wire:click="edit({{ $row->id }})"

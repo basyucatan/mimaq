@@ -23,7 +23,7 @@
                         </button>                   
                     </div>                
                 </div>
-                <div class="cardPrin-body">    
+                <div class="cardPrin-body" style="max-height: 40vh; overflow-y: auto; overflow-x: hidden;">
                     <div class="d-flex justify-content-end mb-2">
                         {{ ${{modelNamePluralLowerCase}}->links() }}
                     </div>                               

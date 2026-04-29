@@ -14,8 +14,7 @@ class Ordens extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalOrden=false, $selected_id, $keyWord, $IdCliente, $orden, $estatus, $fechaVen, $alertas;
-	
+    public $verModalOrden=false, $selected_id, $keyWord, $IdCliente, $orden, $estatus, $fechaVen;
 	public $alertas = [];
 	public $adicionales = [];
     public function mount()
