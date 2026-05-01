@@ -142,7 +142,7 @@ public function imprimirPL()
 
     public function resetInput()
     {
-        $this->resetexcept('keyWord', 'IdFactura', 'factura', 
+        $this->resetexcept('keyWord', 'selected_id', 'IdFactura', 'factura', 
             'kts','colors','origens', 'materials', 'sizes', 'formas', 'estilos');
     }
     public function cancel()
