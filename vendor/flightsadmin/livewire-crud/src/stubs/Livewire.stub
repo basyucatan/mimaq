@@ -12,17 +12,11 @@ use Illuminate\Support\Facades\DB;
 class {{modelName}}s extends Component
 {
     use WithPagination;
-
 	protected $paginationTheme = 'bootstrap';
     public $verModal{{modelName}}=false, $selected_id, $keyWord, {{updatefield}};
 	{{arrayProperties}}
-    public function mount()
-    {
-    }    
-    public function updatedKeyWord()
-	{
-		$this->resetPage();
-	}
+    public function mount(){}
+    public function updatedKeyWord(){$this->resetPage();}
     #[Computed]
 	public function filtered{{modelName}}s()
 	{
@@ -33,25 +27,21 @@ class {{modelName}}s extends Component
 			})
 			->paginate(12);
 	}
-
 	public function render()
 	{
 		return view('livewire.{{modelNamePluralLowerCase}}.view', [
 			'{{modelNamePluralLowerCase}}' => $this->filtered{{modelName}}s,
 		]);
 	}
-	
     public function cancel()
     {
         $this->resetInput();
         $this->verModal{{modelName}} = false;
     }
-
     public function resetInput()
     {
         $this->reset();
     }
-
     public function edit($id)
     {
         $this->selected_id = $id;

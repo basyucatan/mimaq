@@ -8,7 +8,6 @@ use Livewire\Attributes\Computed;
 use App\Models\{Util, Folio, FoliosMat, Estilosdet};
 use Livewire\Attributes\On;
 use App\Traits\Utilfun;
-
 class Folios extends Component
 {
     use WithPagination, Utilfun;
@@ -19,8 +18,12 @@ class Folios extends Component
 	
 	public $adicionales = [];
     #[On('refreshFolios')]
-    public function refresh(){}    
-    
+    public function refresh()
+    {
+        if ($this->IdFolio) {
+            $this->folio = Folio::find($this->IdFolio);
+        }
+    }   
     public function mount(){
 		$this->folio = Folio::find($this->IdFolio);
 	}
@@ -38,9 +41,20 @@ class Folios extends Component
                 'integrado' => false,
             ]);
         }
-        $this->dispatch('refreshRefsMovs');
+        $this->dispatch('refreshFolios');
     }
-
+    public function limpiar()
+	{
+        if (!$this->IdFolio) return;
+        $movimientos = FoliosMat::where('IdFolio', $this->IdFolio);
+        if ($movimientos->exists()) {
+            $movimientos->delete();
+            $this->alerta('🗑️ Registros eliminados', 'success', 1000);
+        } else {
+            $this->alerta('⚠️ No hay registros para limpiar', 'warning', 1000);
+        }
+        $this->dispatch('refreshFolios');
+	}
     public function updatedKeyWord()
 	{
 		$this->resetPage();

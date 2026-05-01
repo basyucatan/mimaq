@@ -15,7 +15,7 @@
         </div>
     </div>
     @include('livewire.arbolfolios.modals')
-    <div class="cardSec-body" style="max-height: 75vh; overflow-y: auto; overflow-x: hidden;">
+    <div class="cardSec-body" style="min-height: 30vh; max-height: 35vh; overflow-y: auto; overflow-x: hidden;">
         <ul class="list-unstyled mb-0">
             @foreach($arbol as $o)
                 @include('livewire.arbolfolios.nodo', [

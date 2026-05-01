@@ -40,7 +40,7 @@
                             <tbody>
                                 @forelse($foliosmats as $row)
                                     <tr>
-                                        <td>{{ $row->IdFacImportsDet }}</td>
+                                        <td>{{ $row->facimportsdet->IdEntradaMex ?? ''}}</td>
                                         <td>{{ $row->Material->material }}</td>
                                         <td>{{  Util::Miles($row->cantidad,0) }}</td>
                                         <td>{{  Util::Miles($row->pesoG,4) }}</td>

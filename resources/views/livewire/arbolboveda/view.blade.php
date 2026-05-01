@@ -13,7 +13,7 @@
             <a class="bot botBlanco botChico" title="Replegar todo" wire:click="replegarTodo">📁</a>
         </div>
     </div>
-    <div class="cardSec-body" style="max-height: 40vh; overflow-y: auto; overflow-x: hidden; background-color: #f8f9fa;">
+    <div class="cardSec-body" style="min-height: 20vh; max-height: 40vh; overflow-y: auto; overflow-x: hidden; background-color: #f8f9fa;">
         <ul class="list-unstyled mb-0">
             @foreach($arbol as $m)
                 @include('livewire.arbolboveda.nodo', [

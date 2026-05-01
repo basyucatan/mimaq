@@ -4,7 +4,6 @@
         <div class="cardSec-header">
             Generación de Folios
         </div>
-
         <div class="cardSec-body p-3">
             @if($IdFolio)
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 bg-light border rounded p-2 mb-3 shadow-sm">

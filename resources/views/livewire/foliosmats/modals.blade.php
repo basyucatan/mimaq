@@ -11,27 +11,37 @@
                             <div class="row">
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
-                                @endif                           
+                                @endif
                                 <div class="col-md-6">
-                                    <label class="etiBase">Idfacimportsdet</label>
-                                    <input wire:model="IdFacImportsDet" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('IdFacImportsDet') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiBase">Material</label>
+                                    <select wire:model="IdMaterial" wire:change="elegirMaterial" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($materials as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('IdMaterial') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="etiBase">Cantidad</label>
-                                    <input wire:model="cantidad" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('cantidad') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+<div class="col-md-6">
+    <label class="etiBase">Referencia</label>
+    <select wire:model="IdFacImportsDet" wire:change="validarDisponibilidad" class="inpBase">
+        <option value=""></option>
+        @foreach ($referencias as $key => $value)
+            <option value="{{ $key }}">{{ $value }}</option>
+        @endforeach
+    </select>
+    @error('IdFacImportsDet') <span class="text-danger">{{ $message }}</span> @enderror
+</div>
+<div class="col-md-6">
+    <label class="etiBase">Cantidad</label>
+    <input wire:model="cantidad" wire:change="validarDisponibilidad" type="text" class="inpBase" onfocus="this.select()">
+    @error('cantidad') <span class="error text-danger">{{ $message }}</span> @enderror
+</div>                          
                                 <div class="col-md-6">
                                     <label class="etiBase">Pesog</label>
-                                    <input wire:model="pesoG" type="text" class="inpBase"  onfocus="this.select()">
+                                    <input wire:model="pesoG" type="text" class="inpBase" readonly>
                                     @error('pesoG') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Integrado</label>
-                                    <input wire:model="integrado" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('integrado') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                </div>
                             </div>
                         </form>
                     </div>
