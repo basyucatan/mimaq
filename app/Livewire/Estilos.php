@@ -56,10 +56,9 @@ class Estilos extends Component
     }
     public function resetInput()
     {
-        $this->resetExcept('clases');
+        $this->resetExcept('clases','selected_id');
         $this->fotoSubida = null;
         $this->foto = null;
-        $this->selected_id = null;
     }
     public function edit($id)
     {
@@ -69,7 +68,7 @@ class Estilos extends Component
     }
     public function create()
     {
-        $this->resetInnput();
+        $this->resetInput();
         $this->verModalEstilo = true;
     } 
 
@@ -78,7 +77,7 @@ class Estilos extends Component
         $this->validate([
             'estilo' => 'required',
             'IdClase' => 'required',
-            'fotoSubida' => $this->selected_id ? 'nullable|image|max:2048' : 'required|image|max:2048',
+            'fotoSubida' => 'nullable|image|max:2048'
         ]);
         $nombreFoto = $this->foto;
         if ($this->fotoSubida) {
