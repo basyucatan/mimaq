@@ -9,7 +9,7 @@
                     <div class="me-2 position-relative" style="display:inline-block;">
                         <input wire:model.lazy="keyWord" class="inpSolo" 
                         wire:keydown.escape="$set('keyWord','')"
-                        onfocus="this.select()" placeholder="Search...">
+                        onfocus="this.select()" placeholder="Buscar...">
                         @if($keyWord)
                             <span wire:click="$set('keyWord','')" 
                                 class="bot botNegro botChico"
@@ -19,6 +19,7 @@
                         @endif
                     </div>                    
                     <button class="bot botVerde" wire:click="create"><i class="bi bi-plus-lg"></i></button>
+                    {{-- <button class="bot botRojo" wire:click="depurarFotos"><i class="bi bi-folder-x"></i></button> --}}
                 </div>
                 <div class="cardSec-body" style="max-height: 70vh; overflow-y: auto; overflow-x: hidden;">
                     <div class="row g-2">

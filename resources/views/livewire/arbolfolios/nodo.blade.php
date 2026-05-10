@@ -24,9 +24,15 @@
                     elseif($selected_id == $nodo->id) $estiloTexto = 'small text-success fw-bold';
                 }
             @endphp
-            <span class="{{ $estiloTexto }} text-truncate">
-                {{ $tipo == 'Folio' ? '' : $tipo }} {{ $texto }} 
-            </span>
+<span class="{{ $estiloTexto }} text-truncate">
+    @if($tipo == 'Orden')
+        {{ $nodo->cliente->cliente ?? '' }} | {{ $texto }}
+    @elseif($tipo == 'Folio')
+        {{ $texto }}
+    @else
+        {{ $tipo }} {{ $texto }}
+    @endif
+</span>
 
             <div class="d-flex gap-2 align-items-center ms-2">
                 @if($tipo == 'Orden')

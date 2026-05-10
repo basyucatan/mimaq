@@ -8,7 +8,7 @@
                     <div class="me-2 position-relative" style="display:inline-block;">
                         <input wire:model.lazy="keyWord" class="inpSolo" 
                         wire:keydown.escape="$set('keyWord','')"
-                        onfocus="this.select()" placeholder="Search...">
+                        onfocus="this.select()" placeholder="Buscar...">
                         @if($keyWord)
                             <span wire:click="$set('keyWord','')" 
                                 class="bot botNegro botChico"
@@ -44,14 +44,14 @@
                                 @forelse($referenciasmovs as $row)
                                     <tr>
                                         <td>{{ $row->Referencia->IdEntradaMex }}</td>
-                                        <td><strong>{{ $row->Referencia->Material->material }}</strong>
+                                        <td><strong>{{ $row->Material->material }}</strong>
                                             {{ $row->Referencia->propsTot }}
                                         </td>
                                         <td>{{ $row->cantidad }}</td>
                                         <td>{{ $row->pesoG }}</td>
                                         <td>{{ $row->difsFormat }}</td>
-
                                         <td width="60">
+                                            @if($row->estatus == 'abierto')
                                             <div class="d-flex justify-content-around align-items-center gap-1">
                                                 <button wire:click="edit({{ $row->id }})" class="bot botNaranja botChico"
                                                     title="Editar">
@@ -62,6 +62,7 @@
                                                     <i class="bi-trash3-fill"></i>
                                                 </button>
                                             </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty

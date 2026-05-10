@@ -7,65 +7,55 @@ use Illuminate\Database\Eloquent\Model;
 
 class Facimportsdet extends Model
 {
-	use HasFactory;
-	
+    use HasFactory;
     public $timestamps = false;
-
     protected $table = 'facimportsdets';
-
-    protected $fillable = ['IdFactura','IdEntradaMex','IdOrigen','IdMaterial',
-        'cantidad','precioU','pesoEnUMat','pesoG','IdSize','IdForma',
-        'IdEstilo','estiloY','adicionales'];
+    protected $fillable = [
+        'IdFactura', 'IdEntradaMex', 'IdOrigen', 'IdMaterial', 'arancel',
+        'cantidad', 'precioU', 'pesoEnUMat', 'pesoG', 'IdSize', 'IdForma',
+        'IdFolio', 'IdEstilo', 'estiloY', 'adicionales'
+    ];
     protected $casts = [
         'adicionales' => 'array'
     ];
-
     public function getPropiedadesAttribute()
     {
         return collect([
             data_get($this->adicionales, 'kt'),
             data_get($this->adicionales, 'color'),
-            $this->Size?->size,
-            $this->Forma?->forma,
-        ])->filter()->implode(' ');
-    }
-    public function getPropsExtAttribute()
-    {
-        return collect([
-            $this->propiedades,
-            $this->IdEstilo ? 'E| '.$this->Estilo?->estilo : null,
-            $this->estiloY ? 'EE| '.$this->estiloY : null,
+            $this->size?->size,
+            $this->forma?->forma,
         ])->filter()->implode(' ');
     }
     public function getPropsTotAttribute()
     {
         return collect([
-            $this->propsExt,
-            data_get($this->adicionales, 'orden') ? 'O| '.strtoupper(data_get($this->adicionales, 'orden')) : null,
-            data_get($this->adicionales, 'lote') ? 'L| '.data_get($this->adicionales, 'lote') : null,
+            $this->propiedades,
+            $this->IdEstilo ? $this->estilo?->estilo : null,
+            $this->estiloY ? $this->estiloY : null,
         ])->filter()->implode(' ');
-    }  
-
-    public function factura(){return $this->hasOne('App\Models\Factura', 'id', 'IdFactura');}
-    public function foliosmats(){return $this->hasMany('App\Models\Foliosmat', 'IdFacImportsDet', 'id');}
-    public function forma(){return $this->hasOne('App\Models\Forma', 'id', 'IdForma');}
-    public function material(){return $this->hasOne('App\Models\Material', 'id', 'IdMaterial');}
-    public function origen(){return $this->hasOne('App\Models\Origen', 'id', 'IdOrigen');}
-    public function Estilo(){return $this->hasOne('App\Models\Estilo', 'id', 'IdEstilo');}    
-    public function size(){return $this->hasOne('App\Models\Size', 'id', 'IdSize');}
-    public function referenciasmovs(){return $this->hasMany('App\Models\Referenciasmov', 'IdFacImportsDet', 'id');}
-public function scopeEnBoveda($query)
-{
-    return $query->whereHas('referenciasmovs', function ($q) {
-        $q->where('estatus', 'boveda')
-            ->groupBy('IdFacImportsDet')
-            ->havingRaw('SUM(cantidad) > 0');
-    });
-}
-public function getStockBovedaAttribute()
-{
-    return \App\Models\Referenciasmov::where('IdFacImportsDet', $this->id)
-        ->where('estatus', 'boveda')
-        ->sum('cantidad');
-}    
+    }
+    public function getOrdenInfoAttribute()
+    {
+        $folio = $this->folio;
+        $lote = $folio?->lote;
+        $orden = $lote?->orden;
+        $cliente = $orden?->cliente;
+        return collect([
+            $orden ? $orden->orden : null,
+            $lote ? '-' . $lote->lote : null,
+            $folio ? ' | ' . $folio->id : null,
+            $cliente ? ' (' . $cliente->cliente.')' : null
+        ])->filter()->implode(' ');
+    }
+    public function factura() { return $this->belongsTo(Factura::class, 'IdFactura'); }
+    public function foliosmats() { return $this->hasMany(Foliosmat::class, 'IdFacImportsDet'); }
+    public function forma() { return $this->belongsTo(Forma::class, 'IdForma'); }
+    public function folio() { return $this->belongsTo(Folio::class, 'IdFolio'); }
+    public function material() { return $this->belongsTo(Material::class, 'IdMaterial'); }
+    public function origen() { return $this->belongsTo(Origen::class, 'IdOrigen'); }
+    public function estilo() { return $this->belongsTo(Estilo::class, 'IdEstilo'); }
+    public function size() { return $this->belongsTo(Size::class, 'IdSize'); }
+    public function referenciasmovs() { return $this->hasMany(Referenciasmov::class, 'IdFacImportsDet'); }
+    public function existencias() { return $this->hasMany(Existencia::class, 'IdFacImportsDet', 'id'); }
 }

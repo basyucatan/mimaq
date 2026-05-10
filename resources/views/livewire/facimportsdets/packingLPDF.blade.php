@@ -85,8 +85,8 @@
                         @endif
                     </td>
                     <td class="centro">{{ $item->Estilo->estilo ?? $item->estiloY ?? '-' }}</td>
-                    <td class="centro">{{ data_get($item->adicionales, 'lote', '-') }}</td>
-                    <td class="centro">{{ $item->material->clase->arancel->arancel ?? '-' }}</td>
+                    <td class="centro">{{ $item->folio?->lote?->lote ?? '-' }}</td>
+                    <td class="centro">{{ $item->arancel ?? '-' }}</td>
                     <td class="derecha">{{ number_format($item->cantidad, 2) }}</td>
                     <td class="derecha">{{ number_format($item->pesoG, 3) }}</td>
                     <td class="derecha">{{ number_format($item->precioU, 2) }}</td>

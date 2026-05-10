@@ -14,7 +14,7 @@
             @if ($hijos && count($hijos) > 0)
                 <span>{{ $expanded ? '🔽' : '▶️' }}</span>
             @else
-                <span>{{ $tipo == 'Factura' ? '📄' : '📁' }}</span>
+                <span>{{ $tipo == 'Factura' ? '' : '📁' }}</span>
             @endif
         </div>
         <div class="flex-grow-1 d-flex align-items-center justify-content-between overflow-hidden">
@@ -31,7 +31,11 @@
                 $fechaFormateada = $nodo->fecha ? $nodo->fecha : '';
             @endphp
             <span class="{{ $estiloTexto }} text-truncate">
-                {{ $texto }} 
+                @if($tipo == 'Factura')
+                    <span class="badge {{ $nodo->estatus == 'abierto' ? 'bg-success' : 'bg-danger' }} ms-1" style="font-size: 0.6rem;">
+                        {{ $nodo->estatus == 'abierto' ? '🔓' : '🔒' }} {{ $texto }}
+                    </span>
+                @endif
                 <small class="text-muted fw-normal ms-1" style="font-size: 0.7rem;">({{ $fechaFormateada }})</small>
             </span>
             <div class="d-flex gap-2 align-items-center ms-2">
@@ -40,16 +44,18 @@
                         <span style="color: #198754; font-weight: bold;">✚</span>
                     </button>
                 @endif
-                <button onclick="confirm('¿Desea eliminar este registro?') || event.stopImmediatePropagation()" 
-                    wire:click.stop="destroy('{{ $tipo }}', {{ $nodo->id }})" 
-                    class="bot botBlanco botChico" title="Eliminar">
-                    <span>⛔</span>
-                </button>
+                @if($tipo == 'Pedimento' || ($tipo == 'Factura' && $nodo->estatus == 'abierto'))
+                    <button onclick="confirm('¿Desea eliminar este registro?') || event.stopImmediatePropagation()" 
+                        wire:click.stop="destroy('{{ $tipo }}', {{ $nodo->id }})" 
+                        class="bot botBlanco botChico" title="Eliminar">
+                        <span>⛔</span>
+                    </button>
+                @endif
             </div>
         </div>
     </div>
     @if ($expanded && $hijos && count($hijos) > 0)
-        <ul class="list-unstyled ps-2 border-start ms-3" style="border-color: #dee2e6 !important;">
+        <ul class="list-unstyled border-start" style="border-color: #dee2e6 !important;">
             @foreach ($hijos as $hijo)
                 @include('livewire.arbolfacturas.nodo', [
                     'tipo' => 'Factura',

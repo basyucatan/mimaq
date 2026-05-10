@@ -22,12 +22,10 @@ return new class extends Migration
         Schema::create('sizes', function (Blueprint $table) {
             $table->id();
             $table->string('size',20)->unique();
-            $table->bigInteger('IdAccess')->nullable();
         });
         Schema::create('formas', function (Blueprint $table) {
             $table->id();
             $table->string('forma',20)->unique();
-            $table->bigInteger('IdAccess')->nullable();
         });
         Schema::create('origens', function (Blueprint $table) {
             $table->id();
@@ -97,6 +95,8 @@ return new class extends Migration
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
             $table->string('empleado',50);
+            $table->foreignId('IdDepto')->constrained('deptos')->restrictOnDelete();
+            $table->boolean('vigente')->default(true);
             $table->json('adicionales')->nullable();
         }); 
     }

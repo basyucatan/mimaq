@@ -39,7 +39,7 @@
                         <li class="nav-item custom-dropdown-item">
                             <a href="#" class="nav-link menu-trigger">🧩 Admin</a>
                             <ul class="submenu d-none list-unstyled ps-2 border-start">
-                                <li><a href="{{ url('/facimports') }}" class="nav-link small">🌍 Importación</a></li>
+                                <li><a href="{{ url('/facimports') }}" class="nav-link small">🌍 Import</a></li>
                                 <li><a href="{{ url('/recibirimports') }}" class="nav-link small">📥 Recepción de Import</a></li>
                                 <li><a href="{{ url('/adminfolios') }}" class="nav-link small">🏷️ Folios</a></li>
                                 <li><a href="{{ url('#') }}" class="nav-link small">🔌 API Go Aduanas</a></li>
@@ -55,6 +55,7 @@
                                         <ul class="submenu d-none list-unstyled ps-3 border-start">
                                             <li><a href="{{ url('/clientes') }}" class="nav-link small">👥 Clientes</a></li>
                                             <li><a href="{{ url('/deptos') }}" class="nav-link small">🏬 Departamentos</a></li>
+                                            <li><a href="{{ url('/empleados') }}" class="nav-link small">👤 Empleados</a></li>
                                             <li><a href="{{ url('/unidads') }}" class="nav-link small">📐 Unidades</a></li>
                                             <li><a href="{{ url('/sizes') }}" class="nav-link small">📏 Sizes</a></li>
                                             <li><a href="{{ url('/formas') }}" class="nav-link small">🔷 Formas</a></li>

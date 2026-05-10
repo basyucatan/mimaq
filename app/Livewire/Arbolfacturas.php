@@ -3,8 +3,10 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Pedimento;
 use App\Models\Factura;
+use App\Traits\Utilfun;
 class Arbolfacturas extends Component
 {
+    use Utilfun;
     public $keyWord = '', $verModalFacimport = false, $verModalPedimento = false, $cerrado = false;
     public $selected_id, $factura, $IdPedimento, $fecha, $pedimento, 
         $viadE, $guiaA, $nPaq, $estatus, 
@@ -134,6 +136,7 @@ class Arbolfacturas extends Component
             $registro = Pedimento::withCount('Facturas')->find($id);
             if ($registro) {
                 if ($registro->facturas_count > 0) {
+                    $this->alerta('⛔ Este pedimento tiene facturas relacionadas', 'warning');
                     return;
                 }
                 $registro->delete();
@@ -142,6 +145,7 @@ class Arbolfacturas extends Component
             $registro = Factura::find($id);
             if ($registro) {
                 if ($registro->estatus == 'cerrado') {
+                    $this->alerta('⛔ Esta factura está cerrada', 'warning');
                     return;
                 }
                 $registro->delete();
@@ -151,7 +155,7 @@ class Arbolfacturas extends Component
                 }
             }
         }
-    }  
+    }
     public function render()
     {
         $consulta = Pedimento::query()

@@ -3,14 +3,15 @@ namespace App\Traits;
 use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\{Facimportsdet, Factura, Material, Util};
+use App\Models\{Facimportsdet, Factura, Material, Util, Folio};
 trait GestionFacImports
 {
     public $verModalFacimportsdet = false, $verModalEstilos = false, $verModalImpresiones = false;
-    public $selected_id, $keyWord, $IdFactura, $factura;
-    public $IdEntradaMex, $IdOrigen, $IdMaterial, $cantidad, $precioU, $pesoEnUMat;
-    public $IdEstilo, $estiloY, $orden, $lote, $cantidadEstilo, $pesoG, $IdSize, $IdForma, $kt, $color;
-    public $adicionales = [], $origens = [], $materials = [], 
+    public $selected_id, $keyWord, $IdFactura, $factura, $arancel;
+    public $IdEntradaMex, $IdOrigen, $IdMaterial, $cantidad, $precioU, $pesoEnUMat,
+        $IdEstilo, $IdFolio,
+        $estiloY, $cliente, $orden, $lote, $cantidadEstilo, $pesoG, $IdSize, $IdForma, $kt, $color;
+    public $adicionales = [], $origens = [], $materials = [], $clientes = [], $folios = [],
         $kts = [], $colors = [], $sizes = [], $formas = [], $estilos = [];
     public function impresiones()
     {
@@ -27,66 +28,89 @@ trait GestionFacImports
         $this->estilos = Util::getArray('estilos');
         $this->kts = ['10K','14K','18K','24K'];
         $this->colors = ['Y','W','P'];
+        $this->clientes = Util::getArray('clientes');
+        $this->folios = Folio::with(['lote.orden.cliente'])
+        ->where('estatus', 'abierto')
+        ->orderBy('id', 'desc')
+        ->get();
     }
+public function limpiarFolio()
+{
+    $this->IdFolio = null;
+    $this->orden = null;
+    $this->lote = null;
+}
+public function actualizarDatosFolio()
+{
+    if ($this->IdFolio) {
+        $folio = Folio::with(['lote.orden'])->find($this->IdFolio);
+        if ($folio) {
+            $this->orden = $folio->lote->orden->orden;
+            $this->lote = $folio->lote->lote;
+        }
+    }
+}
     public function edit($id)
     {
         $this->selected_id = $id;
         $this->fill(Facimportsdet::findOrFail($id)->toArray());
         $this->kt = $this->adicionales['kt'] ?? null;
         $this->color = $this->adicionales['color'] ?? null;
-        $this->orden = $this->adicionales['orden'] ?? null;
-        $this->lote = $this->adicionales['lote'] ?? null;
         $this->verModalFacimportsdet = true;
     }
     public function create()
     {
         $this->resetInput();
+        $this->selected_id = null;
         $this->verModalFacimportsdet = true;
     }
     public function save()
-    {
-        $this->validate([
-            'IdOrigen' => 'required', 'IdMaterial' => 'required',
-            'cantidad' => 'required', 'precioU' => 'required', 'pesoEnUMat' => 'required',
-        ]);        
-        $material = Material::find($this->IdMaterial);
-        $this->pesoG = $material ? $material->getPesoG($this->pesoEnUMat) : 0;
-        if (!$this->selected_id) {
-            $this->IdEntradaMex = $this->factura->getNextIdEntradaMex();
-        }
-        $facDet = $this->selected_id ? Facimportsdet::find($this->selected_id) : null;
-        $adActual = $facDet?->adicionales ?? [];
-        $this->adicionales = array_merge(
-            $adActual,
-            (array)$this->adicionales,
-            [
-                'kt' => $this->kt,
-                'color' => $this->color,
-                'orden' => $this->orden,
-                'lote' => $this->lote,
-            ]
-        );
-        Facimportsdet::updateOrCreate(['id' => $this->selected_id], [
-            'IdFactura' => $this->IdFactura,
-            'IdEntradaMex' => $this->IdEntradaMex,
-            'IdOrigen' => $this->IdOrigen,
-            'IdMaterial' => $this->IdMaterial,
-            'cantidad' => $this->cantidad,
-            'precioU' => $this->precioU,
-            'pesoEnUMat' => $this->pesoEnUMat,
-            'pesoG' => $this->pesoG,
-            'IdSize' => $this->IdSize ?: null,
-            'IdForma' => $this->IdForma ?: null,
-            'IdEstilo' => $material->Clase->Tipo->tipo == 'CASTING' ? $this->IdEstilo : null,
-            'estiloY' => $material->Clase->Tipo->tipo == 'METAL AUX' ? $this->estiloY : null,
-            'adicionales' => $this->adicionales
-        ]);
-        if (!$this->selected_id) {
-            $this->IdEntradaMex = null;
-        }
-        $this->cancel();
+{
+    $this->validate([
+        'IdOrigen' => 'required', 
+        'IdMaterial' => 'required',
+        'cantidad' => 'required', 
+        'precioU' => 'required', 
+        'pesoEnUMat' => 'required',
+    ]);        
+    $material = Material::with('Clase.Arancel')->find($this->IdMaterial);
+    $arancel = $material->Clase->Arancel->arancel;
+    $this->pesoG = $material ? $material->getPesoG($this->pesoEnUMat) : 0;
+    if (!$this->selected_id) {
+        $this->IdEntradaMex = $this->factura->getNextIdEntradaMex();
     }
-
+    $facDet = $this->selected_id ? Facimportsdet::find($this->selected_id) : null;
+    $adActual = $facDet?->adicionales ?? [];
+    $this->adicionales = array_merge(
+        $adActual,
+        (array)$this->adicionales,
+        [
+            'kt' => $this->kt,
+            'color' => $this->color
+        ]
+    );
+    Facimportsdet::updateOrCreate(['id' => $this->selected_id], [
+        'IdFactura' => $this->IdFactura,
+        'IdEntradaMex' => $this->IdEntradaMex,
+        'IdOrigen' => $this->IdOrigen,
+        'IdMaterial' => $this->IdMaterial,
+        'IdFolio' => $this->IdFolio, // <-- Vinculación con el folio creado
+        'arancel' => $arancel,
+        'cantidad' => $this->cantidad,
+        'precioU' => $this->precioU,
+        'pesoEnUMat' => $this->pesoEnUMat,
+        'pesoG' => $this->pesoG,
+        'IdSize' => $this->IdSize ?: null,
+        'IdForma' => $this->IdForma ?: null,
+        'IdEstilo' => $material->Clase->Tipo->tipo == 'CASTING' ? $this->IdEstilo : null,
+        'estiloY' => $material->Clase->Tipo->tipo == 'METAL AUX' ? $this->estiloY : null,
+        'adicionales' => $this->adicionales
+    ]);
+    if (!$this->selected_id) {
+        $this->IdEntradaMex = null;
+    }
+    $this->cancel();
+}
 private function getFactura()
 {
     $factura = Factura::with([
@@ -95,14 +119,24 @@ private function getFactura()
         'facimportsdets.origen',
         'facimportsdets.Estilo',
         'facimportsdets.Size',
-        'facimportsdets.Forma'
+        'facimportsdets.Forma',
+        'facimportsdets.folio.lote.orden'
     ])->findOrFail($this->IdFactura);
     $itemsAgrupados = $factura->facimportsdets
-        ->sortBy(fn($item) => $item->material?->clase?->IdAccess ?? '')
         ->groupBy(function ($item) {
             $nombreMaterial = $item->material->material ?? 'N/A';
             $propiedades = strip_tags($item->propiedades);
             return $nombreMaterial . ($propiedades ? ' ' . $propiedades : '');
+        })
+        ->map(function ($grupo) {
+            return $grupo->sortBy([
+                ['folio.lote.lote', 'asc'],
+                ['folio.id', 'asc']
+            ]);
+        })
+        ->sortBy(function ($grupo) {
+            $primerItem = $grupo->first();
+            return $primerItem->material?->clase?->IdAccess ?? '';
         });
     return [$factura, $itemsAgrupados];
 }
@@ -142,8 +176,8 @@ public function imprimirPL()
 
     public function resetInput()
     {
-        $this->resetexcept('keyWord', 'selected_id', 'IdFactura', 'factura', 
-            'kts','colors','origens', 'materials', 'sizes', 'formas', 'estilos');
+        $this->resetexcept('keyWord', 'selected_id', 'IdFactura', 'factura', 'folios',
+            'kts','colors','origens', 'clientes', 'materials', 'sizes', 'formas', 'estilos');
     }
     public function cancel()
     {

@@ -71,7 +71,7 @@ class Clientes extends Component
         Cliente::updateOrCreate(
 			['id' => $this->selected_id],
 			[
-				'cliente' => $this-> cliente
+				'cliente' => strtoupper($this-> cliente)
 			]
 		);
         $this->resetInput();

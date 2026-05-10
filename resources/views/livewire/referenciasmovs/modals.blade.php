@@ -12,42 +12,31 @@
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
                                 @endif
-
                                 <div class="col-md-6">
-                                    <label class="etiBase">Idfacimportsdet</label>
-                                    <input wire:model="IdFacImportsDet" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('IdFacImportsDet') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Iddoc</label>
-                                    <input wire:model="IdDoc" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('IdDoc') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Tipodoc</label>
-                                    <input wire:model="tipoDoc" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('tipoDoc') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Estatus</label>
-                                    <input wire:model="estatus" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('estatus') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                    <label class="etiBase">Material</label>
+                                    <select wire:model="IdMaterial" wire:change="$refresh" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($materials as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('IdMaterial') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>                                
                                 <div class="col-md-6">
                                     <label class="etiBase">Cantidad</label>
                                     <input wire:model="cantidad" type="text" class="inpBase"  onfocus="this.select()">
                                     @error('cantidad') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                </div>
                                 <div class="col-md-6">
                                     <label class="etiBase">Pesog</label>
                                     <input wire:model="pesoG" type="text" class="inpBase"  onfocus="this.select()">
                                     @error('pesoG') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                </div>
                                 <div class="col-md-6">
                                     <label class="etiBase">Diferencias</label>
                                     <input wire:model="diferencias" type="text" class="inpBase"  onfocus="this.select()">
                                     @error('diferencias') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                </div>
                             </div>
                         </form>
                     </div>

@@ -14,7 +14,7 @@
                                 @endif
                                 <div class="col-md-6">
                                     <label class="etiBase">Material</label>
-                                    <select wire:model="IdMaterial" class="inpBase">
+                                    <select wire:model="IdMaterial" wire:change="elegirMaterial" class="inpBase">
                                         <option value=""></option>
                                         @foreach ($materials as $key => $value)
                                             <option value="{{ $key }}">{{ $value }}</option>
@@ -101,16 +101,29 @@
                                         @endforeach
                                     </select>
                                     @error('IdOrigen') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>  
+                                <div class="col-md-8">
+                                    <label class="etiBase">Order-Lot | Ticket (Customer)</label>
+                                    <div class="d-flex gap-1">
+                                        <select wire:model="IdFolio" class="inpBase" wire:change="actualizarDatosFolio">
+                                            <option value="">--</option>
+                                            @foreach ($folios as $f)
+                                                <option value="{{ $f->id }}">
+                                                    {{ $f->lote->orden->orden }}-{{ $f->lote->lote }} | {{ $f->id }} ({{ $f->lote->orden->cliente->cliente }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @if($IdFolio)
+                                            <button type="button" wire:click="limpiarFolio" class="bot botRojo" title="Desvincular">
+                                                <i class="bi bi-link-45deg"></i>
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="etiBase">Order</label>
-                                    <input wire:model="orden" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('orden') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="etiBase">Lot</label>
-                                    <input wire:model="lote" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('lote') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiChico">MX Tariff</label>
+                                    <input wire:model="arancel" type="text" class="inpBase" disabled onfocus="this.select()">
+                                    @error('arancel') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </form>
@@ -143,14 +156,24 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="etiBase">Style</label>
-                                    <select wire:model="IdEstilo" class="inpBase">
+                                    <select wire:model="IdEstilo" wire:change="$refresh" class="inpBase">
                                         <option value=""></option>
                                         @foreach ($estilos as $key => $value)
                                             <option value="{{ $key }}">{{ $value }}</option>
                                         @endforeach
                                     </select>
                                     @error('IdEstilo') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>                              
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="etiBase">Customer</label>
+                                    <input wire:model="cliente" list="listaClientes" type="text" class="inpBase" onfocus="this.select()" autocomplete="off">
+                                    <datalist id="listaClientes">
+                                        @foreach($clientes as $c)
+                                            <option value="{{ $c }}">
+                                        @endforeach
+                                    </datalist>
+                                    @error('cliente') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>
                                 <div class="col-md-6">
                                     <label class="etiBase">Order</label>
                                     <input wire:model="orden" type="text" class="inpBase"  onfocus="this.select()">
@@ -162,8 +185,15 @@
                                     @error('lote') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
-                        </form>
+                        </form>                      
                     </div>
+                    @if($IdEstilo)
+                        <div class="cardSec">
+                            <div class="cardSec-body">
+                                @livewire('estilosdets', ['IdEstilo' => $IdEstilo], key('estilosdets-'.$IdEstilo))
+                            </div>
+                        </div>
+                    @endif                      
                     <div class="cardPrin-footer mt-3 d-flex justify-content-end gap-2">
                         <button wire:click.prevent="cancel()" class="bot botNegro">Close</button>
                         <button wire:click.prevent="generarConEstilo()" class="bot botVerde">Generate</button>

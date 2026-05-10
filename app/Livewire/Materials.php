@@ -91,10 +91,10 @@ class Materials extends Component
 				'IdClase' => $this-> IdClase,
 				'IdUnidad' => $this-> IdUnidad,
 				'IdUnidadP' => $this-> IdUnidadP,
-				'material' => $this-> material,
-				'materialI' => $this-> materialI,
-				'materialFiscal' => $this-> materialFiscal,
-				'abreviatura' => $this-> abreviatura
+				'material' => strtoupper($this->material),
+				'materialI' => strtoupper($this->materialI),
+				'materialFiscal' => strtoupper($this->materialFiscal),
+				'abreviatura' => strtoupper($this->abreviatura)
 			]
 		);
         $this->resetInput();

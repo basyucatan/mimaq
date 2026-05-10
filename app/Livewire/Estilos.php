@@ -8,7 +8,7 @@ use Livewire\WithFileUploads;
 use Livewire\Attributes\Computed;
 use App\Models\{Util, Estilo};
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
 class Estilos extends Component
 {
     use WithPagination, WithFileUploads;
@@ -32,16 +32,15 @@ class Estilos extends Component
 	public function filteredEstilos()
 	{
 		$keyWord = '%' . $this->keyWord . '%';
-		return Estilo::Where('id','>',0)
-			->where(function ($query) use ($keyWord) {
-				$query
-						->orWhere('estilo', 'LIKE', $keyWord)
-						->orWhere('IdClase', 'LIKE', $keyWord)
-						->orWhere('foto', 'LIKE', $keyWord);
-			})
-			->paginate(12);
+		return Estilo::where(function ($query) use ($keyWord) {
+            $query->orWhere('estilo', 'LIKE', $keyWord)
+                ->orWhereHas('clase', function ($subQuery) use ($keyWord) { 
+                    $subQuery->where('clase', 'LIKE', $keyWord);
+                });
+        })
+        ->orderby('estilo')
+        ->paginate(8);
 	}
-
 	public function render()
 	{
 		return view('livewire.estilos.view', [
@@ -56,7 +55,7 @@ class Estilos extends Component
     }
     public function resetInput()
     {
-        $this->resetExcept('clases','selected_id');
+        $this->resetExcept('clases','selected_id','keyWord');
         $this->fotoSubida = null;
         $this->foto = null;
     }
@@ -71,7 +70,6 @@ class Estilos extends Component
         $this->resetInput();
         $this->verModalEstilo = true;
     } 
-
     public function save()
     {
         $this->validate([
@@ -92,7 +90,7 @@ class Estilos extends Component
         Estilo::updateOrCreate(
             ['id' => $this->selected_id],
             [
-                'estilo' => $this->estilo,
+                'estilo' => strtoupper($this->estilo),
                 'IdClase' => $this->IdClase,
                 'foto' => $nombreFoto
             ]
@@ -112,6 +110,17 @@ class Estilos extends Component
         }
         $this->fotoSubida = null;
     }
+    public function depurarFotos()
+    {
+        $fotosEnBaseDatos = Estilo::whereNotNull('foto')->pluck('foto')->toArray();
+        $todosLosArchivos = Storage::files('public/estilos');
+        foreach ($todosLosArchivos as $archivo) {
+            $nombreArchivo = basename($archivo);
+            if (!in_array($nombreArchivo, $fotosEnBaseDatos)) {
+                Storage::delete($archivo);
+            }
+        }
+    }    
     public function paginationView()
     {
         return 'livewire.paginacionBase';

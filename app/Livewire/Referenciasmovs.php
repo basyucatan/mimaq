@@ -6,21 +6,21 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Referenciasmov;
 use Livewire\Attributes\Computed;
-use App\Models\{Util, Facimportsdet};
+use App\Models\{Util, Material, Facimportsdet};
 use Livewire\Attributes\On;
 class Referenciasmovs extends Component
 {
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalReferenciasmov=false, $selected_id, $keyWord, $IdFacImportsDet, 
+    public $verModalReferenciasmov=false, $selected_id, $keyWord, $IdFacImportsDet, $IdMaterial,
         $IdDoc, $tipoDoc, $estatus, $cantidad, $pesoG, $diferencias;	
-	public $adicionales = [];
+	public $adicionales = [], $materials = [];
     #[On('refreshRefsMovs')]
     public function refresh(){}    
-    
-    public function mount(){}
-
+    public function mount(){
+        $this->materials = Util::getArray('materials');
+    }
     public function updatedKeyWord()
 	{
 		$this->resetPage();
@@ -31,7 +31,6 @@ class Referenciasmovs extends Component
         $keyWord = '%' . $this->keyWord . '%';
         return Referenciasmov::where('IdDoc', $this->IdDoc)
             ->where('tipoDoc', $this->tipoDoc)
-            ->where('estatus', $this->estatus)
             ->where(function ($query) use ($keyWord) {
                 $query->where('IdDoc', 'LIKE', $keyWord)
                     ->orWhereHas('Referencia', function ($q) use ($keyWord) {
@@ -47,7 +46,7 @@ class Referenciasmovs extends Component
                     });
             })
             ->orderBy('id', 'desc')
-            ->paginate(12);
+            ->paginate(10);
     }
 
 	public function render()
@@ -65,12 +64,13 @@ class Referenciasmovs extends Component
 
     public function resetInput()
     {
-        $this->resetExcept('IdDoc','tipoDoc');
+        $this->resetExcept('IdDoc','tipoDoc','materials');
     }
 public function edit($id)
 {
     $this->selected_id = $id;
     $registro = Referenciasmov::findOrFail($id);
+    $this->IdMaterial = $registro->Referencia->IdMaterial;
     $this->fill($registro->toArray());
     if (is_array($registro->diferencias)) {
         $soloTexto = collect($registro->diferencias)->first(fn($v, $k) => is_numeric($k));
@@ -83,13 +83,11 @@ public function edit($id)
         $this->resetInput();
         $this->verModalReferenciasmov = true;
     }   
-    
     public function save()
     {
         $this->validate([
             'IdDoc' => 'required',
             'tipoDoc' => 'required',
-            'estatus' => 'required',
             'cantidad' => 'required',
             'pesoG' => 'required',
         ]);
@@ -100,6 +98,10 @@ public function edit($id)
         if ($this->IdFacImportsDet) {
             $refFiscal = Facimportsdet::find($this->IdFacImportsDet);
             if ($refFiscal) {
+                if ($this->IdMaterial != $refFiscal->IdMaterial) {
+                    $nombreOriginal = $refFiscal->material->material ?? 'S/N';
+                    $jsonFinal['material'] = "Se documentó {$nombreOriginal}";
+                }
                 if ($this->cantidad != $refFiscal->cantidad) {
                     $jsonFinal['cantidad'] = $this->cantidad - $refFiscal->cantidad;
                 }
@@ -112,9 +114,9 @@ public function edit($id)
             ['id' => $this->selected_id],
             [
                 'IdFacImportsDet' => $this->IdFacImportsDet,
+                'IdMaterial' => $this->IdMaterial,
                 'IdDoc' => $this->IdDoc,
                 'tipoDoc' => $this->tipoDoc,
-                'estatus' => $this->estatus,
                 'cantidad' => $this->cantidad,
                 'pesoG' => $this->pesoG,
                 'diferencias' => !empty($jsonFinal) ? $jsonFinal : null

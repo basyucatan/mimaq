@@ -13,7 +13,7 @@ class Depto extends Model
 
     protected $table = 'deptos';
 
-    protected $fillable = ['depto'];
+    protected $fillable = ['depto','deptoI','orden'];
     
 	
     public function users()

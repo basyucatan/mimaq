@@ -4,11 +4,11 @@
         <div class="col-12">
             <div class="cardPrin">
                 <div class="cardPrin-header">
-                    <span>Invoice <span class="badge bg-danger">{{ $factura?->factura }} | {{ Util::dinero($factura?->total,2) }}</span></span>
+                    <span>Invoice <span class="badge bg-danger fs-5 fw-bold">{{ $factura?->factura }} | {{ Util::dinero($factura?->total,2) }}</span></span>
                     <div class="me-2 position-relative" style="display:inline-block;">
                         <input wire:model.lazy="keyWord" class="inpSolo" 
                         wire:keydown.escape="$set('keyWord','')"
-                        onfocus="this.select()" placeholder="Search...">
+                        onfocus="this.select()" placeholder="Buscar...">
                         @if($keyWord)
                             <span wire:click="$set('keyWord','')" 
                                 class="bot botNegro botChico"
@@ -61,10 +61,15 @@
                                     <tr>
                                         <td>{{ $row->IdEntradaMex }}</td>
                                         <td>{{ $row->Origen->origen ?? ''}}</td>
-                                        <td><strong>{{ $row->Material->materialI }}</strong> {!! $row->propsTot !!}</td>
+                                        <td>
+                                            <strong>{{ $row->Material->materialI }}</strong> {{ $row->propsTot }}
+                                            @if($row->ordenInfo)
+                                                <br><small class="text-muted">{{ $row->ordenInfo }}</small>
+                                            @endif
+                                        </td>
                                         <td>{{ Util::Miles($row->cantidad) }}</td>
                                         <td>{{ Util::Miles($row->precioU,2) }}</td>
-                                        <td>{{ Util::Miles($row->pesoEnUMat,3) }}</td>
+                                        <td>{{ Util::Miles($row->pesoEnUMat,3) }} {{ $row->material->unidadP->unidad ?? '' }}</td>
                                         <td width="60">
                                             @if($factura->estatus === 'abierto')
                                                 <div class="d-flex justify-content-around align-items-center gap-1">

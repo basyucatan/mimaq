@@ -12,12 +12,21 @@
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
                                 @endif
-
                                 <div class="col-md-6">
-                                    <label for="depto" class="etiBase">Depto</label>
-                                    <input wire:model="depto" type="text" class="inpBase"  onfocus="this.select()" id="depto">@error('depto') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-
+                                    <label class="etiBase">Depto</label>
+                                    <input wire:model="depto" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('depto') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="etiBase">Depto en Inglés</label>
+                                    <input wire:model="deptoI" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('depto') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="etiBase">Orden</label>
+                                    <input wire:model="orden" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('depto') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>
                             </div>
                         </form>
                     </div>

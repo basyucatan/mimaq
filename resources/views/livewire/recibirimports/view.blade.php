@@ -11,43 +11,48 @@
                         @livewire('arbolfacturas', ['Regimen' => 'IN'])
                     </div>
                 </div>
-
                 <div class="col-12 col-md-9">
-                    @if($selected_id)
+                    @if($selected_id && $factura)
                         <div class="d-flex justify-content-between align-items-center bg-light border rounded p-2 mb-3 shadow-sm">
                             <div class="btn-toolbar" role="toolbar">
                                 <div class="btn-group me-2 shadow-sm">
-                                    <button type="button" class="bot botBlanco botChico" wire:click="recibirFactura"
-                                        title="Descargar datos de la factura">
-                                        <span class="text-primary">⏬</span> 
-                                        <small class="fw-bold">Bajar materiales de la Factura</small>
+                                    <button type="button" class="bot botBlanco botChico" wire:click="recibirFactura" wire:loading.attr="disabled" title="Descargar datos de la factura">
+                                        <span wire:loading.remove wire:target="recibirFactura">
+                                            <span class="text-primary">⏬</span> 
+                                            <small class="fw-bold">Bajar materiales de la Factura</small>
+                                        </span>
+                                        <span wire:loading wire:target="recibirFactura">
+                                            <span class="spinner-border spinner-border-sm text-primary" role="status"></span>
+                                            <small>Procesando...</small>
+                                        </span>
                                     </button>
                                     <button type="button" class="bot botBlanco botChico" wire:click="limpiar"
-                                        title="Limpiar datos">
+                                        wire:loading.attr="disabled" wire:confirm="¿Estás seguro?" title="Limpiar datos">
                                         <span class="text-primary">🗑️</span> 
                                         <small class="fw-bold">Borrar todo</small>
                                     </button>
                                 </div>
-
                                 <div class="btn-group me-2 shadow-sm">
-                                    <button type="button" class="bot botBlanco botChico" wire:click="confirmarIngreso"
-                                        title="Procesar ingreso a almacén de seguridad">
-                                        <span class="text-success">🔐</span> 
-                                        <small class="fw-bold">Operar entradas a bóveda</small>
+                                    <button type="button" class="bot botBlanco botChico" wire:click="confirmarIngreso" wire:loading.attr="disabled" title="Procesar ingreso a almacén de seguridad">
+                                        <span wire:loading.remove wire:target="confirmarIngreso">
+                                            <span class="text-success">🔐</span> 
+                                            <small class="fw-bold">Operar entradas a bóveda</small>
+                                        </span>
+                                        <span wire:loading wire:target="confirmarIngreso">
+                                            <span class="spinner-border spinner-border-sm text-success" role="status"></span>
+                                            <small>Ingresando...</small>
+                                        </span>
                                     </button>
                                 </div>
                             </div>
                             <div class="d-none d-lg-block">
-                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2">
+                                <span class="badge bg-warning text-black fs-5 fw-bold">
                                     Factura: <strong>#{{ $factura->factura }}</strong>
                                 </span>
                             </div>
                         </div>
                         <div class="rounded border shadow-sm bg-white">
-                            @if($selected_id)
-                                @livewire('referenciasmovs', ['IdDoc' => $selected_id, 
-                                    'tipoDoc' => 'import', 'estatus' => 'import'], key('movs-import-'.$selected_id))
-                            @endif
+                            @livewire('referenciasmovs', ['IdDoc' => $selected_id, 'tipoDoc' => 'import'], key('referenciasmovs-'.$selected_id))
                         </div>
                     @else
                         <div class="h-100 d-flex flex-column align-items-center justify-content-center border rounded bg-light text-muted p-5 shadow-inner" style="min-height: 400px; border-style: dashed !important;">

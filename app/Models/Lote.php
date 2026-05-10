@@ -15,9 +15,9 @@ class Lote extends Model
 
     protected $fillable = ['lote','IdOrden','alertas','adicionales'];
     protected $casts = [
+        'lote' => 'integer',
         'adicionales' => 'array'
     ];
-	
     public function folios()
     {
         return $this->hasMany('App\Models\Folio', 'IdLote', 'id');

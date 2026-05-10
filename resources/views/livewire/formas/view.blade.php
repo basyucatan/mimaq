@@ -8,7 +8,7 @@
                     <div class="me-2 position-relative" style="display:inline-block;">
                         <input wire:model.lazy="keyWord" class="inpSolo" 
                         wire:keydown.escape="$set('keyWord','')"
-                        onfocus="this.select()" placeholder="Search...">
+                        onfocus="this.select()" placeholder="Buscar...">
                         @if($keyWord)
                             <span wire:click="$set('keyWord','')" 
                                 class="bot botNegro botChico"

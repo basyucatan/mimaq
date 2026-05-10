@@ -6,20 +6,21 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Estilosdet;
 use Livewire\Attributes\Computed;
-use App\Models\{Util};
+use App\Models\{Util, Estilo};
 class Estilosdets extends Component
 {
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalEstilosdet=false, $selected_id, $keyWord, $IdEstilo, 
+    public $verModalEstilosdet=false, $selected_id, $keyWord, $IdEstilo, $estilo,
         $cantidad, $IdMaterial, $IdSize, $IdForma, $estiloY;
 	
 	public $adicionales = [], $sizes = [], $formas = [], $materials = [];
     public function mount(){
-        $this->materials = Util::getArray('materials');
+        $this->materials = Util::getArray('materials','materialI');
         $this->sizes = Util::getArray('sizes');
         $this->formas = Util::getArray('formas');
+        $this->estilo = Estilo::find($this->IdEstilo);
     }   
     public function updatedKeyWord()
 	{
@@ -39,7 +40,7 @@ class Estilosdets extends Component
 						->orWhere('IdForma', 'LIKE', $keyWord)
 						->orWhere('estiloY', 'LIKE', $keyWord);
 			})
-			->paginate(12);
+			->get();
 	}
 
 	public function render()
@@ -57,7 +58,7 @@ class Estilosdets extends Component
 
     public function resetInput()
     {
-        $this->resetExcept('IdEstilo','materials','sizes','formas');
+        $this->resetExcept('estilo','IdEstilo','materials','sizes','formas');
     }
 
     public function edit($id)
@@ -86,7 +87,7 @@ class Estilosdets extends Component
 				'IdMaterial' => $this-> IdMaterial,
 				'IdSize' => $this-> IdSize ? : null,
 				'IdForma' => $this-> IdForma ? : null,
-				'estiloY' => $this-> estiloY
+				'estiloY' => strtoupper($this-> estiloY)
 			]
 		);
         $this->resetInput();

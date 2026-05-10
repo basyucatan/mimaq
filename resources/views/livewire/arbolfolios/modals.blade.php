@@ -24,7 +24,7 @@
                             @elseif($tipoModal == 'Folio')
                                 <div class="col-md-3">
                                     <label class="etiBase">Estilo</label>
-                                    <select wire:model="IdEstilo" class="inpBase">
+                                    <select wire:model="IdEstilo" wire:change="$refresh" class="inpBase">
                                         <option value=""></option>
                                         @foreach ($estilos as $key => $value)
                                             <option value="{{ $key }}">{{ $value }}</option>
@@ -55,6 +55,13 @@
                             @endif
                         </div>
                     </form>
+                    @if($IdEstilo)
+                        <div class="cardSec">
+                            <div class="cardSec-body">
+                                @livewire('estilosdets', ['IdEstilo' => $IdEstilo], key('estilosdets-'.$IdEstilo))
+                            </div>
+                        </div>
+                    @endif                     
                 </div>
                 <div class="cardPrin-footer mt-3 d-flex justify-content-end gap-2">
                     <button wire:click.prevent="cancel()" class="bot botNegro">Cerrar</button>

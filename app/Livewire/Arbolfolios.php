@@ -1,9 +1,11 @@
 <?php
 namespace App\Livewire;
 use Livewire\Component;
-use App\Models\{Util, Orden, Lote, Folio, Estilo};
+use App\Models\{Util, Facimportsdet, Orden, Lote, Folio, Estilo};
+use App\Traits\Utilfun;
 class Arbolfolios extends Component
 {
+    use Utilfun;
     public $keyWord = '', $tipoModal = null;
     public $selected_id, $IdOrden, $IdLote, $orden, $lote, $IdEstilo,
         $cantidad, $totalBandejas, $jobStyle, $fechaVen, $estatus = 'abierto';
@@ -119,13 +121,34 @@ class Arbolfolios extends Component
             'Lote' => Lote::class, 
             'Folio' => Folio::class 
         ];
-        if (isset($modelos[$tipo])) {
-            $modelos[$tipo]::find($id)?->delete();
-            if ($tipo == 'Folio' && $this->selected_id == $id) {
-                $this->selected_id = null;
-            }
+        if (!isset($modelos[$tipo])) return;
+        $registro = $modelos[$tipo]::find($id);
+        if (!$registro) return;
+        $tieneReservasFiscales = false;
+        if ($tipo == 'Folio') {
+            $tieneReservasFiscales = Facimportsdet::where('IdFolio', $id)->exists();
+        } elseif ($tipo == 'Lote') {
+            $tieneReservasFiscales = Facimportsdet::whereIn('IdFolio', function($query) use ($id) {
+                $query->select('id')->from('folios')->where('IdLote', $id);
+            })->exists();
+        } elseif ($tipo == 'Orden') {
+            $tieneReservasFiscales = Facimportsdet::whereIn('IdFolio', function($query) use ($id) {
+                $query->select('f.id')
+                    ->from('folios as f')
+                    ->join('lotes as l', 'f.IdLote', '=', 'l.id')
+                    ->where('l.IdOrden', $id);
+            })->exists();
         }
-    }
+        if ($tieneReservasFiscales) {
+            $this->alerta('Tiene materiales definidos en la importación', 'error', 2000);
+            return;
+        }
+        $registro->delete();
+        if ($tipo == 'Folio' && $this->selected_id == $id) {
+            $this->selected_id = null;
+        }
+        $this->dispatch('refreshComponent');
+    }    
     public function cancel()
     {
         $this->tipoModal = null;
@@ -139,20 +162,26 @@ class Arbolfolios extends Component
     public function render()
     {
         $consulta = Orden::query()->orderBy('id', 'desc');
+
         if (!empty($this->keyWord)) {
             $keyWord = '%' . $this->keyWord . '%';
+
             $consulta->where(function($q) use ($keyWord) {
                 $q->where('orden', 'like', $keyWord)
+                    ->orWhereHas('cliente', function($qC) use ($keyWord) {
+                        $qC->where('cliente', 'like', $keyWord);
+                    })
                     ->orWhereHas('lotes', function($qL) use ($keyWord) {
                         $qL->where('lote', 'like', $keyWord)
-                        ->orWhereHas('folios', function($qF) use ($keyWord) {
-                            $qF->where('id', 'like', $keyWord)
-                                ->orWhereHas('Estilo', function($qE) use ($keyWord) {
-                                    $qE->where('estilo', 'like', $keyWord);
-                                });
-                        });
+                            ->orWhereHas('folios', function($qF) use ($keyWord) {
+                                $qF->where('id', 'like', $keyWord)
+                                    ->orWhereHas('Estilo', function($qE) use ($keyWord) {
+                                        $qE->where('estilo', 'like', $keyWord);
+                                    });
+                            });
                     });
             });
+
             $arbol = $consulta->with(['lotes.folios.Estilo'])->get();
             foreach ($arbol as $o) {
                 $this->expandir['Orden'][$o->id] = true;

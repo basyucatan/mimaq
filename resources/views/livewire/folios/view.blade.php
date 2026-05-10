@@ -1,4 +1,4 @@
-@section('title', __('import'))
+@section('title', __('Folios'))
 <div class="container-fluid p-2">
     <div class="cardSec">
         <div class="cardSec-header">
@@ -9,40 +9,36 @@
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 bg-light border rounded p-2 mb-3 shadow-sm">
                     <div class="d-flex flex-wrap align-items-center gap-2">
                         <div class="btn-group shadow-sm">
-                            <button type="button" 
-                                class="bot botBlanco botChico" 
-                                wire:click="generarMateriales"
+                            <button type="button" class="bot botBlanco botChico" 
+                                wire:click="generarMateriales" wire:loading.attr="disabled"
+                                title="Generar materiales desde la factura o desde el estilo"
                                 @if($folio->tieneMats) disabled @endif>
-                                <span class="text-primary">{{ $folio->tieneMats ? '✅' : '⏬' }}</span>
-                                <small class="fw-bold">
-                                    {{ $folio->tieneMats ? 'Materiales Cargados' : 'Generar Materiales' }}
-                                </small>
+                                <span wire:loading.remove wire:target="generarMateriales">
+                                    <small class="fw-bold">
+                                        {{ $folio->tieneMats ? '✅ Materiales Cargados' : '⏬ Generar Materiales' }}
+                                    </small>
+                                </span>
+                                <span wire:loading wire:target="generarMateriales">
+                                    <span class="spinner-border spinner-border-sm text-primary" role="status"></span>
+                                    <small>Procesando...</small>
+                                </span>
                             </button>
-                            <button type="button" class="bot botBlanco botChico" wire:click="limpiar">
-                                <span class="text-danger">🗑️</span>
-                                <small class="fw-bold">Limpiar</small>
-                            </button>
+                            <button type="button" class="bot botBlanco botChico" wire:click="limpiar"
+                                wire:loading.attr="disabled" wire:confirm="¿Estás seguro?" title="Limpiar datos">
+                                <small class="fw-bold">🗑️ Borrar todo</small>
+                            </button>                            
                         </div>
                         <div class="btn-group shadow-sm">
-                            <button type="button" class="bot botBlanco botChico" wire:click="confirmarIngreso">
-                                <span class="text-success">🔐</span>
-                                <small class="fw-bold">Entrada</small>
+                            <button type="button" class="bot botBlanco botChico" wire:click="procesar">
+                                <small class="fw-bold">✨ Procesar</small>
                             </button>
                         </div>
                         <span class="badge bg-success px-3 py-2">
-                            {{ $folio->totalBandejas }} Bandeja(s)
-                        </span>
-                        <small class="text-muted">
-                            Vence: {{ $folio->fechaVen }}
-                        </small>
-                        <span class="fw-semibold text-dark">
-                            {{ $folio->jobStyle }}
+                            {{ $folio->totalBandejas }} Bandeja(s), Vence: {{ $folio->fechaVen }}
                         </span>
                     </div>
-                    <div class="d-none d-lg-block">
-                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2">
-                            Estilo: <strong>#{{ $folio->Estilo->estilo ?? '' }}</strong>
-                        </span>
+                    <div class="bg-warning text-black rounded-2 p-1">
+                        <div class="fs-5 fw-bold">{{ $folio->id ?? '' }} | {{ $folio->Estilo->estilo ?? '' }}</div>
                     </div>
                 </div>
 

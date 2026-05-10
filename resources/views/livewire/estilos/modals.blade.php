@@ -13,8 +13,8 @@
                                 <input type="hidden" wire:model="selected_id">
                             @endif
                             <div class="col-md-6">
-                                <label for="estilo" class="etiBase">Estilo</label>
-                                <input wire:model="estilo" type="text" class="inpBase" onfocus="this.select()" id="estilo">
+                                <label class="etiBase">Estilo</label>
+                                <input wire:model="estilo" type="text" class="inpBase" onfocus="this.select()">
                                 @error('estilo') <span class="error text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-6">
@@ -26,16 +26,16 @@
                                     @endforeach
                                 </select>
                                 @error('IdClase') <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
+                            </div>                          
                             <div class="col-12 mt-3" x-data="{ dragging: false }">
                                 <div class="d-flex align-items-center gap-3 border p-2 rounded bg-light" @paste.window="const items = $event.clipboardData.items; for (let i = 0; i < items.length; i++) { if (items[i].type.indexOf('image') !== -1) { const blob = items[i].getAsFile(); @this.upload('fotoSubida', blob); } }">
-                                    <div class="border rounded d-flex align-items-center justify-content-center bg-white" style="width: 100px; height: 100px; overflow: hidden; flex-shrink: 0;">
+                                    <div class="border rounded d-flex align-items-center justify-content-center bg-white" style="width: 250px; height: 250px; overflow: hidden; flex-shrink: 0;">
                                         @if ($fotoSubida)
-                                            <img src="{{ $fotoSubida->temporaryUrl() }}" class="img-fluid">
+                                            <img src="{{ $fotoSubida->temporaryUrl() }}" style="width: 100%; height: 100%; object-fit: contain;">
                                         @elseif ($foto)
-                                            <img src="{{ asset('storage/estilos/' . $foto) }}?v={{ time() }}" class="img-fluid">
+                                            <img src="{{ asset('storage/estilos/' . $foto) }}?v={{ time() }}" style="width: 100%; height: 100%; object-fit: contain;">
                                         @else
-                                            <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                                            <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
                                         @endif
                                     </div>
                                     <div class="flex-grow-1">

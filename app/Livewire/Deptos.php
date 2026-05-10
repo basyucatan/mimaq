@@ -14,7 +14,7 @@ class Deptos extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $verModalDepto=false, $selected_id, $keyWord, $depto;
+    public $verModalDepto=false, $selected_id, $keyWord, $depto, $deptoI, $orden;
 	
     public function updatedKeyWord()
 	{
@@ -47,7 +47,7 @@ class Deptos extends Component
 
     public function resetInput()
     {
-        $this->reset();
+        $this->resetExcept('selected_id');
     }
 
     public function edit($id)
@@ -65,12 +65,15 @@ class Deptos extends Component
     {
         $this->validate([
 		'depto' => 'required',
+		'deptoI' => 'required',
+		'orden' => 'required',
         ]);
-
         Depto::updateOrCreate(
 			['id' => $this->selected_id],
 			[
-				'depto' => $this-> depto
+                'depto' => strtoupper($this-> depto),
+                'deptoI' => strtoupper($this-> deptoI),
+				'orden' => $this-> orden
 			]
 		);
         $this->resetInput();

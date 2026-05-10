@@ -81,8 +81,8 @@ class Clases extends Component
 				'IdAccess' => $this-> IdAccess,
 				'IdTipo' => $this-> IdTipo,
 				'IdArancel' => $this-> IdArancel,
-				'clase' => $this-> clase,
-				'claseI' => $this-> claseI
+				'clase' =>  strtoupper($this->clase),
+				'claseI' =>  strtoupper($this->claseI)
 			]
 		);
         $this->resetInput();
