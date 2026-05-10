@@ -54,57 +54,57 @@ class Facimportsdets extends Component
     {
         return view('livewire.facimportsdets.view', ['facimportsdets' => $this->filteredFacimportsdets]);
     }
-public function generarConEstilo()
-{
-    $this->validate([
-        'IdEstilo' => 'required',
-        'cantidadEstilo' => 'required|numeric'
-    ]);
-    $estiloPrincipal = Estilo::find($this->IdEstilo);
-    $cantidadEstilo = $this->cantidadEstilo;
-    $detalles = Estilosdet::where('IdEstilo', $this->IdEstilo)->get();
-    $this->IdFolio = null;
-    if (!empty($this->cliente) && !empty($this->orden) && !empty($this->lote)) {
-        $objCliente = Cliente::firstOrCreate([
-            'cliente' => strtoupper($this->cliente)
+    public function generarConEstilo()
+    {
+        $this->validate([
+            'IdEstilo' => 'required',
+            'cantidadEstilo' => 'required|numeric'
         ]);
-        $objOrden = Orden::firstOrCreate(
-            ['orden' => strtoupper($this->orden)],
-            [
-                'IdCliente' => $objCliente->id,
-                'fechaVen' => now()->addDays(7),
+        $estiloPrincipal = Estilo::find($this->IdEstilo);
+        $cantidadEstilo = $this->cantidadEstilo;
+        $detalles = Estilosdet::where('IdEstilo', $this->IdEstilo)->get();
+        $this->IdFolio = null;
+        if (!empty($this->cliente) && !empty($this->orden) && !empty($this->lote)) {
+            $objCliente = Cliente::firstOrCreate([
+                'cliente' => strtoupper($this->cliente)
+            ]);
+            $objOrden = Orden::firstOrCreate(
+                ['orden' => strtoupper($this->orden)],
+                [
+                    'IdCliente' => $objCliente->id,
+                    'fechaVen' => now()->addDays(7),
+                    'estatus' => 'abierto'
+                ]
+            );
+            $objLote = Lote::firstOrCreate([
+                'IdOrden' => $objOrden->id,
+                'lote' => strtoupper($this->lote)
+            ]);
+            $objFolio = Folio::create([
+                'IdLote' => $objLote->id,
+                'IdEstilo' => $this->IdEstilo,
+                'productoFinal' => $estiloPrincipal->descripcion ?? 'PRODUCTO TERMINADO',
+                'cantidad' => $this->cantidadEstilo,
+                'totalBandejas' => 1,
+                'precioU' => 0,
+                'fechaVen' => $objOrden->fechaVen,
                 'estatus' => 'abierto'
-            ]
-        );
-        $objLote = Lote::firstOrCreate([
-            'IdOrden' => $objOrden->id,
-            'lote' => strtoupper($this->lote)
-        ]);
-        $objFolio = Folio::create([
-            'IdLote' => $objLote->id,
-            'IdEstilo' => $this->IdEstilo,
-            'productoFinal' => $estiloPrincipal->descripcion ?? 'PRODUCTO TERMINADO',
-            'cantidad' => $this->cantidadEstilo,
-            'totalBandejas' => 1,
-            'precioU' => 0,
-            'fechaVen' => $objOrden->fechaVen,
-            'estatus' => 'abierto'
-        ]);
-        $this->IdFolio = $objFolio->id;
+            ]);
+            $this->IdFolio = $objFolio->id;
+        }
+        $this->selected_id = null;
+        foreach ($detalles as $det) {
+            $this->IdMaterial = $det->IdMaterial;
+            $this->estiloY = $det->estiloY;
+            $this->IdOrigen = 2;
+            $this->cantidad = $cantidadEstilo * $det->cantidad;
+            $this->IdFolio = $objFolio->id ?? null;
+            $this->pesoEnUMat = 0;
+            $this->precioU = 0;
+            $this->save();
+        }
+        $this->clientes = Util::getArray('clientes');
     }
-    $this->selected_id = null;
-    foreach ($detalles as $det) {
-        $this->IdMaterial = $det->IdMaterial;
-        $this->estiloY = $det->estiloY;
-        $this->IdOrigen = 2;
-        $this->cantidad = $cantidadEstilo * $det->cantidad;
-        $this->IdFolio = $objFolio->id ?? null;
-        $this->pesoEnUMat = 0;
-        $this->precioU = 0;
-        $this->save();
-    }
-    $this->clientes = Util::getArray('clientes');
-}
     public function crearEstilo()
     {
         $this->resetInput();

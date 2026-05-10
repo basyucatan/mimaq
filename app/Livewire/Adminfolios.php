@@ -3,9 +3,8 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
-use App\Models\{Folio, FoliosMat, Referenciasmov, Facimportsdet};
+use App\Models\{Folio, Foliosmat, Referenciasmov, Facimportsdet};
 use Illuminate\Support\Facades\DB;
-
 class Adminfolios extends Component
 {
     public $orden, $lote, $IdFolio;
@@ -47,7 +46,7 @@ class Adminfolios extends Component
 
             foreach ($this->materialesSeleccionados as $idDet => $datos) {
                 // 2. Registrar en foliosMats (Referencia del Folio)
-                FoliosMat::create([
+                Foliosmat::create([
                     'IdFolio' => $folio->id,
                     'IdFacImportsDet' => $idDet,
                     'cantidad' => $datos['cantidad'],

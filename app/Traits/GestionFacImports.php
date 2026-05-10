@@ -67,7 +67,6 @@ public function actualizarDatosFolio()
     public function save()
 {
     $this->validate([
-        'IdOrigen' => 'required', 
         'IdMaterial' => 'required',
         'cantidad' => 'required', 
         'precioU' => 'required', 

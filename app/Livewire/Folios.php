@@ -5,7 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
-use App\Models\{Facimportsdet, Existencia, Referenciasmov, Folio, FoliosMat, Estilosdet};
+use App\Models\{Facimportsdet, Existencia, Referenciasmov, Folio, Foliosmat, Estilosdet};
 use Livewire\Attributes\On;
 use App\Traits\Utilfun;
 use Illuminate\Support\Facades\DB;
@@ -66,7 +66,7 @@ public function procesar()
 public function generarMateriales()
 {
     if (!$this->folio) return;
-    FoliosMat::where('IdFolio', $this->IdFolio)->delete();
+    Foliosmat::where('IdFolio', $this->IdFolio)->delete();
     $idDeptoBoveda = DB::table('deptos')->where('depto', '0 BOVEDA')->value('id');
     if (!$idDeptoBoveda) {
         $this->alerta('❌ Error: El departamento "0 BOVEDA" no existe', 'error', 3000);
@@ -94,7 +94,7 @@ public function generarMateriales()
                         : 0;
                     $pesoFinal = min($pesoProporcional, $pesoStock);
                 }
-                FoliosMat::create([
+                Foliosmat::create([
                     'IdFolio' => $this->IdFolio,
                     'IdFacImportsDet' => $row->id,
                     'IdMaterial' => $row->IdMaterial,
@@ -117,7 +117,7 @@ public function generarMateriales()
     } else {
         $estilosdets = Estilosdet::where('IdEstilo', $this->folio->IdEstilo)->get();
         foreach ($estilosdets as $row) {
-            FoliosMat::create([
+            Foliosmat::create([
                 'IdFolio' => $this->IdFolio,
                 'IdMaterial' => $row->IdMaterial,
                 'cantidad' => $row->cantidad * $this->folio->cantidad,
@@ -132,7 +132,7 @@ public function generarMateriales()
     public function limpiar()
 	{
         if (!$this->IdFolio) return;
-        $movimientos = FoliosMat::where('IdFolio', $this->IdFolio);
+        $movimientos = Foliosmat::where('IdFolio', $this->IdFolio);
         if ($movimientos->exists()) {
             $movimientos->delete();
             $this->alerta('🗑️ Registros eliminados', 'success', 1000);
