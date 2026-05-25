@@ -14,11 +14,9 @@ class Proceso extends Model
     protected $table = 'procesos';
 
     protected $fillable = ['proceso','procesoI','IdDepto','PMaxMerma'];
-    
-	
-    public function depto()
-    {
-        return $this->hasOne('App\Models\Depto', 'id', 'IdDepto');
-    }
+public function depto()
+{
+    return $this->belongsTo(Depto::class, 'IdDepto');
+}
     
 }

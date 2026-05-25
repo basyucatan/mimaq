@@ -2,15 +2,16 @@
 namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\{Foliosmat, Util, Existencia};
+use App\Models\{Foliosmat, Material, Util, Existencia};
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\{Computed, On};
 class Foliosmats extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    public $verModalFoliosmat = false, $selected_id, $keyWord, $IdFolio, $IdFacImportsDet, $IdMaterial, $cantidad, $pesoG, $integrado;
-    public $materials = [], $referencias = [];
+    public $verModalFoliosmat = false, $selected_id, $keyWord, $IdFolio, 
+        $IdFacImportsDet, $IdTipo, $IdMaterial, $cantidad, $pesoG, $integrado;
+    public $materials = [], $referencias = [], $tipos = [];
     #[On('refreshFolios')]
     public function refreshChild(){}
     public function updatedIdMaterial()
@@ -18,10 +19,32 @@ class Foliosmats extends Component
         $this->IdFacImportsDet = null;
         $this->pesoG = 0;
         $this->integrado = false;
+        if(!$this->IdMaterial) return;
+        $this->IdTipo = DB::table('materials')
+            ->join('clases', 'clases.id', '=', 'materials.IdClase')
+            ->where('materials.id', $this->IdMaterial)
+            ->value('clases.IdTipo');
         $this->resetErrorBag(['IdMaterial', 'IdFacImportsDet', 'cantidad']);
         $this->cargarReferencias();
         $this->validarDisponibilidad();
     }
+    public function updatedIdTipo()
+    {
+        if(!$this->IdTipo){
+            $this->materials = Util::getArray('materials');
+            return;
+        }
+        $this->IdMaterial = null;
+        $this->IdFacImportsDet = null;
+        $this->pesoG = 0;
+        $this->materials = DB::table('materials')
+            ->join('clases', 'clases.id', '=', 'materials.IdClase')
+            ->where('clases.IdTipo', $this->IdTipo)
+            ->select('materials.*')
+            ->orderby('materials.material')
+            ->pluck('material','id')
+            ->toArray();        
+    }    
     public function updatedIdFacImportsDet()
     {
         if (!$this->IdFacImportsDet) {
@@ -132,8 +155,13 @@ public function save()
         $this->verModalFoliosmat = true;
     }
     public function cancel() { $this->resetInput(); $this->verModalFoliosmat = false; }
-    public function resetInput() { $this->resetExcept('materials', 'IdFolio'); $this->referencias = []; }
-    public function mount() { $this->materials = Util::getArray('materials'); }
+    public function resetInput() { 
+        $this->resetExcept('materials','tipos', 'IdFolio'); $this->referencias = []; 
+    }
+    public function mount() { 
+        $this->tipos = Util::getArray('tipos'); 
+        $this->materials = Util::getArray('materials'); 
+    }
     public function render() { return view('livewire.foliosmats.view', ['foliosmats' => $this->filteredFoliosmats]); }
     public function destroy($id){if ($id) {Foliosmat::where('id', $id)->delete();}}
     #[Computed]

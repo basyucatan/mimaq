@@ -6,9 +6,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Proceso;
 use Livewire\Attributes\Computed;
-use App\Models\{Util};
-use Illuminate\Support\Facades\DB;
-
 class Procesos extends Component
 {
     use WithPagination;

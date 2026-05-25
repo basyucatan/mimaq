@@ -1,17 +1,25 @@
 <?php
 namespace App\Livewire;
 use Livewire\Component;
-use App\Models\{Util, Facimportsdet, Orden, Lote, Folio, Estilo};
+use App\Models\{Util, Facimportsdet, Cliente, Orden, Lote, Folio, Estilo};
 use App\Traits\Utilfun;
 class Arbolfolios extends Component
 {
     use Utilfun;
     public $keyWord = '', $tipoModal = null;
-    public $selected_id, $IdOrden, $IdLote, $orden, $lote, $IdEstilo,
-        $cantidad, $totalBandejas, $jobStyle, $fechaVen, $estatus = 'abierto';
-    public $expandir = ['Orden' => [], 'Lote' => []], $estilos = [];
+    public $selected_id, $IdOrden, $IdCliente, $cliente, $IdLote, $orden, $lote, $IdEstilo,
+        $cantidad, $totalBandejas, $jobStyle, $abreviatura, $productoFinal, 
+        $kt = '', $color = '',
+        $fechaVen, $estatus = 'abierto';
+    public $expandir = ['Orden' => [], 'Lote' => []], $estilos = [], $clientes = [], $adicionales = [],
+        $kts = [], $colors = [];
+    protected $listeners = ['estilosDetsActualizado' => 'generarDef'];
     public function mount(){
         $this->estilos = Util::getArray('estilos');
+        $this->clientes = Util::getArray('clientes');
+        $config = json_decode(file_get_contents(base_path('settings.json')), true);
+        $this->kts = collect($config['kts'] ?? [])->pluck('valor')->toArray();
+        $this->colors = collect($config['colors'] ?? [])->pluck('valor')->toArray();
     }
     public function elegir($tipo, $id)
     {
@@ -53,6 +61,8 @@ class Arbolfolios extends Component
         $registro = Orden::findOrFail($id);
         $this->selected_id = $id;
         $this->orden = $registro->orden;
+        $this->IdCliente = $registro->IdCliente;
+        $this->cliente = $registro->cliente?->cliente;
         $this->fechaVen = $registro->fechaVen;
         $this->estatus = $registro->estatus;
         $this->tipoModal = 'Orden';
@@ -92,25 +102,70 @@ class Arbolfolios extends Component
         $this->cantidad = $registro->cantidad ?? 1;
         $this->totalBandejas = $registro->totalBandejas;
         $this->jobStyle = $registro->jobStyle;
+        $this->abreviatura = $registro->abreviatura;
+        $this->productoFinal = $registro->productoFinal;
         $this->fechaVen = $registro->fechaVen;
         $this->estatus = $registro->estatus;
+        $this->adicionales = $registro->adicionales ?? [];
+        $this->kt = $this->adicionales['kt'] ?? '';
+        $this->color = $this->adicionales['color'] ?? '';
         $this->tipoModal = 'Folio';
+    }
+    public function generarDef()
+    {
+        if (!$this->IdEstilo) return;
+        $folioEdit = new Folio();
+        $folioEdit->adicionales = $this->adicionales;
+        $folioEdit->definirProducto($this->IdEstilo, $this->cantidad, $this->kt, $this->color);
+        $this->jobStyle = $folioEdit->jobStyle;
+        $this->abreviatura = $folioEdit->abreviatura;
+        $this->productoFinal = $folioEdit->productoFinal;
+        $this->totalBandejas = $folioEdit->totalBandejas;
+        $this->adicionales = $folioEdit->adicionales;
     }
     public function guardar()
     {
         if ($this->tipoModal == 'Orden') {
-            $this->validate(['orden' => 'required', 'fechaVen' => 'required|date']);
-            Orden::updateOrCreate(['id' => $this->selected_id], ['orden' => $this->orden, 'estatus' => $this->estatus, 'fechaVen' => $this->fechaVen]);
+            $this->IdCliente = array_search(trim($this->cliente), $this->clientes) ?: null;
+            $this->validate([
+                'orden' => 'required',
+                'fechaVen' => 'required|date',
+                'IdCliente' => 'required'
+            ], [
+                'IdCliente.required' => 'El cliente escrito no es válido. Por favor, selecciona uno de la lista.'
+            ]);
+            Orden::updateOrCreate(['id' => $this->selected_id], [
+                'orden' => $this->orden,
+                'IdCliente' => $this->IdCliente,
+                'estatus' => $this->estatus,
+                'fechaVen' => $this->fechaVen
+            ]);
         } elseif ($this->tipoModal == 'Lote') {
             $this->validate(['lote' => 'required|numeric', 'IdOrden' => 'required']);
-            Lote::updateOrCreate(['id' => $this->selected_id], ['lote' => $this->lote, 'IdOrden' => $this->IdOrden]);
+            Lote::updateOrCreate(['id' => $this->selected_id], [
+                'lote' => $this->lote,
+                'IdOrden' => $this->IdOrden
+            ]);
         } elseif ($this->tipoModal == 'Folio') {
             $this->validate(['IdEstilo' => 'required', 'cantidad' => 'required|numeric', 'IdLote' => 'required']);
             $this->jobStyle = $this->selected_id ? $this->jobStyle : Estilo::find($this->IdEstilo)?->estilo;
-            Folio::updateOrCreate(['id' => $this->selected_id], ['IdLote' => $this->IdLote, 
-                'IdEstilo' => $this->IdEstilo, 'cantidad' => $this->cantidad, 
-                'totalBandejas' => $this->totalBandejas, 'fechaVen' => $this->fechaVen, 
-                'jobStyle' => $this->jobStyle, 'estatus' => $this->estatus, 'precioU' => 0]);
+            $this->adicionales = array_merge($this->adicionales ?? [], [
+                'kt' => is_array($this->kt) ? ($this->kt['valor'] ?? '') : $this->kt,
+                'color' => is_array($this->color) ? ($this->color['valor'] ?? '') : $this->color
+            ]);
+            Folio::updateOrCreate(['id' => $this->selected_id], [
+                'IdLote' => $this->IdLote,
+                'IdEstilo' => $this->IdEstilo,
+                'cantidad' => $this->cantidad,
+                'totalBandejas' => $this->totalBandejas,
+                'fechaVen' => $this->fechaVen,
+                'jobStyle' => $this->jobStyle,
+                'abreviatura' => $this->abreviatura,
+                'productoFinal' => $this->productoFinal,
+                'adicionales' => $this->adicionales,
+                'estatus' => $this->estatus,
+                'precioU' => 0
+            ]);
         }
         $this->cancel();
     }
@@ -156,7 +211,7 @@ class Arbolfolios extends Component
     }
     private function resetInput()
     {
-        $this->resetExcept(['selected_id', 'expandir', 'keyWord', 'estilos']);
+        $this->resetExcept(['selected_id', 'expandir', 'keyWord', 'estilos','clientes','kts','colors']);
         $this->selected_id = null;
     }
     public function render()

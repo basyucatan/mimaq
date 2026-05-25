@@ -46,6 +46,9 @@
                                         <td>{{ $row->Referencia->IdEntradaMex }}</td>
                                         <td><strong>{{ $row->Material->material }}</strong>
                                             {{ $row->Referencia->propsTot }}
+                                            @if($row->Referencia->ordenInfo)
+                                                <br><small class="text-muted">{{ $row->Referencia->ordenInfo }}</small>
+                                            @endif                                            
                                         </td>
                                         <td>{{ $row->cantidad }}</td>
                                         <td>{{ $row->pesoG }}</td>

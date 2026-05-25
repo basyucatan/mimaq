@@ -7,8 +7,6 @@ use Livewire\WithPagination;
 use App\Models\Empleado;
 use Livewire\Attributes\Computed;
 use App\Models\{Util};
-use Illuminate\Support\Facades\DB;
-
 class Empleados extends Component
 {
     use WithPagination;

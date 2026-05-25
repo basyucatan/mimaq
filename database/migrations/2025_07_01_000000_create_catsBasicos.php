@@ -48,6 +48,7 @@ return new class extends Migration
         Schema::create('tipos', function (Blueprint $table) { //casting, diamante, piedra
             $table->id();
             $table->string('tipo',20)->unique();
+            $table->string('tipoI',20)->unique();
             $table->json('adicionales')->nullable();
         });                   
         Schema::create('clases', function (Blueprint $table) {

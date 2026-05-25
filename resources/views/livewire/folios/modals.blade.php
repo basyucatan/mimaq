@@ -12,7 +12,6 @@
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
                                 @endif
-
                                 <div class="col-md-6">
                                     <label class="etiBase">Idlote</label>
                                     <input wire:model="IdLote" type="text" class="inpBase"  onfocus="this.select()">

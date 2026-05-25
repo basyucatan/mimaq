@@ -43,10 +43,12 @@ class Factura extends Model
     {
         return $this->hasMany('App\Models\Facimportsdet', 'IdFactura', 'id');
     }
-    
-    public function pedimento()
+    public function facexportsdets()
     {
-        return $this->belongsTo('App\Models\Pedimento', 'id', 'IdPedimento');
+        return $this->hasMany('App\Models\Facexportsdet', 'IdFactura', 'id');
     }
-    
+public function pedimento()
+{
+    return $this->belongsTo('App\Models\Pedimento', 'IdPedimento', 'id');
+}
 }

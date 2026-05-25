@@ -57,14 +57,14 @@ html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color:
     font-size:0.9rem;
 }
 /* formularios */
-.inpSolo,.etiBase,.inpBase,.etiChico,.inpChico {
+.inpSolo,.etiBase,.inpBase,.etiLectura,.etiChico,.inpChico {
     border-width: 1px 1px 0 1px;
     border: 1px solid black;
     width: 100%;
     font-size: 16px;
     padding: 2px; 
 }
-.etiBase, .etiChico {border-top-left-radius: 6px;border-top-right-radius: 6px;}
+.etiBase, .etiLectura, .etiChico {border-top-left-radius: 6px;border-top-right-radius: 6px;}
 .inpBase, .inpChico {
     border: 1px solid var(--primarioC);
     border-bottom-left-radius: 6px;
@@ -74,7 +74,8 @@ html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color:
 .etiBase {background: linear-gradient(to right, var(--primarioC), white);color: black;}
 .inpBase {background-color: white;color: black;}
 .inpSolo {border-radius: 5px;}
-.etiChico {background: linear-gradient(to right,  black, var(--primarioO));color: white;}
+.etiChico {background: linear-gradient(to right,  black, var(--primarioC));color: white;}
+.etiLectura {background: linear-gradient(to right,  black, var(--primarioO));color: white;}
 .inpChico { background-color: black; color: white }
 
 .bot {

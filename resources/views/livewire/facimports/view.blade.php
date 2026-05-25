@@ -7,7 +7,7 @@
         <div class="cardPrin-body">
             <div class="row">
                 <div class="col-12 col-md-3">
-                    @livewire('arbolfacturas', ['Regimen' => 'IN'])
+                    @livewire('arbolfacturas', ['regimen' => 'IN'])
                 </div>
                 <div class="col-md-9">
                     @if($selected_id)

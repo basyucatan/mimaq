@@ -13,7 +13,7 @@ class Bandejasmov extends Model
 
     protected $table = 'bandejasmovs';
 
-    protected $fillable = ['IdBandeja','IdProceso','IdEmpleado','pesoMetalEntrada','pesoMetalSalida','mermaMetal','fechaH'];
+    protected $fillable = ['IdBandeja','IdProceso','IdEmpleado','pesoEntrada','pesoSalida','fechaHEntrada','fechaHSalida'];
     
 	
     public function bandeja()
@@ -26,9 +26,9 @@ class Bandejasmov extends Model
         return $this->hasOne('App\Models\Empleado', 'id', 'IdEmpleado');
     }
     
-    public function proceso()
-    {
-        return $this->hasOne('App\Models\Proceso', 'id', 'IdProceso');
-    }
+public function proceso()
+{
+    return $this->belongsTo(Proceso::class, 'IdProceso');
+}
     
 }

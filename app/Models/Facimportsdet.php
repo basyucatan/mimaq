@@ -13,9 +13,10 @@ class Facimportsdet extends Model
     protected $fillable = [
         'IdFactura', 'IdEntradaMex', 'IdOrigen', 'IdMaterial', 'arancel',
         'cantidad', 'precioU', 'pesoEnUMat', 'pesoG', 'IdSize', 'IdForma',
-        'IdFolio', 'IdEstilo', 'estiloY', 'adicionales'
+        'IdFolio', 'IdEstilo', 'estiloY',  'diferencias', 'adicionales'
     ];
     protected $casts = [
+        'diferencias' => 'array',
         'adicionales' => 'array'
     ];
     public function getPropiedadesAttribute()
@@ -47,6 +48,18 @@ class Facimportsdet extends Model
             $folio ? ' | ' . $folio->id : null,
             $cliente ? ' (' . $cliente->cliente.')' : null
         ])->filter()->implode(' ');
+    }
+    public function getDifsFormatAttribute()
+    {
+        if (!$this->diferencias) return '';
+        return collect($this->diferencias)->map(function ($valor, $llave) {
+            if (is_numeric($llave)) return $valor;
+            if ($llave === 'material') return $valor;
+            
+            $prefijo = ($llave === 'pesoG') ? 'g: ' : 'Pz: ';
+            $signo = (is_numeric($valor) && $valor > 0) ? '+' : '';
+            return $prefijo . $signo . $valor;
+        })->implode(' | ');
     }
     public function factura() { return $this->belongsTo(Factura::class, 'IdFactura'); }
     public function foliosmats() { return $this->hasMany(Foliosmat::class, 'IdFacImportsDet'); }

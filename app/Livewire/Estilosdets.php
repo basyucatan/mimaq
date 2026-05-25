@@ -90,6 +90,7 @@ class Estilosdets extends Component
 				'estiloY' => strtoupper($this-> estiloY)
 			]
 		);
+        $this->dispatch('estilosDetsActualizado');
         $this->resetInput();
         $this->verModalEstilosdet = false;
     }
@@ -101,6 +102,7 @@ class Estilosdets extends Component
     {
         if ($id) {
             Estilosdet::where('id', $id)->delete();
+            $this->dispatch('estilosDetsActualizado');
         }
     }
 }

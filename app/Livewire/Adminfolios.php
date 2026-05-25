@@ -3,12 +3,12 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
-use App\Models\{Folio, Foliosmat, Referenciasmov, Facimportsdet};
+use App\Models\{Folio, Foliosmat, Referenciasmov};
 use Illuminate\Support\Facades\DB;
 class Adminfolios extends Component
 {
     public $orden, $lote, $IdFolio;
-    public $materialesSeleccionados = []; // Array de IdFacImportsDet => ['cantidad', 'pesoG']
+    public $materialesSeleccionados = []; 
     public $idFacturaBusqueda;
 
     #[On('IdFolioElecto')]
@@ -18,7 +18,6 @@ class Adminfolios extends Component
     }
     public function getMaterialesDisponiblesProperty()
     {
-        // Solo materiales que tienen saldo en Bóveda
         return Referenciasmov::where('estatus', 'boveda')
             ->select('IdFacImportsDet', DB::raw('SUM(cantidad) as saldoCant'), DB::raw('SUM(pesoG) as saldoPeso'))
             ->groupBy('IdFacImportsDet')
@@ -36,25 +35,19 @@ class Adminfolios extends Component
         ]);
 
         DB::transaction(function () {
-            // 1. Crear el Folio
             $folio = Folio::create([
                 'orden' => $this->orden,
                 'lote' => $this->lote,
                 'estatus' => 'produccion',
                 'fechaCreacion' => now()
             ]);
-
             foreach ($this->materialesSeleccionados as $idDet => $datos) {
-                // 2. Registrar en foliosMats (Referencia del Folio)
                 Foliosmat::create([
                     'IdFolio' => $folio->id,
                     'IdFacImportsDet' => $idDet,
                     'cantidad' => $datos['cantidad'],
                     'pesoG' => $datos['pesoG']
                 ]);
-
-                // 3. Generar movimiento de salida en referenciasMovs
-                // NOTA: Los valores van en NEGATIVO para descontar de Bóveda
                 Referenciasmov::create([
                     'IdFacImportsDet' => $idDet,
                     'IdDoc' => $folio->id,
@@ -73,7 +66,6 @@ class Adminfolios extends Component
         $this->reset();
         session()->flash('message', '✅ Folio enviado a producción correctamente.');
     }
-
     public function render()
     {
         return view('livewire.adminfolios.view');

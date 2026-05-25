@@ -32,6 +32,7 @@
                                 <tr>
                                     <th>Referencia</th>
                                     <th>Material</th>
+                                    <th>Rol</th>
                                     <th>Cantidad</th>
                                     <th>Peso(g)</th>
                                     <th>Acciones</th>
@@ -41,7 +42,18 @@
                                 @forelse($foliosmats as $row)
                                     <tr>
                                         <td title="id: {{ $row->id ?? ''}} RefId: {{ $row->facimportsdet->id ?? ''}}">{{ $row->facimportsdet->IdEntradaMex ?? ''}}</td>
-                                        <td>{{ $row->Material->material }} {{ $row->facimportsdet->propsTot ?? ''}}</td>
+                                        <td>{{ $row->Material->material }} {{ $row->facimportsdet->propsTot ?? ''}}
+                                            @if($row->facimportsdet->diferencias)
+                                                <div class="mt-1 px-2 py-1 rounded bg-warning-subtle border-start border-3 border-warning" style="font-size: 0.7rem;">
+                                                    <span class="text-dark">
+                                                        <i class="bi bi-info-circle me-1"></i>
+                                                        {{-- Usamos el accessor que ya creamos --}}
+                                                        {{ $row->facimportsdet->difsFormat }}
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td>{{ $row->rol }}</td>
                                         <td>{{  Util::Miles($row->cantidad,0) }}</td>
                                         <td>{{  Util::Miles($row->pesoG,4) }}</td>
 <td width="60">

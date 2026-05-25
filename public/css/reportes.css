@@ -66,8 +66,10 @@ td {
     font-style: italic;
 }
 @page {
-    margin: 15px 30px 45px 30px;
+    margin: 15px 20px 15px 20px;
 }
 .pagina::after {
     content: counter(page);
 }
+.salto-pagina { page-break-after: always; }
+.salto-pagina:last-child { page-break-after: avoid; }

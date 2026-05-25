@@ -21,6 +21,15 @@
                                     </div>
                                 @endif
                                 <div class="col-md-6">
+                                    <label class="etiBase">Tipo</label>
+                                    <select wire:model.live="IdTipo" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($tipos as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>                                                               
+                                <div class="col-md-6">
                                     <label class="etiBase">Material</label>
                                     <select wire:model.live="IdMaterial" class="inpBase @error('IdMaterial') is-invalid @enderror">
                                         <option value=""></option>
@@ -43,7 +52,7 @@
                                     <input wire:model="cantidad" wire:change="validarDisponibilidad" type="text" class="inpBase @error('cantidad') is-invalid @enderror" onfocus="this.select()">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="etiChico">Peso (g)</label>
+                                    <label class="etiLectura">Peso (g)</label>
                                     <input wire:model="pesoG" type="text" class="inpBase" disabled>
                                 </div>
                             </div>

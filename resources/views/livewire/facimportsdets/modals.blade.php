@@ -12,7 +12,16 @@
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
                                 @endif
-                                <div class="col-md-6">
+                                <div class="col-md-3">
+                                    <label class="etiBase">Type</label>
+                                    <select wire:model="IdTipo" wire:change="cambiarTipo" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($tipos as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>                                 
+                                <div class="col-md-5">
                                     <label class="etiBase">Material</label>
                                     <select wire:model="IdMaterial" wire:change="elegirMaterial" class="inpBase">
                                         <option value=""></option>
@@ -102,7 +111,7 @@
                                     </select>
                                     @error('IdOrigen') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>  
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <label class="etiBase">Order-Lot | Ticket (Customer)</label>
                                     <div class="d-flex gap-1">
                                         <select wire:model="IdFolio" class="inpBase" wire:change="actualizarDatosFolio">
@@ -121,7 +130,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="etiChico">MX Tariff</label>
+                                    <label class="etiLectura">MX Tariff</label>
                                     <input wire:model="arancel" type="text" class="inpBase" disabled onfocus="this.select()">
                                     @error('arancel') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>

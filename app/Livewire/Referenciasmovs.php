@@ -48,7 +48,6 @@ class Referenciasmovs extends Component
             ->orderBy('id', 'desc')
             ->paginate(10);
     }
-
 	public function render()
 	{
 		return view('livewire.referenciasmovs.view', [
@@ -66,66 +65,69 @@ class Referenciasmovs extends Component
     {
         $this->resetExcept('IdDoc','tipoDoc','materials');
     }
-public function edit($id)
-{
-    $this->selected_id = $id;
-    $registro = Referenciasmov::findOrFail($id);
-    $this->IdMaterial = $registro->Referencia->IdMaterial;
-    $this->fill($registro->toArray());
-    if (is_array($registro->diferencias)) {
-        $soloTexto = collect($registro->diferencias)->first(fn($v, $k) => is_numeric($k));
-        $this->diferencias = $soloTexto;
+    public function edit($id)
+    {
+        $this->selected_id = $id;
+        $registro = Referenciasmov::findOrFail($id);
+        $this->IdMaterial = $registro->Referencia->IdMaterial;
+        $this->fill($registro->toArray());
+        if (is_array($registro->diferencias)) {
+            $soloTexto = collect($registro->diferencias)->first(fn($v, $k) => is_numeric($k));
+            $this->diferencias = $soloTexto;
+        }
+        $this->verModalReferenciasmov = true;
     }
-    $this->verModalReferenciasmov = true;
-}
     public function create()
     {
         $this->resetInput();
         $this->verModalReferenciasmov = true;
     }   
-    public function save()
-    {
-        $this->validate([
-            'IdDoc' => 'required',
-            'tipoDoc' => 'required',
-            'cantidad' => 'required',
-            'pesoG' => 'required',
-        ]);
-        $jsonFinal = [];
-        if (!empty($this->diferencias)) {
-            $jsonFinal[] = $this->diferencias;
-        }
-        if ($this->IdFacImportsDet) {
-            $refFiscal = Facimportsdet::find($this->IdFacImportsDet);
-            if ($refFiscal) {
-                if ($this->IdMaterial != $refFiscal->IdMaterial) {
-                    $nombreOriginal = $refFiscal->material->material ?? 'S/N';
-                    $jsonFinal['material'] = "Se documentó {$nombreOriginal}";
-                }
-                if ($this->cantidad != $refFiscal->cantidad) {
-                    $jsonFinal['cantidad'] = $this->cantidad - $refFiscal->cantidad;
-                }
-                if ($this->pesoG != $refFiscal->pesoG) {
-                    $jsonFinal['pesoG'] = round($this->pesoG - $refFiscal->pesoG, 4);
-                }
+public function save()
+{
+    $this->validate([
+        'IdDoc' => 'required',
+        'tipoDoc' => 'required',
+        'cantidad' => 'required',
+        'pesoG' => 'required',
+    ]);
+    $nuevasDiferencias = [];
+    if ($this->IdFacImportsDet) {
+        $refFiscal = Facimportsdet::find($this->IdFacImportsDet);
+        if ($refFiscal) {
+            if ($this->IdMaterial != $refFiscal->IdMaterial) {
+                $materialReal = Material::find($this->IdMaterial);
+                $nuevasDiferencias['material'] = "Físicamente llegó: " . ($materialReal->material ?? 'S/N');
             }
+            if ($this->cantidad != $refFiscal->cantidad) {
+                $nuevasDiferencias['cantidad'] = $this->cantidad - $refFiscal->cantidad;
+            }
+            if ($this->pesoG != $refFiscal->pesoG) {
+                $nuevasDiferencias['pesoG'] = round($this->pesoG - $refFiscal->pesoG, 4);
+            }
+            $diferenciasActuales = $refFiscal->diferencias ?? [];
+            $diferenciasFinales = array_merge($diferenciasActuales, $nuevasDiferencias);
+            $refFiscal->update([
+                'diferencias' => !empty($diferenciasFinales) ? $diferenciasFinales : null
+            ]);
         }
-        Referenciasmov::updateOrCreate(
-            ['id' => $this->selected_id],
-            [
-                'IdFacImportsDet' => $this->IdFacImportsDet,
-                'IdMaterial' => $this->IdMaterial,
-                'IdDoc' => $this->IdDoc,
-                'tipoDoc' => $this->tipoDoc,
-                'cantidad' => $this->cantidad,
-                'pesoG' => $this->pesoG,
-                'diferencias' => !empty($jsonFinal) ? $jsonFinal : null
-            ]
-        );
-        $this->resetInput();
-        $this->verModalReferenciasmov = false;
-        $this->dispatch('refreshRefsMovs');
     }
+    Referenciasmov::updateOrCreate(
+        ['id' => $this->selected_id],
+        [
+            'IdFacImportsDet' => $this->IdFacImportsDet,
+            'IdDeptoDes' => 1,
+            'tipo' => 'entrada',
+            'IdDoc' => $this->IdDoc,
+            'tipoDoc' => $this->tipoDoc,
+            'cantidad' => $this->cantidad,
+            'pesoG' => $this->pesoG,
+            'glosa' => !empty($nuevasDiferencias) ? "Ingreso con discrepancias detectadas" : "Ingreso estándar"
+        ]
+    );
+    $this->resetInput();
+    $this->verModalReferenciasmov = false;
+    $this->dispatch('refreshRefsMovs');
+}
 
     public function paginationView()
     {

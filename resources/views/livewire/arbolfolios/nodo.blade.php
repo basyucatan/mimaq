@@ -4,16 +4,13 @@
         onmouseover="this.style.backgroundColor='#fbff00'" 
         onmouseout="this.style.backgroundColor='transparent'" 
         onclick="manejadorClick(event, '{{ $tipo }}', {{ $nodo->id }})">
-        
         <div style="width: 20px;" class="text-center me-1 flex-shrink-0">
             @if ($hijos && count($hijos) > 0)
                 <span>{{ $expanded ? '🔽' : '▶️' }}</span>
             @else
-                {{-- Icono según tipo --}}
                 <span>{{ $tipo == 'Folio' ? '💎' : ($tipo == 'Lote' ? '🏷️' : '📦') }}</span>
             @endif
         </div>
-
         <div class="flex-grow-1 d-flex align-items-center justify-content-between overflow-hidden">
             @php
                 $estiloTexto = 'text-dark small';
@@ -24,16 +21,15 @@
                     elseif($selected_id == $nodo->id) $estiloTexto = 'small text-success fw-bold';
                 }
             @endphp
-<span class="{{ $estiloTexto }} text-truncate">
-    @if($tipo == 'Orden')
-        {{ $nodo->cliente->cliente ?? '' }} | {{ $texto }}
-    @elseif($tipo == 'Folio')
-        {{ $texto }}
-    @else
-        {{ $tipo }} {{ $texto }}
-    @endif
-</span>
-
+            <span class="{{ $estiloTexto }} text-truncate">
+                @if($tipo == 'Orden')
+                    {{ $nodo->cliente->cliente ?? '' }} | {{ $texto }}
+                @elseif($tipo == 'Folio')
+                    {{ $texto }}
+                @else
+                    {{ $tipo }} {{ $texto }}
+                @endif
+            </span>
             <div class="d-flex gap-2 align-items-center ms-2">
                 @if($tipo == 'Orden')
                     <button wire:click.stop="nuevoLote({{ $nodo->id }})" class="bot botBlanco botChico">✚</button>
@@ -46,14 +42,13 @@
             </div>
         </div>
     </div>
-
     @if ($expanded && $hijos && count($hijos) > 0)
         <ul class="list-unstyled ps-2 border-start ms-3">
             @foreach ($hijos as $hijo)
                 @include('livewire.arbolfolios.nodo', [
                     'tipo' => ($tipo == 'Orden' ? 'Lote' : 'Folio'),
                     'nodo' => $hijo,
-                    'texto' => ($tipo == 'Orden' ? $hijo->lote : ($hijo->Estilo ? $hijo->Estilo->estilo.' ('.$hijo->cantidad.' pz)': '')),
+                    'texto' => ($tipo == 'Orden' ? $hijo->lote : ($hijo->Estilo ? $hijo->id.' | '.$hijo->Estilo->estilo.' ('.$hijo->cantidad.' pz)': '')),
                     'expanded' => ($tipo == 'Orden' ? ($expandir['Lote'][$hijo->id] ?? false) : false),
                     'hijos' => ($tipo == 'Orden' ? $hijo->folios : []),
                     'selected_id' => $selected_id
@@ -62,7 +57,6 @@
         </ul>
     @endif
 </li>
-
 @once
 <script>
     if (typeof timerClick === 'undefined') {

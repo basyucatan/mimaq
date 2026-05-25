@@ -1,12 +1,22 @@
 {
   "Empresa":[
-    {"id":1,"razonSocial":"EMA DE YUCATAN SA DE CV",
-    "rfc":"EYU030827858","numeroImmex":"XXX",
-    "domicilioFiscal":"CALLE 64 #366-A X 39 Y 41, COL. CENTRO CP 97000, MERIDA, YUCATAN, MEXICO",
-    "domicilioPlanta":"CALLE 64 #366-A X 39 Y 41, COL. CENTRO CP 97000, MERIDA, YUCATAN, MEXICO"}
+    {"id":1,"razonSocial":"EMA DE YUCATAN SA DE CV","rfc":"EYU030827858","numeroImmex":"XXX","domicilioFiscal":"CALLE 64 #366-A X 39 Y 41, COL. CENTRO CP 97000, MERIDA, YUCATAN, MEXICO","domicilioPlanta":"CALLE 64 #366-A X 39 Y 41, COL. CENTRO CP 97000, MERIDA, YUCATAN, MEXICO"}
   ],
 
   "Parametros":[
-    {"id":1,"factorIva":0.16}
+    {"id":1,"factorIva":0.16,"cantBandeja":"10"}
+  ],
+
+  "kts":[
+    {"id":1,"valor":"10K"},
+    {"id":2,"valor":"14K"},
+    {"id":3,"valor":"18K"},
+    {"id":4,"valor":"24K"}
+  ],
+
+  "colors":[
+    {"id":1,"valor":"Y"},
+    {"id":2,"valor":"W"},
+    {"id":3,"valor":"P"}
   ]
 }

@@ -7,8 +7,6 @@ use Livewire\WithPagination;
 use App\Models\Material;
 use Livewire\Attributes\Computed;
 use App\Models\Util;
-use Illuminate\Support\Facades\DB;
-
 class Materials extends Component
 {
     use WithPagination;

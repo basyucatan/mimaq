@@ -52,6 +52,7 @@ class Arbolfacturas extends Component
     {
         $this->resetInput();
         $this->IdPedimento = $idPedimento;
+        $this->selected_id = null;
         $this->viadE='FEDEX';
         $this->guiaA='';
         $this->nPaq = 1;        
@@ -67,7 +68,6 @@ class Arbolfacturas extends Component
         $this->tipoCambio = $registro->tipoCambio;
         $this->verModalPedimento = true;
     }
-
     public function editarFactura($id)
     {
         $registro = Factura::findOrFail($id);

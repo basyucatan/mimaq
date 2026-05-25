@@ -6,9 +6,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Tipo;
 use Livewire\Attributes\Computed;
-use App\Models\Util;
-use Illuminate\Support\Facades\DB;
-
 class Tipos extends Component
 {
     use WithPagination;

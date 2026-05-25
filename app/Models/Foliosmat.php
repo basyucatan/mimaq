@@ -13,7 +13,7 @@ class Foliosmat extends Model
 
     protected $table = 'foliosmats';
 
-    protected $fillable = ['IdFolio','IdFacImportsDet','IdMaterial',
+    protected $fillable = ['IdFolio','IdFacImportsDet','IdMaterial', 'IdTipo',
         'cantidad','pesoG','integrado','adicionales'];
     protected $casts = [
         'adicionales' => 'array'

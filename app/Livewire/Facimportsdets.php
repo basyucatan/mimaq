@@ -2,12 +2,12 @@
 namespace App\Livewire;
 use Livewire\{Component, WithPagination};
 use App\Models\{Util, Material, Factura, Facimportsdet, Cliente, Orden, 
-    Lote, Estilo, Folio, Estilosdet};
+    Lote, Foliosmat, Folio, Estilosdet};
 use Livewire\Attributes\Computed;
-use App\Traits\GestionFacImports;
+use App\Traits\FacImportsMangaer;
 class Facimportsdets extends Component
 {
-    use WithPagination, GestionFacImports;
+    use WithPagination, FacImportsMangaer;
     protected $paginationTheme = 'bootstrap';
     protected $listeners = [
         'IdFacturaElecta' => 'IdFacturaElecta',
@@ -54,57 +54,56 @@ class Facimportsdets extends Component
     {
         return view('livewire.facimportsdets.view', ['facimportsdets' => $this->filteredFacimportsdets]);
     }
-    public function generarConEstilo()
-    {
-        $this->validate([
-            'IdEstilo' => 'required',
-            'cantidadEstilo' => 'required|numeric'
+public function generarConEstilo()
+{
+    $this->validate([
+        'IdEstilo' => 'required', 
+        'cantidadEstilo' => 'required|numeric',
+        'cliente' => 'required',
+        'orden' => 'required',
+        'lote' => 'required|numeric'
+    ]);
+
+    if (!empty($this->cliente) && !empty($this->orden) && !empty($this->lote)) {
+        $objCliente = Cliente::firstOrCreate(['cliente' => strtoupper($this->cliente)]);
+        $objOrden = Orden::firstOrCreate(['orden' => strtoupper($this->orden)], [
+            'IdCliente' => $objCliente->id,
+            'fechaVen' => now()->addDays(7),
+            'estatus' => 'abierto'
         ]);
-        $estiloPrincipal = Estilo::find($this->IdEstilo);
-        $cantidadEstilo = $this->cantidadEstilo;
+        $objLote = Lote::firstOrCreate(['IdOrden' => $objOrden->id, 'lote' => strtoupper($this->lote)]);
+
+        $objFolio = new Folio();
+        $objFolio->IdLote = $objLote->id;
+        $objFolio->precioU = 0;
+        $objFolio->fechaVen = $objOrden->fechaVen;
+        $objFolio->estatus = 'abierto';
+        
+        // Llamada con los dos parámetros solicitados
+        $objFolio->definirProducto($this->IdEstilo, $this->cantidadEstilo);
+        
+        $objFolio->save();
+
+        $this->IdFolio = $objFolio->id;
         $detalles = Estilosdet::where('IdEstilo', $this->IdEstilo)->get();
-        $this->IdFolio = null;
-        if (!empty($this->cliente) && !empty($this->orden) && !empty($this->lote)) {
-            $objCliente = Cliente::firstOrCreate([
-                'cliente' => strtoupper($this->cliente)
-            ]);
-            $objOrden = Orden::firstOrCreate(
-                ['orden' => strtoupper($this->orden)],
-                [
-                    'IdCliente' => $objCliente->id,
-                    'fechaVen' => now()->addDays(7),
-                    'estatus' => 'abierto'
-                ]
-            );
-            $objLote = Lote::firstOrCreate([
-                'IdOrden' => $objOrden->id,
-                'lote' => strtoupper($this->lote)
-            ]);
-            $objFolio = Folio::create([
-                'IdLote' => $objLote->id,
-                'IdEstilo' => $this->IdEstilo,
-                'productoFinal' => $estiloPrincipal->descripcion ?? 'PRODUCTO TERMINADO',
-                'cantidad' => $this->cantidadEstilo,
-                'totalBandejas' => 1,
-                'precioU' => 0,
-                'fechaVen' => $objOrden->fechaVen,
-                'estatus' => 'abierto'
-            ]);
-            $this->IdFolio = $objFolio->id;
-        }
-        $this->selected_id = null;
+
         foreach ($detalles as $det) {
+            // Aquí asumo que llamas a una función interna o save del trait/componente para los materiales
             $this->IdMaterial = $det->IdMaterial;
-            $this->estiloY = $det->estiloY;
             $this->IdOrigen = 2;
-            $this->cantidad = $cantidadEstilo * $det->cantidad;
-            $this->IdFolio = $objFolio->id ?? null;
+            $this->cantidad = $objFolio->cantidad * $det->cantidad;
+            $this->IdFolio = $objFolio->id;
+            $this->IdSize = $det->IdSize;
+            $this->IdForma = $det->IdForma;
+            $this->estiloY = $det->estiloY;
             $this->pesoEnUMat = 0;
-            $this->precioU = 0;
-            $this->save();
+            $this->precioU = 1;
+            $this->save(); 
         }
-        $this->clientes = Util::getArray('clientes');
     }
+    
+    $this->clientes = Util::getArray('clientes');
+}
     public function crearEstilo()
     {
         $this->resetInput();

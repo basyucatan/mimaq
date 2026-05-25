@@ -6,7 +6,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Referenciasmov;
 use Livewire\Attributes\Computed;
-
 class Kardex extends Component
 {
     use WithPagination;

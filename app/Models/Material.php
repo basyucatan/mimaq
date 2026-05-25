@@ -13,7 +13,8 @@ class Material extends Model
 
     protected $table = 'materials';
 
-    protected $fillable = ['IdClase','IdUnidad','IdUnidadP','material','materialI','materialFiscal','abreviatura','adicionales'];
+    protected $fillable = ['IdClase','IdUnidad','IdUnidadP','material','materialI',
+        'materialFiscal','abreviatura','adicionales'];
     protected $casts = [
         'adicionales' => 'array'
     ];

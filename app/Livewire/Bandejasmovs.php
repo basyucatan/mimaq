@@ -13,7 +13,7 @@ class Bandejasmovs extends Component
 {
     use WithPagination;
 	protected $paginationTheme = 'bootstrap';
-    public $verModalBandejasmov=false, $selected_id, $keyWord, $IdBandeja, $IdProceso, $IdEmpleado, $pesoMetalEntrada, $pesoMetalSalida, $mermaMetal, $fechaH;
+    public $verModalBandejasmov=false, $selected_id, $keyWord, $IdBandeja, $IdProceso, $IdEmpleado, $pesoEntrada, $pesoSalida, $fechaHEntrada, $fechaHSalida;
 	
     public function mount(){}
     public function updatedKeyWord(){$this->resetPage();}
@@ -21,18 +21,8 @@ class Bandejasmovs extends Component
 	public function filteredBandejasmovs()
 	{
 		$keyWord = '%' . $this->keyWord . '%';
-		return Bandejasmov::Where('id','>',0)
-			->where(function ($query) use ($keyWord) {
-				$query
-						->orWhere('IdBandeja', 'LIKE', $keyWord)
-						->orWhere('IdProceso', 'LIKE', $keyWord)
-						->orWhere('IdEmpleado', 'LIKE', $keyWord)
-						->orWhere('pesoMetalEntrada', 'LIKE', $keyWord)
-						->orWhere('pesoMetalSalida', 'LIKE', $keyWord)
-						->orWhere('mermaMetal', 'LIKE', $keyWord)
-						->orWhere('fechaH', 'LIKE', $keyWord);
-			})
-			->paginate(12);
+		return Bandejasmov::Where('IdBandeja',$this->IdBandeja)
+			->get();
 	}
 	public function render()
 	{
@@ -65,10 +55,9 @@ class Bandejasmovs extends Component
         $this->validate([
 		'IdBandeja' => 'required',
 		'IdProceso' => 'required',
-		'pesoMetalEntrada' => 'required',
-		'pesoMetalSalida' => 'required',
-		'mermaMetal' => 'required',
-		'fechaH' => 'required',
+		'pesoEntrada' => 'required',
+		'fechaHEntrada' => 'required',
+		'fechaHSalida' => 'required',
         ]);
 
         Bandejasmov::updateOrCreate(
@@ -77,10 +66,10 @@ class Bandejasmovs extends Component
 				'IdBandeja' => $this-> IdBandeja,
 				'IdProceso' => $this-> IdProceso,
 				'IdEmpleado' => $this-> IdEmpleado,
-				'pesoMetalEntrada' => $this-> pesoMetalEntrada,
-				'pesoMetalSalida' => $this-> pesoMetalSalida,
-				'mermaMetal' => $this-> mermaMetal,
-				'fechaH' => $this-> fechaH
+				'pesoEntrada' => $this-> pesoEntrada,
+				'pesoSalida' => $this-> pesoSalida,
+				'fechaHEntrada' => $this-> fechaHEntrada,
+				'fechaHSalida' => $this-> fechaHSalida
 			]
 		);
         $this->resetInput();

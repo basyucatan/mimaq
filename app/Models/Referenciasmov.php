@@ -17,25 +17,10 @@ class Referenciasmov extends Model
         'diferencias' => 'array',
         'adicionales' => 'array'
     ];
-
     public function getDifsFormatAttribute()
     {
-        if (!$this->diferencias) return '';
-        $salida = [];
-        foreach ($this->diferencias as $llave => $valor) {
-            if (is_numeric($llave)) {
-                $salida[] = $valor;
-            } elseif ($llave === 'material') {
-                $salida[] = $valor;
-            } else {
-                $prefijo = ($llave == 'pesoG') ? 'g: ' : 'Pz: ';
-                $signo = (is_numeric($valor) && $valor > 0) ? '+' : '';
-                $salida[] = $prefijo . $signo . $valor;
-            }
-        }
-        return implode(' | ', $salida);
+        return $this->Referencia?->difsFormat ?? '';
     }
-
     public function Referencia()
     {
         return $this->belongsTo(Facimportsdet::class, 'IdFacImportsDet');

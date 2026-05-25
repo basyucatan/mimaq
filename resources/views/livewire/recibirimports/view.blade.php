@@ -1,4 +1,4 @@
-@section('title', __('import'))
+@section('title', __('Recibir Import'))
 <div class="container-fluid p-2">
     <div class="cardPrin shadow-sm border-0">
         <div class="card-header bg-primary text-white fs-5 ps-3 py-2 d-flex align-items-center">

@@ -1,67 +1,40 @@
-@if ($verModalUser)
-    <div class="modal-overlay">
-        <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" wire:ignore.self>            
-            <div class="modal-content">
-                <div class="cardPrin" style="cursor: move;">
-                    <div class="cardPrin-header">
-                        <span>{{ $selected_id ? 'Editar Usuario' : 'Crear Usuario' }}</span>
-                    </div>
-                    <div class="cardPrin-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">
-                        <form>
-                            <div class="row g-1">
-                                @if ($selected_id)<input type="hidden" wire:model="selected_id">@endif
-                                <div class="col-md-6">
-                                    <label for="name" class="etiBase">Nombre</label>
-                                    <input wire:model.live="name" type="text" class="inpBase" id="name">
-                                    @error('name')
-                                        <span class="error text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="telefono" class="etiBase">Telefono</label>
-                                    <input wire:model.live="telefono" type="text" class="inpBase" id="telefono">
-                                    @error('telefono')
-                                        <span class="error text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="etiBase">Email</label>
-                                    <input wire:model.live="email" type="text" class="inpBase" id="email">
-                                    @error('email')
-                                        <span class="error text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="etiBase">Rol</label>
-                                    <select wire:model="IdRol" class="inpBase">
-                                        <option value=""></option>
-                                        @foreach ($roles as $key => $value)
-                                            <option value="{{ $key }}">{{ $value }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('IdRol') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>                                 
-                                <div class="col-md-6">
-                                    <label for="password" class="etiBase">Password</label>
-                                    <input wire:model.live="password" type="password" class="inpBase" id="password">
-                                    @error('password')
-                                        <span class="error text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="passwordConf" class="etiBase">Confirmar Password</label>
-                                    <input wire:model.live="passwordConf" type="password" class="inpBase" id="passwordConf">
-                                </div>
-       
-                            </div>
-                        </form>
-                    </div>
-                    <div class="cardPrin-footer mt-3 d-flex justify-content-end gap-2">
-                        <a wire:click.prevent="cancel()" class="bot botNegro">Cerrar</a>
-                        <a wire:click.prevent="save()" class="bot botVerde">Guardar</a>
+<div x-data="{ abierto: true }" x-show="abierto" class="modal fade show d-block" style="background: rgba(0,0,0,0.5);">
+    <div x-data="modalDraggable" class="modal-dialog" style="top: 50px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px;">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header bg-light" style="cursor: move; user-select: none;" @mousedown="iniciarArrastre($event)">
+                <h5 class="modal-title">
+                    {{ $selected_id ? 'Editar Usuario' : 'Nuevo Usuario' }}
+                </h5>
+                <button type="button" class="btn-close" @click="abierto = false; window.location.href='{{URL_BASE}}users'"></button>
+            </div>
+            
+            <form action="{{URL_BASE}}users/save" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="selected_id" value="{{$selected_id}}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label font-weight-bold">Nombre</label>
+                            <input type="text" name="name" class="form-control" value="{{$name}}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" name="telefono" class="form-control" value="{{$telefono}}">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{$email}}" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Contraseña {{ $selected_id ? '(Opcional)' : '' }}</label>
+                            <input type="password" name="password" class="form-control" {{ $selected_id ? '' : 'required' }}>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" @click="abierto = false; window.location.href='{{URL_BASE}}users'">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
         </div>
     </div>
-@endif
+</div>

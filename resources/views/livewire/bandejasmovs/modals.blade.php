@@ -29,24 +29,24 @@
                                     @error('IdEmpleado') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label class="etiBase">Pesometalentrada</label>
-                                    <input wire:model="pesoMetalEntrada" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('pesoMetalEntrada') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiBase">Pesoentrada</label>
+                                    <input wire:model="pesoEntrada" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('pesoEntrada') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label class="etiBase">Pesometalsalida</label>
-                                    <input wire:model="pesoMetalSalida" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('pesoMetalSalida') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiBase">Pesosalida</label>
+                                    <input wire:model="pesoSalida" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('pesoSalida') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label class="etiBase">Mermametal</label>
-                                    <input wire:model="mermaMetal" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('mermaMetal') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiBase">Fechahentrada</label>
+                                    <input wire:model="fechaHEntrada" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('fechaHEntrada') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label class="etiBase">Fechah</label>
-                                    <input wire:model="fechaH" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('fechaH') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiBase">Fechahsalida</label>
+                                    <input wire:model="fechaHSalida" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('fechaHSalida') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
 
                             </div>

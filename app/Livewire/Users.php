@@ -5,11 +5,9 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
-use Livewire\Attributes\Computed;
 use App\Models\Util;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
-
 class Users extends Component
 {
     use WithPagination;
