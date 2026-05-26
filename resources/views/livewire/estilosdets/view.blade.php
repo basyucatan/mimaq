@@ -33,7 +33,7 @@
                                 @forelse($estilosdets as $row)
                                     <tr>
                                         <td>{{ $row->cantidad }}</td>
-                                        <td>{{ $row->Material->material }}</td>
+                                        <td>{{ $row->Material->material ?? ''}}</td>
                                         <td>{{ $row->Size->size ?? '' }}</td>
                                         <td>{{ $row->Forma->forma ?? '' }}</td>
                                         <td>{{ $row->estiloY }}</td>

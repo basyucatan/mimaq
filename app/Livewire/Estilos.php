@@ -32,12 +32,7 @@ class Estilos extends Component
 	public function filteredEstilos()
 	{
 		$keyWord = '%' . $this->keyWord . '%';
-		return Estilo::where(function ($query) use ($keyWord) {
-            $query->orWhere('estilo', 'LIKE', $keyWord)
-                ->orWhereHas('clase', function ($subQuery) use ($keyWord) { 
-                    $subQuery->where('clase', 'LIKE', $keyWord);
-                });
-        })
+		return Estilo::Where('estilo', 'LIKE', $keyWord)
         ->orderby('estilo')
         ->paginate(8);
 	}
