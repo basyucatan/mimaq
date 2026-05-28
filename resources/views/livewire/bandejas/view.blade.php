@@ -125,11 +125,6 @@
                                                 class="bot botNaranja botChico" title="Editar">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
-                                            <button wire:click="destroy({{ $row->id }})"
-                                                class="bot botRojo botChico"
-                                                onclick="confirm('¿Estás seguro de eliminar este registro?') || event.stopImmediatePropagation()">
-                                                <i class="bi bi-trash3-fill"></i>
-                                            </button>
                                         </div>
                                     </td>
                                 </tr>

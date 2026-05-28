@@ -65,6 +65,7 @@ class Bandejasmovs extends Component
 			[
 				'IdBandeja' => $this-> IdBandeja,
 				'IdProceso' => $this-> IdProceso,
+                'IdUser' => Auth()->user()->id,
 				'IdEmpleado' => $this-> IdEmpleado,
 				'pesoEntrada' => $this-> pesoEntrada,
 				'pesoSalida' => $this-> pesoSalida,

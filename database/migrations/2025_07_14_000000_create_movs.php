@@ -142,6 +142,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('IdBandeja')->constrained('bandejas')->cascadeOnDelete();
             $table->foreignId('IdProceso')->constrained('procesos')->restrictOnDelete();
+            $table->foreignId('IdUser')->nullable()->constrained('users')->restrictOnDelete();
             $table->foreignId('IdEmpleado')->nullable()->constrained('empleados')->nullOnDelete();
             $table->decimal('pesoEntrada', 12, 4);
             $table->decimal('pesoSalida', 12, 4)->nullable();

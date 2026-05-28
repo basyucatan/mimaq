@@ -93,6 +93,7 @@ public function procesar()
             Bandejasmov::updateOrCreate(
                 ['IdBandeja' => $bandeja->id, 'IdProceso' => 1],
                 [
+                    'IdUser' => Auth()->user()->id,
                     'pesoEntrada' => round(($pesoMetal + $pesoPiedras + $pesoDiamantes + $pesoMisc) * $factor, 4),
                     'fechaHEntrada' => now(),
                     'fechaHSalida' => now()

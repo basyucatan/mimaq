@@ -21,7 +21,7 @@ trait FacImportsMangaer
     public function updatedIdTipo()
     {
         if (!$this->IdTipo) {
-            $this->materials = Util::getArray('materials');
+            $this->materials = Util::getArray('materials', 'materialI');
             return;
         }
         $this->cargarMateriales();
@@ -33,7 +33,7 @@ trait FacImportsMangaer
             ->where('clases.IdTipo', $this->IdTipo)
             ->select('materials.*')
             ->orderBy('materials.material')
-            ->pluck('material', 'id')
+            ->pluck('materialI', 'id')
             ->toArray();
     }
     public function cambiarTipo(){$this->IdMaterial = null;}

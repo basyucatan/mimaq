@@ -27,7 +27,7 @@
                                 </div>
                             @elseif($tipoModal == 'Lote')
                                 <div class="col-md-12">
-                                    <label class="etiBase">Nombre del Lote</label>
+                                    <label class="etiBase">Número de Lote</label>
                                     <input wire:model="lote" type="text" class="inpBase" onfocus="this.select()">
                                     @error('lote') <span class="inpBase">{{ $message }}</span> @enderror
                                 </div>

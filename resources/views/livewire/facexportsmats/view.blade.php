@@ -15,11 +15,11 @@
                             </span>
                         @endif
                     </div>
-                    <div>
+                    {{-- <div>
                         <button class="bot botVerde" wire:click="create" title="Nuevo Facexportsmat">
                             <i class="bi bi-file-earmark-plus"></i>
                         </button>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="cardPrin-body">
                     @include('livewire.facexportsmats.modals')
@@ -29,8 +29,9 @@
                                 <tr>
                                     <th>Referencia</th>
                                     <th>Material</th>
+                                    <th>Tipo</th>
                                     <th>Cantidad</th>
-                                    <th>Pesog</th>
+                                    <th>Peso</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -38,22 +39,22 @@
                                 @forelse($facexportsmats as $row)
                                     <tr>
 
-                                        <td>{{ $row->IdFacImportsDet }}</td>
-                                        <td>{{ $row->IdMaterial }}</td>
-                                        <td>{{ $row->IdTipo }}</td>
-                                        <td>{{ $row->cantidadDescargada }}</td>
-                                        <td>{{ $row->pesoDescargadoG }}</td>
+                                        <td>{{ $row->facimportsdet->IdEntradaMex }}</td>
+                                        <td>{{ $row->facimportsdet->material->material }}</td>
+                                        <td>{{ $row->facimportsdet->material->clase->tipo->tipo }}</td>
+                                        <td>{{ $row->cantidad }}</td>
+                                        <td>{{ $row->pesoG }}</td>
                                         <td width="60">
                                             <div class="d-flex justify-content-around align-items-center gap-1">
                                                 <button wire:click="edit({{ $row->id }})"
                                                     class="bot botNaranja botChico" title="Editar">
                                                     <i class="bi-pencil-square"></i>
                                                 </button>
-                                                <button wire:click="destroy({{ $row->id }})"
+                                                {{-- <button wire:click="destroy({{ $row->id }})"
                                                     class="bot botRojo botChico"
                                                     onclick="confirm('¿Estás seguro de eliminar este registro?') || event.stopImmediatePropagation()">
                                                     <i class="bi-trash3-fill"></i>
-                                                </button>
+                                                </button> --}}
                                             </div>
                                         </td>
                                     </tr>

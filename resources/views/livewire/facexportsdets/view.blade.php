@@ -55,11 +55,11 @@
                                         <td>{{ $row->arancel }}</td>
                                         <td>{{ $row->cantidad }}</td>
                                         <td>{{ $row->precioU }}</td>
-                                        <td>{{ $row->pesoTotalG }}</td>
+                                        <td>{{ $row->pesoG }}</td>
                                         <td width="90">
                                             <div class="d-flex justify-content-around align-items-center gap-1">
                                                 <button wire:click="verMaterials({{ $row->id }})" class="bot botNegro botChico" title="Historial de Movimientos">
-                                                    <i class="bi bi-clock-history"></i>
+                                                    🛎️
                                                 </button>
                                                 <button wire:click="edit({{ $row->id }})"
                                                     class="bot botNaranja botChico" title="Editar">

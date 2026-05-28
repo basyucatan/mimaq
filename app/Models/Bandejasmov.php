@@ -13,7 +13,8 @@ class Bandejasmov extends Model
 
     protected $table = 'bandejasmovs';
 
-    protected $fillable = ['IdBandeja','IdProceso','IdEmpleado','pesoEntrada','pesoSalida','fechaHEntrada','fechaHSalida'];
+    protected $fillable = ['IdBandeja','IdProceso','IdUser','IdEmpleado','pesoEntrada',
+        'pesoSalida','fechaHEntrada','fechaHSalida'];
     
 	
     public function bandeja()
@@ -30,5 +31,8 @@ public function proceso()
 {
     return $this->belongsTo(Proceso::class, 'IdProceso');
 }
-    
+public function user()
+{
+    return $this->belongsTo(User::class, 'IdUser');
+}
 }

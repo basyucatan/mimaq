@@ -1,10 +1,10 @@
 @if($verModalBandeja)
     <div class="modal-overlay">
-        <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" wire:ignore.self>            
+        <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" wire:ignore.self>           
             <div class="modal-content">
                 <div class="cardPrin" style="cursor: move;">
                     <div class="cardPrin-header">
-                        <span>{{ $selected_id ? 'Editar Bandeja' : 'Crear Bandeja' }}</span>
+                        <span>{{ $selected_id ? 'Editar Bandeja '.$codigoBandeja : 'Crear Bandeja' }} </span>
                     </div>
                     <div class="cardPrin-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">
                         <form gy-2>
@@ -13,55 +13,46 @@
                                     <input type="hidden" wire:model="selected_id">
                                 @endif
                                 <div class="col-md-6">
-                                    <label class="etiBase">Cantidad</label>
-                                    <input wire:model="cantidad" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('cantidad') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiBase">Peso Casting Inicial</label>
+                                    <input wire:model="castingIni" type="text" class="inpBase" onfocus="this.select()">
+                                    @error('castingIni') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>            
+                                <div class="col-md-6">
+                                    <label class="etiBase">Peso Casting final</label>
+                                    <input wire:model="castingFin" type="text" class="inpBase" onfocus="this.select()">
+                                    @error('castingFin') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>            
+                                <div class="col-md-6">
+                                    <label class="etiBase">Peso Piedras</label>
+                                    <input wire:model="piedrasG" type="text" class="inpBase" onfocus="this.select()">
+                                    @error('piedrasG') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>            
+                                <div class="col-md-6">
+                                    <label class="etiBase">Peso Diamantes</label>
+                                    <input wire:model="diamantesG" type="text" class="inpBase" onfocus="this.select()">
+                                    @error('diamantesG') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>            
+                                <div class="col-md-6">
+                                    <label class="etiBase">Peso Miscelaneo</label>
+                                    <input wire:model="miscG" type="text" class="inpBase" onfocus="this.select()">
+                                    @error('miscG') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="etiBase">Castinginicial</label>
-                                    <input wire:model="castingInicial" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('castingInicial') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Castingfinal</label>
-                                    <input wire:model="castingFinal" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('castingFinal') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Piedras</label>
-                                    <input wire:model="piedras" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('piedras') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Diamantes</label>
-                                    <input wire:model="diamantes" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('diamantes') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Miscelaneo</label>
-                                    <input wire:model="miscelaneo" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('miscelaneo') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Idprocesoactual</label>
-                                    <input wire:model="IdProcesoActual" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('IdProcesoActual') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Enboveda</label>
-                                    <input wire:model="enBoveda" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('enBoveda') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Habilitada</label>
-                                    <input wire:model="habilitada" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('habilitada') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Estatus</label>
-                                    <input wire:model="estatus" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('estatus') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>            
+                                <div class="col-md-3 d-flex align-items-center justify-content-center">
+                                    <div class="form-check form-switch shadow-sm p-2 rounded border" style="background-color: #f8f9fa; min-width: 150px;">
+                                        <input wire:model.live="enBoveda" class="form-check-input ms-0" type="checkbox" role="switch" id="switchEstatus" style="cursor: pointer; width: 2.5em; height: 1.25em;">
+                                        <label class="form-check-label fw-bold mb-0 ms-2" for="switchEstatus" style="cursor: pointer; font-size: 0.9rem;">
+                                            {{ $enBoveda ? 'Bóveda' : 'Producción' }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 d-flex align-items-center justify-content-center">
+                                    <div class="form-check form-switch shadow-sm p-2 rounded border" style="background-color: #f8f9fa; min-width: 150px;">
+                                        <input wire:model.live="habilitada" class="form-check-input ms-0" type="checkbox" role="switch" id="switchEstatus" style="cursor: pointer; width: 2.5em; height: 1.25em;">
+                                        <label class="form-check-label fw-bold mb-0 ms-2" for="switchEstatus" style="cursor: pointer; font-size: 0.9rem;">
+                                            {{ $habilitada ? 'Habilitada' : 'Inhabilitada' }}
+                                        </label>
+                                    </div>
+                                </div>                      
                             </div>
                         </form>
                     </div>
@@ -77,26 +68,28 @@
 @if($verModalDividir)
     <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog modal-dialog-centered" wire:ignore.self>
-            <div class="modal-content border-0 shadow-lg cardPrin" style="cursor: move;">
-                <div class="cardPrin-header bg-dark text-white py-2">
-                    <h5 class="modal-title fs-6 m-0">Dividir Bandeja (ID: {{ $selected_id }})</h5>
-                </div>
-                <div class="modal-content-body p-3">
-                    <p class="text-muted small mb-3">
-                        Indica cuántas piezas se asignarán a la **nueva bandeja**. Los pesos e historial de movimientos previos se recalcularán de forma proporcional y equitativa.
-                    </p>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small text-secondary">Piezas Totales Actuales:</label>
-                        <input type="text" class="form-control bg-light text-center fw-bold" value="{{ $cantidad }}" disabled>
+            <div class="modal-content border-0 bg-transparent">
+                <div class="cardPrin">
+                    <div class="cardPrin-header" style="cursor: move;">
+                        <span>Dividir Bandeja {{$codigoBandeja ?? ''}}</span>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small text-dark">Piezas para la Nueva Bandeja:</label>
-                        <input type="number" wire:model.defer="piezasADividir" class="form-control text-center" min="1" max="{{ $cantidad - 1 }}">
-                        @error('piezasADividir') <span class="text-danger small">{{ $message }}</span> @enderror
+                    <div class="cardPrin-body p-3">
+                        <p class="text-muted mb-3">
+                            Indica cuántas piezas se asignarán a la **nueva bandeja**..
+                        </p>
+                        <div class="mb-3">
+                            <label class="etiBase">Piezas Totales Actuales</label>
+                            <input type="text" class="inpBase bg-light text-center fw-bold" value="{{ $cantidad }}" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label class="etiBase">Piezas para la Nueva Bandeja</label>
+                            <input type="number" wire:model.defer="piezasADividir" class="inpBase text-center" min="1" max="{{ $cantidad - 1 }}">
+                            @error('piezasADividir') <span class="text-danger small">{{ $message }}</span> @enderror
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-end gap-2 mt-4">
-                        <button type="button" wire:click="cancel" class="bot botNegro">Cancelar</button>
-                        <button type="button" wire:click="procesarDivision" class="bot botAzul">Confirmar División</button>
+                    <div class="cardPrin-footer d-flex justify-content-end gap-2">
+                        <button type="button" wire:click="cancel" class="bot botNegro botChico">Cancelar</button>
+                        <button type="button" wire:click="procesarDivision" class="bot botAzul botChico">Confirmar División</button>
                     </div>
                 </div>
             </div>
@@ -106,29 +99,31 @@
 @if($verModalUnir)
     <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog modal-dialog-centered" wire:ignore.self>
-            <div class="modal-content border-0 shadow-lg cardPrin" style="cursor: move;">
-                <div class="cardPrin-header bg-dark text-white py-2">
-                    <h5 class="modal-title fs-6 m-0">Unir Bandeja Actual</h5>
-                </div>
-                <div class="modal-content-body p-3">
-                    <p class="text-muted small mb-3">
-                        La bandeja actual se fusionará con la que elijas abajo. El ID seleccionado absorberá todos los pesos, piezas e historiales, eliminando el registro de origen de manera controlada.
-                    </p>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small text-dark">Selecciona la Bandeja Destino:</label>
-                        <select wire:model.defer="IdBandejaDestino" class="form-select">
-                            <option value="">-- Seleccionar bandeja compatible --</option>
-                            @foreach($bandejasCompatibles as $b)
-                                <option value="{{ $b->id }}">
-                                    ID: {{ $b->id }} | {{ $b->cantidad }} pzs | Casting F: {{ $b->castingFinal }}g
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('IdBandejaDestino') <span class="text-danger small">{{ $message }}</span> @enderror
+            <div class="modal-content border-0 bg-transparent">
+                <div class="cardPrin">
+                    <div class="cardPrin-header" style="cursor: move;">
+                        <span>Unir Bandeja Actual {{$codigoBandeja ?? ''}}</span>
                     </div>
-                    <div class="d-flex justify-content-end gap-2 mt-4">
-                        <button type="button" wire:click="cancel" class="bot botNegro">Cancelar</button>
-                        <button type="button" wire:click="procesarUnion" class="bot botVerde">Confirmar Fusión</button>
+                    <div class="cardPrin-body p-3">
+                        <p class="text-muted small mb-3">
+                            La bandeja actual se fusionará con la que elijas abajo.
+                        </p>
+                        <div class="mb-3">
+                            <label class="etiBase">Selecciona la Bandeja Destino</label>
+                            <select wire:model.defer="IdBandejaDestino" class="inpBase">
+                                <option value="">-- Seleccionar bandeja compatible --</option>
+                                @foreach($bandejasCompatibles as $b)
+                                    <option value="{{ $b->id }}">
+                                        ID: {{ $b->id }} | {{ $b->cantidad }} pzs | Casting F: {{ $b->castingFinal }}g
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('IdBandejaDestino') <span class="text-danger small">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+                    <div class="cardPrin-footer d-flex justify-content-end gap-2">
+                        <button type="button" wire:click="cancel" class="bot botNegro botChico">Cancelar</button>
+                        <button type="button" wire:click="procesarUnion" class="bot botVerde botChico">Confirmar Fusión</button>
                     </div>
                 </div>
             </div>
@@ -138,46 +133,48 @@
 @if($verModalTraspaso)
     <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog modal-dialog-centered" wire:ignore.self>
-            <div class="modal-content cardPrin" style="cursor: move;">
-                <div class="cardPrin-header d-flex justify-content-between align-items-center">
-                    <span>Traspasar Bandeja {{ $codigoBandeja }}</span>
-                    <button type="button" class="btn-close btn-close-white" wire:click="cerrarModalTraspaso()"></button>
-                </div>
-                <div class="modal-body p-3">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="etiBase">Proceso Destino</label>
-                            <select wire:model="idProcesoDestino" class="inpBase">
-                                <option value=""></option>
-                                @foreach ($procesos as $key => $value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
-                                @endforeach
-                            </select>
-                            @error('idProcesoDestino') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <label class="etiBase">Empleado</label>
-                            <select wire:model="idEmpleadoTraspaso" class="inpBase">
-                                <option value=""></option>
-                                @foreach ($empleados as $key => $value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
-                                @endforeach
-                            </select>
-                            @error('idEmpleadoTraspaso') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-6">
-                            <label class="etiBase">Peso Entrada (g)</label>
-                            <input type="number" step="0.0001" wire:model="pesoEntradaTraspaso" class="inpSolo">
-                        </div>
-                        <div class="col-6">
-                            <label class="etiBase">Peso Salida Proceso Anterior (g)</label>
-                            <input type="number" step="0.0001" wire:model="pesoSalidaTraspaso" class="inpSolo">
+            <div class="modal-content border-0 bg-transparent">
+                <div class="cardPrin">
+                    <div class="cardPrin-header d-flex justify-content-between align-items-center" style="cursor: move;">
+                        <span>Traspasar Bandeja {{ $codigoBandeja }}</span>
+                        <button type="button" class="btn-close btn-close-white" wire:click="cerrarModalTraspaso()"></button>
+                    </div>
+                    <div class="cardPrin-body p-3">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="etiBase">Proceso Destino</label>
+                                <select wire:model="idProcesoDestino" class="inpBase">
+                                    <option value=""></option>
+                                    @foreach ($procesos as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                                @error('idProcesoDestino') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="etiBase">Empleado</label>
+                                <select wire:model="idEmpleadoTraspaso" class="inpBase">
+                                    <option value=""></option>
+                                    @foreach ($empleados as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                                @error('idEmpleadoTraspaso') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-6">
+                                <label class="etiBase">Peso Entrada (g)</label>
+                                <input type="number" step="0.0001" wire:model="pesoEntradaTraspaso" class="inpBase">
+                            </div>
+                            <div class="col-6">
+                                <label class="etiBase">Peso Salida Proceso Anterior (g)</label>
+                                <input type="number" step="0.0001" wire:model="pesoSalidaTraspaso" class="inpBase">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer d-flex justify-content-end gap-2 p-2 border-0">
-                    <button type="button" class="bot botNegro" wire:click="cerrarModalTraspaso()">Cancelar</button>
-                    <button type="button" class="bot botVerde" wire:click="guardarTraspaso()">Confirmar Traspaso</button>
+                    <div class="cardPrin-footer d-flex justify-content-end gap-2">
+                        <button type="button" class="bot botNegro botChico" wire:click="cerrarModalTraspaso()">Cancelar</button>
+                        <button type="button" class="bot botVerde botChico" wire:click="guardarTraspaso()">Confirmar Traspaso</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,18 +183,23 @@
 @if($verModalHistorial)
     <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog modal-xl modal-dialog-centered" wire:ignore.self>
-            <div class="modal-content cardPrin" style="cursor: move;">
-                <div class="cardPrin-body">
-                    @if($selected_id)
-                        @livewire('bandejasmovs', ['IdBandeja' => $selected_id], key('movs-'.$selected_id))
-                    @else
-                        <div class="p-5 text-center text-muted">
-                            <span>No se ha seleccionado ninguna bandeja</span>
-                        </div>
-                    @endif
-                </div>
-                <div class="cardPrin-footer">
-                    <button type="button" class="bot botNegro" wire:click="cerrarModalHistorial()">Cerrar</button>
+            <div class="modal-content border-0 bg-transparent">
+                <div class="cardPrin">
+                    <div class="cardPrin-header" style="cursor: move;">
+                        <span>Historial de Movimientos</span>
+                    </div>
+                    <div class="cardPrin-body p-3">
+                        @if($selected_id)
+                            @livewire('bandejasmovs', ['IdBandeja' => $selected_id], key('movs-'.$selected_id))
+                        @else
+                            <div class="p-5 text-center text-muted">
+                                <span>No se ha seleccionado ninguna bandeja</span>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="cardPrin-footer d-flex justify-content-end">
+                        <button type="button" class="bot botNegro botChico" wire:click="cerrarModalHistorial()">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>

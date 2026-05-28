@@ -13,6 +13,7 @@
                             <thead>
                                 <tr>
                                     <th>Proceso</th>
+                                    <th>Registró</th>
                                     <th>Empleado</th>
                                     <th>Pesoentrada</th>
                                     <th>Pesosalida</th>
@@ -25,6 +26,7 @@
                                     <tr>
 
                                         <td>{{ $row->Proceso->proceso }}</td>
+                                        <td>{{ $row->user->name ?? ''}}</td>
                                         <td>{{ $row->Empleado->empleado ?? ''}}</td>
                                         <td>{{ $row->pesoEntrada }}</td>
                                         <td>{{ $row->pesoSalida }}</td>

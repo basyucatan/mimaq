@@ -11,18 +11,7 @@
                             <div class="row">
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
-                                @endif
-
-                                <div class="col-md-6">
-                                    <label class="etiBase">Idfactura</label>
-                                    <input wire:model="IdFactura" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('IdFactura') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-                                <div class="col-md-6">
-                                    <label class="etiBase">Idbandeja</label>
-                                    <input wire:model="IdBandeja" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('IdBandeja') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
+                                @endif                         
                                 <div class="col-md-6">
                                     <label class="etiBase">Productofinal</label>
                                     <input wire:model="productoFinal" type="text" class="inpBase"  onfocus="this.select()">
@@ -44,26 +33,30 @@
                                     @error('precioU') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label class="etiBase">Pesototalg</label>
-                                    <input wire:model="pesoTotalG" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('pesoTotalG') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiBase">Peso Total</label>
+                                    <input wire:model="pesoG" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('pesoG') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label class="etiBase">Totalcastingg</label>
-                                    <input wire:model="totalCastingG" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('totalCastingG') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiBase">Casting</label>
+                                    <input wire:model="castingG" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('castingG') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label class="etiBase">Totalpiedrasct</label>
-                                    <input wire:model="totalPiedrasCt" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('totalPiedrasCt') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    <label class="etiBase">Piedras</label>
+                                    <input wire:model="piedrasG" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('piedrasG') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-6">
-                                    <label class="etiBase">Totaldiamantesct</label>
-                                    <input wire:model="totalDiamantesCt" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('totalDiamantesCt') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-
+                                    <label class="etiBase">Diamantes</label>
+                                    <input wire:model="diamantesG" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('diamantesG') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>    
+                                <div class="col-md-6">
+                                    <label class="etiBase">Misceláneo</label>
+                                    <input wire:model="miscG" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('miscG') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>                                                         
                             </div>
                         </form>
                     </div>

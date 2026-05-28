@@ -15,9 +15,9 @@ class Bandejas extends Component
     public $verModalBandeja=false, $verModalTraspaso = false, $verModalDividir = false,
         $verModalUnir = false, $verModalHistorial = false,
         $selected_id, $keyWord, $IdFolio, $IdFactura, $codigoBandeja,
-        $IdFacturaExport, $cantidad, $castingInicial, $castingFinal, $piedras, 
+        $IdFacturaExport, $cantidad, $castingIni, $castingFin, $piedrasG, 
         $piezasADividir = 1, $IdBandejaDestino,
-        $diamantes, $miscelaneo, $IdProcesoActual, $enBoveda, $habilitada, $estatus;
+        $diamantesG, $miscG, $IdProcesoActual, $enBoveda, $habilitada, $estatus;
     public $adicionales = [], $procesos = [], $empleados = [], $facturas = [];
     public $idBandejaTraspaso, $idProcesoDestino, $idEmpleadoTraspaso, $pesoEntradaTraspaso, $pesoSalidaTraspaso;
 public function exportar()
@@ -299,7 +299,7 @@ public function filteredBandejas()
     }
     public function resetInput()
     {
-        $this->resetExcept('procesos', 'empleados');
+        $this->resetExcept('procesos', 'empleados','keyWord', 'facturas');
     }
     public function edit($id)
     {
@@ -308,6 +308,7 @@ public function filteredBandejas()
             $this->alerta('⛔ Bandeja ya integrada a Exportación.', 'warning');
             return;
         }
+        $this->codigoBandeja = $bandeja->codigoBandeja;
         $this->selected_id = $id;
         $this->fill($bandeja->toArray());
         $this->verModalBandeja = true;
@@ -322,11 +323,11 @@ public function filteredBandejas()
         $this->validate([
             'IdFolio' => 'required',
             'cantidad' => 'required',
-            'castingInicial' => 'required',
-            'castingFinal' => 'required',
-            'piedras' => 'required',
-            'diamantes' => 'required',
-            'miscelaneo' => 'required',
+            'castingIni' => 'required',
+            'castingFin' => 'required',
+            'piedrasG' => 'required',
+            'diamantesG' => 'required',
+            'miscG' => 'required',
             'enBoveda' => 'required',
             'habilitada' => 'required',
             'estatus' => 'required',
@@ -344,11 +345,11 @@ public function filteredBandejas()
                 'IdFolio' => $this-> IdFolio,
                 'IdFacturaExport' => $this-> IdFacturaExport,
                 'cantidad' => $this-> cantidad,
-                'castingInicial' => $this-> castingInicial,
-                'castingFinal' => $this-> castingFinal,
-                'piedras' => $this-> piedras,
-                'diamantes' => $this-> diamantes,
-                'miscelaneo' => $this-> miscelaneo,
+                'castingIni' => $this-> castingIni,
+                'castingFin' => $this-> castingFin,
+                'piedrasG' => $this-> piedrasG,
+                'diamantesG' => $this-> diamantesG,
+                'miscG' => $this-> miscG,
                 'IdProcesoActual' => $this-> IdProcesoActual,
                 'enBoveda' => $this-> enBoveda,
                 'habilitada' => $this-> habilitada,
@@ -380,6 +381,7 @@ public function filteredBandejas()
             session()->flash('error', 'No se puede dividir una bandeja vinculada a una Factura de Exportación.');
             return;
         }
+        $this->codigoBandeja = $bandeja->codigoBandeja;
         $this->selected_id = $id;
         $this->cantidad = $bandeja->cantidad;
         $this->piezasADividir = 1;
@@ -398,18 +400,18 @@ public function filteredBandejas()
             $factorOrigen = ($piezasOriginales - $this->piezasADividir) / $piezasOriginales;
             $nuevaBandeja = $origen->replicate();
             $nuevaBandeja->cantidad = $this->piezasADividir;
-            $nuevaBandeja->castingInicial = round($origen->castingInicial * $factorNueva, 4);
-            $nuevaBandeja->castingFinal = round($origen->castingFinal * $factorNueva, 4);
-            $nuevaBandeja->piedras = round($origen->piedras * $factorNueva, 4);
-            $nuevaBandeja->diamantes = round($origen->diamantes * $factorNueva, 4);
-            $nuevaBandeja->miscelaneo = round($origen->miscelaneo * $factorNueva, 4);
+            $nuevaBandeja->castingIni = round($origen->castingIni * $factorNueva, 4);
+            $nuevaBandeja->castingFin = round($origen->castingFin * $factorNueva, 4);
+            $nuevaBandeja->piedrasG = round($origen->piedrasG * $factorNueva, 4);
+            $nuevaBandeja->diamantesG = round($origen->diamantesG * $factorNueva, 4);
+            $nuevaBandeja->miscG = round($origen->miscG * $factorNueva, 4);
             $nuevaBandeja->save();
             $origen->cantidad = $piezasOriginales - $this->piezasADividir;
-            $origen->castingInicial = round($origen->castingInicial * $factorOrigen, 4);
-            $origen->castingFinal = round($origen->castingFinal * $factorOrigen, 4);
-            $origen->piedras = round($origen->piedras * $factorOrigen, 4);
-            $origen->diamantes = round($origen->diamantes * $factorOrigen, 4);
-            $origen->miscelaneo = round($origen->miscelaneo * $factorOrigen, 4);
+            $origen->castingIni = round($origen->castingIni * $factorOrigen, 4);
+            $origen->castingFin = round($origen->castingFin * $factorOrigen, 4);
+            $origen->piedrasG = round($origen->piedrasG * $factorOrigen, 4);
+            $origen->diamantesG = round($origen->diamantesG * $factorOrigen, 4);
+            $origen->miscG = round($origen->miscG * $factorOrigen, 4);
             $origen->save();
             $movimientosPrevios = Bandejasmov::where('IdBandeja', $origen->id)->get();
             foreach ($movimientosPrevios as $movimiento) {
@@ -430,18 +432,20 @@ public function filteredBandejas()
                 Bandejasmov::create([
                     'IdBandeja' => $origen->id,
                     'IdProceso' => $origen->IdProcesoActual,
+                    'IdUser' => Auth()->user()->id,
                     'IdEmpleado' => null,
-                    'pesoEntrada' => $origen->castingFinal,
-                    'pesoSalida' => $origen->castingFinal,
+                    'pesoEntrada' => $origen->castingFin,
+                    'pesoSalida' => $origen->castingFin,
                     'fechaHEntrada' => now(),
                     'fechaHSalida' => now()
                 ]);
                 Bandejasmov::create([
                     'IdBandeja' => $nuevaBandeja->id,
                     'IdProceso' => $nuevaBandeja->IdProcesoActual,
+                    'IdUser' => Auth()->user()->id,
                     'IdEmpleado' => null,
-                    'pesoEntrada' => $nuevaBandeja->castingFinal,
-                    'pesoSalida' => $nuevaBandeja->castingFinal,
+                    'pesoEntrada' => $nuevaBandeja->castingFin,
+                    'pesoSalida' => $nuevaBandeja->castingFin,
                     'fechaHEntrada' => now(),
                     'fechaHSalida' => now()
                 ]);
@@ -456,6 +460,7 @@ public function filteredBandejas()
             session()->flash('error', 'No se puede unir una bandeja vinculada a una Factura de Exportación.');
             return;
         }
+        $this->codigoBandeja = $bandeja->codigoBandeja;
         $this->selected_id = $id;
         $this->verModalUnir = true;
     }
@@ -472,20 +477,21 @@ public function filteredBandejas()
                 return;
             }
             $destino->cantidad += $origen->cantidad;
-            $destino->castingInicial += $origen->castingInicial;
-            $destino->castingFinal += $origen->castingFinal;
-            $destino->piedras += $origen->piedras;
-            $destino->diamantes += $origen->diamantes;
-            $destino->miscelaneo += $origen->miscelaneo;
+            $destino->castingIni += $origen->castingIni;
+            $destino->castingFin += $origen->castingFin;
+            $destino->piedrasG += $origen->piedrasG;
+            $destino->diamantesG += $origen->diamantesG;
+            $destino->miscG += $origen->miscG;
             $destino->save();
             Bandejasmov::where('IdBandeja', $origen->id)->update(['IdBandeja' => $destino->id]);
             if ($destino->IdProcesoActual) {
                 Bandejasmov::create([
                     'IdBandeja' => $destino->id,
                     'IdProceso' => $destino->IdProcesoActual,
+                    'IdUser' => Auth()->user()->id,
                     'IdEmpleado' => null,
-                    'pesoEntrada' => $destino->castingFinal,
-                    'pesoSalida' => $destino->castingFinal,
+                    'pesoEntrada' => $destino->castingFin,
+                    'pesoSalida' => $destino->castingFin,
                     'fechaHEntrada' => now(),
                     'fechaHSalida' => now()
                 ]);
