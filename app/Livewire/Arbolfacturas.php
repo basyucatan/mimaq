@@ -96,7 +96,7 @@ class Arbolfacturas extends Component
     public function saveFactura()
     {
         $this->validate([
-            'factura' => 'required',
+            'factura' => 'required|unique',
             'IdPedimento' => 'required|exists:pedimentos,id',
             'fecha' => 'required',
             'tipoCambio' => 'required|numeric',
