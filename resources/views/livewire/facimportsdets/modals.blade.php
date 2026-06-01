@@ -175,13 +175,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="etiBase">Customer</label>
-                                    <input wire:model="cliente" list="listaClientes" type="text" class="inpBase" onfocus="this.select()" autocomplete="off">
-                                    <datalist id="listaClientes">
-                                        @foreach($clientes as $c)
-                                            <option value="{{ $c }}">
+                                    <select wire:model="IdCliente" wire:change="$refresh" class="inpBase">
+                                        <option value=""></option>
+                                        @foreach ($clientes as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
                                         @endforeach
-                                    </datalist>
-                                    @error('cliente') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    </select>
+                                    @error('IdCliente') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label class="etiBase">Order</label>

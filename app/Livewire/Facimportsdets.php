@@ -4,7 +4,7 @@ use Livewire\{Component, WithPagination};
 use App\Models\{Util, Material, Factura, Facimportsdet, Cliente, Orden, 
     Lote, Foliosmat, Folio, Estilosdet};
 use Livewire\Attributes\Computed;
-use App\Traits\FacImportsMangaer;
+use App\Traits\FacImportsMangaer; 
 class Facimportsdets extends Component
 {
     use WithPagination, FacImportsMangaer;
@@ -59,13 +59,13 @@ public function generarConEstilo()
     $this->validate([
         'IdEstilo' => 'required', 
         'cantidadEstilo' => 'required|numeric',
-        'cliente' => 'required',
+        'IdCliente' => 'required',
         'orden' => 'required',
         'lote' => 'required|numeric'
     ]);
 
-    if (!empty($this->cliente) && !empty($this->orden) && !empty($this->lote)) {
-        $objCliente = Cliente::firstOrCreate(['cliente' => strtoupper($this->cliente)]);
+    if (!empty($this->IdCliente) && !empty($this->orden) && !empty($this->lote)) {
+        $objCliente = Cliente::find($this->IdCliente);
         $objOrden = Orden::firstOrCreate(['orden' => strtoupper($this->orden)], [
             'IdCliente' => $objCliente->id,
             'fechaVen' => now()->addDays(7),

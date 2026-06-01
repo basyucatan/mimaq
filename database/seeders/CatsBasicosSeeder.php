@@ -181,8 +181,7 @@ $clientes = array(
   array('id' => '21','cliente' => 'J67200','adicionales' => NULL),
   array('id' => '22','cliente' => 'R78700','adicionales' => NULL),
   array('id' => '23','cliente' => 'S73260','adicionales' => NULL),
-  array('id' => '24','cliente' => 'T29GC0','adicionales' => NULL),
-  array('id' => '25','cliente' => 'KARN','adicionales' => NULL)
+  array('id' => '24','cliente' => 'T29GC0','adicionales' => NULL)
 );
 DB::table('clientes')->insert($clientes);
 $permisos = array(

@@ -4,14 +4,14 @@ use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\{Facimportsdet, Factura, Material, Util, Folio};
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB; 
 trait FacImportsMangaer
 {
     public $verModalFacimportsdet = false, $verModalEstilos = false, $verModalImpresiones = false;
     public $selected_id, $keyWord, $IdFactura, $factura, $arancel;
     public $IdEntradaMex, $IdOrigen, $IdMaterial, $cantidad, $precioU, $pesoEnUMat,
         $IdEstilo, $IdFolio, $IdTipo,
-        $estiloY, $cliente, $orden, $lote, $cantidadEstilo, $pesoG, $IdSize, $IdForma, $kt, $color;
+        $estiloY, $IdCliente, $orden, $lote, $cantidadEstilo, $pesoG, $IdSize, $IdForma, $kt, $color;
     public $adicionales = [], $origens = [], $materials = [], $clientes = [], $folios = [],
         $kts = [], $colors = [], $sizes = [], $formas = [], $estilos = [], $tipos = [];
     public function impresiones()

@@ -9,6 +9,7 @@ class MovsIniSeeder extends Seeder
 {    
     public function run()
     {
+      
 $ordens = array(
   array('id' => '1','IdCliente' => '1','orden' => 'W400','estatus' => 'abierto','fechaVen' => '2026-05-13','adicionales' => NULL),
   array('id' => '2','IdCliente' => '2','orden' => '1561','estatus' => 'abierto','fechaVen' => '2026-05-13','adicionales' => NULL),
