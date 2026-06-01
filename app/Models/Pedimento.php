@@ -13,7 +13,7 @@ class Pedimento extends Model
 
     protected $table = 'pedimentos';
 
-    protected $fillable = ['pedimento','regimen','fecha','adicionales'];
+    protected $fillable = ['pedimento','regimen','fecha','tipoCambio','adicionales'];
     protected $casts = [
         'adicionales' => 'array'
     ];

@@ -7,7 +7,8 @@ class Folio extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'folios';
-    protected $fillable = ['IdLote','IdEstilo','jobStyle','cantidad','totalBandejas','abreviatura','productoFinal','precioU','fechaVen','estatus','alertas','adicionales'];
+    protected $fillable = ['IdLote','IdEstilo','jobStyle','cantidad','totalBandejas',
+        'abreviatura','productoFinal','precioU','fechaVen','estatus','alertas','adicionales'];
     protected $casts = ['alertas' => 'array','adicionales' => 'array'];
     public function precioU()
     {

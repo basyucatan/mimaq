@@ -28,7 +28,10 @@ class Foliosmat extends Model
     {
         return $this->hasOne('App\Models\Folio', 'id', 'IdFolio');
     }
-    
+    public function tipo()
+    {
+        return $this->hasOne('App\Models\Tipo', 'id', 'IdTipo');
+    }
     public function material()
     {
         return $this->hasOne('App\Models\Material', 'id', 'IdMaterial');

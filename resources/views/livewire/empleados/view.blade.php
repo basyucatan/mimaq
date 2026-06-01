@@ -30,6 +30,7 @@
                         <table class="table tabBase ch">
                             <thead>
                                 <tr>
+                                    <th>Numero</th>
                                     <th>Empleado</th>
                                     <th>Depto</th>
                                     <th>Vigente</th>
@@ -39,10 +40,17 @@
                             <tbody>
                                 @forelse($empleados as $row)
                                     <tr>
-
+                                        <td>{{ $row->numero }}</td>
                                         <td>{{ $row->empleado }}</td>
-                                        <td>{{ $row->Depto->depto }}</td>
-                                        <td>{{ $row->vigente ? '✅' : '⛔' }}</td>
+                                        <td>{{ $row->depto->depto }}</td>
+                                        <td class="text-center">
+                                            <div class="form-check form-switch d-inline-block">
+                                                <input
+                                                    class="form-check-input {{ $row->vigente ? 'bg-success' : 'bg-primary' }} border-0"
+                                                    type="checkbox" role="switch" id="sw{{ $row->id }}"
+                                                    @checked($row->vigente) disabled>
+                                            </div>
+                                        </td>
                                         <td width="60">
                                             <div class="d-flex justify-content-around align-items-center gap-1">
                                                 <button wire:click="edit({{ $row->id }})"

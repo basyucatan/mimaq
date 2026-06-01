@@ -26,7 +26,10 @@ class Bandejasmov extends Model
     {
         return $this->hasOne('App\Models\Empleado', 'id', 'IdEmpleado');
     }
-    
+    public function registrador()
+    {
+        return $this->hasOne('App\Models\Empleado', 'id', 'IdRegostrador');
+    }
 public function proceso()
 {
     return $this->belongsTo(Proceso::class, 'IdProceso');

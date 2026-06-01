@@ -20,7 +20,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="etiBase">Tipo</label>
                                     <select wire:model.live="IdTipo" class="inpBase">
                                         <option value=""></option>
@@ -29,7 +29,7 @@
                                         @endforeach
                                     </select>
                                 </div>                                                               
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <label class="etiBase">Material</label>
                                     <select wire:model.live="IdMaterial" class="inpBase @error('IdMaterial') is-invalid @enderror">
                                         <option value=""></option>
@@ -47,13 +47,13 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label class="etiBase">Cantidad</label>
-                                    <input wire:model="cantidad" wire:change="validarDisponibilidad" type="text" class="inpBase @error('cantidad') is-invalid @enderror" onfocus="this.select()">
+                                    <input wire:model="cantidad" wire:change="validarDisponibilidad" type="number" class="inpBase @error('cantidad') is-invalid @enderror" onfocus="this.select()">
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label class="etiLectura">Peso (g)</label>
-                                    <input wire:model="pesoG" type="text" class="inpBase" disabled>
+                                    <input wire:model="pesoG" type="number" class="inpBase" disabled>
                                 </div>
                             </div>
                         </form>

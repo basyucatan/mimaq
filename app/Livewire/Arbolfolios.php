@@ -12,8 +12,18 @@ class Arbolfolios extends Component
         $kt = '', $color = '',
         $fechaVen, $estatus = 'abierto';
     public $expandir = ['Orden' => [], 'Lote' => []], $estilos = [], $clientes = [], $adicionales = [],
-        $kts = [], $colors = [];
+        $alertas = [], $kts = [], $colors = [];
     protected $listeners = ['estilosDetsActualizado' => 'generarDef'];
+    public function updated($propertyName)
+    {
+        if (in_array($propertyName, ['penalty', 'rush', 'alertaGeneral'])) {
+            $this->alertas = [
+                'penalty' => (bool) $this->penalty,
+                'rush' => (bool) $this->rush,
+                'alertaGeneral' => trim($this->alertaGeneral)
+            ];
+        }
+    }
     public function mount(){
         $this->estilos = Util::getArray('estilos');
         $this->clientes = Util::getArray('clientes');
@@ -90,6 +100,11 @@ class Arbolfolios extends Component
         $this->cantidad = 1;
         $this->totalBandejas = 1;
         $this->fechaVen = now()->tz('America/Mexico_City')->addDays(7)->format('Y-m-d');
+        $this->alertas = [
+            'penalty' => false,
+            'rush' => false,
+            'alertaGeneral' => ''
+        ];
         $this->estatus = 'abierto';
         $this->tipoModal = 'Folio';
     }
@@ -106,6 +121,11 @@ class Arbolfolios extends Component
         $this->productoFinal = $registro->productoFinal;
         $this->fechaVen = $registro->fechaVen;
         $this->estatus = $registro->estatus;
+        $this->alertas = $registro->alertas ?? [
+            'penalty' => false,
+            'rush' => false,
+            'alertaGeneral' => ''
+        ];
         $this->adicionales = $registro->adicionales ?? [];
         $this->kt = $this->adicionales['kt'] ?? '';
         $this->color = $this->adicionales['color'] ?? '';
@@ -162,6 +182,7 @@ class Arbolfolios extends Component
                 'jobStyle' => $this->jobStyle,
                 'abreviatura' => $this->abreviatura,
                 'productoFinal' => $this->productoFinal,
+                'alertas' => $this->alertas,
                 'adicionales' => $this->adicionales,
                 'estatus' => $this->estatus,
                 'precioU' => 0

@@ -31,17 +31,17 @@ $folios = array(
 );
 DB::table('folios')->insert($folios);
 $pedimentos = [
-    ['id'=>1,'pedimento'=>'101','regimen'=>'IN','fecha'=>'2024-04-08','adicionales'=>null,'created_at'=>now(),'updated_at'=>now()],
-    ['id'=>2,'pedimento'=>'102','regimen'=>'IN','fecha'=>'2024-04-15','adicionales'=>null,'created_at'=>now(),'updated_at'=>now()],
-    ['id'=>3,'pedimento'=>'103','regimen'=>'RT','fecha'=>'2024-04-22','adicionales'=>null,'created_at'=>now(),'updated_at'=>now()],
+    ['id'=>1,'pedimento'=>'101','regimen'=>'IN','fecha'=>'2024-04-08','tipoCambio' => '17.9900','adicionales'=>null,'created_at'=>now(),'updated_at'=>now()],
+    ['id'=>2,'pedimento'=>'102','regimen'=>'IN','fecha'=>'2024-04-15','tipoCambio' => '17.9900','adicionales'=>null,'created_at'=>now(),'updated_at'=>now()],
+    ['id'=>3,'pedimento'=>'103','regimen'=>'RT','fecha'=>'2024-04-22','tipoCambio' => '17.9900','adicionales'=>null,'created_at'=>now(),'updated_at'=>now()],
 ];
 DB::table('pedimentos')->insert($pedimentos);
 $facturas = array(
-  array('id' => '1','factura' => '393','IdPedimento' => '1','fecha' => '2024-04-15','tipoCambio' => '18.0100','estatus' => 'abierto','adicionales' => NULL,'created_at' => '2026-04-22 17:06:50','updated_at' => '2026-04-22 17:06:50'),
-  array('id' => '2','factura' => '397','IdPedimento' => '2','fecha' => '2024-04-22','tipoCambio' => '17.9900','estatus' => 'cerrado','adicionales' => '{"viadE":"406186745024","guiaA":"FEDEX","nPaq":"1"}','created_at' => '2026-04-22 17:06:50','updated_at' => '2026-04-22 18:12:33'),
-  array('id' => '3','factura' => '398','IdPedimento' => '2','fecha' => '2024-04-22','tipoCambio' => '17.9900','estatus' => 'abierto','adicionales' => '{"viadE":"406186745024","guiaA":"FEDEX","nPaq":"1"}','created_at' => '2026-04-22 17:06:50','updated_at' => '2026-04-22 18:12:27'),
-  array('id' => '4','factura' => '399','IdPedimento' => '2','fecha' => '2024-04-21','tipoCambio' => '18.1100','estatus' => 'abierto','adicionales' => NULL,'created_at' => '2026-04-22 17:06:50','updated_at' => '2026-04-22 17:06:50'),
-  array('id' => '5','factura' => '150','IdPedimento' => '3','fecha' => '2026-05-20','tipoCambio' => '18.5000','estatus' => 'abierto','adicionales' => '{"viadE":"FEDEX","guiaA":"","nPaq":1}','created_at' => '2026-05-21 00:23:48','updated_at' => '2026-05-21 00:23:48')
+  array('id' => '1','factura' => '393','IdPedimento' => '1','fecha' => '2024-04-15','estatus' => 'abierto','adicionales' => NULL,'created_at' => '2026-04-22 17:06:50','updated_at' => '2026-04-22 17:06:50'),
+  array('id' => '2','factura' => '397','IdPedimento' => '2','fecha' => '2024-04-22','estatus' => 'cerrado','adicionales' => '{"viadE":"406186745024","guiaA":"FEDEX","nPaq":"1"}','created_at' => '2026-04-22 17:06:50','updated_at' => '2026-04-22 18:12:33'),
+  array('id' => '3','factura' => '398','IdPedimento' => '2','fecha' => '2024-04-22','estatus' => 'abierto','adicionales' => '{"viadE":"406186745024","guiaA":"FEDEX","nPaq":"1"}','created_at' => '2026-04-22 17:06:50','updated_at' => '2026-04-22 18:12:27'),
+  array('id' => '4','factura' => '399','IdPedimento' => '2','fecha' => '2024-04-21','estatus' => 'abierto','adicionales' => NULL,'created_at' => '2026-04-22 17:06:50','updated_at' => '2026-04-22 17:06:50'),
+  array('id' => '5','factura' => '150','IdPedimento' => '3','fecha' => '2026-05-20','estatus' => 'abierto','adicionales' => '{"viadE":"FEDEX","guiaA":"","nPaq":1}','created_at' => '2026-05-21 00:23:48','updated_at' => '2026-05-21 00:23:48')
 );
 DB::table('facturas')->insert($facturas);
 $facimportsdets = array(

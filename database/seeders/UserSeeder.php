@@ -27,5 +27,15 @@ class UserSeeder extends Seeder
             'password'=>Hash::make('control$'),'activo'=>true,'IdDepto'=>$IdDeptoAdmin])->assignRole('Admin');
         User::create(['name'=>'Martha','email'=>'martha@gmail.com','telefono'=>'99911',
             'password'=>Hash::make('qc$'),'activo'=>true,'IdDepto'=>$IdDeptoAdmin])->assignRole('Admin'); 
+        User::create(['name'=>'Jaime','email'=>'jaime@gmail.com','telefono'=>'99912',
+            'password'=>Hash::make('jaime$'),'activo'=>true,'IdDepto'=>$IdDeptoAdmin])->assignRole('Admin');
+        User::create(['name'=>'Cristofer','email'=>'cristofer@gmail.com','telefono'=>'99913',
+            'password'=>Hash::make('cristofer$'),'activo'=>true,'IdDepto'=>$IdDeptoAdmin])->assignRole('Admin');
+        User::create(['name'=>'Javier','email'=>'javier@gmail.com','telefono'=>'99914',
+            'password'=>Hash::make('javier$'),'activo'=>true,'IdDepto'=>$IdDeptoAdmin])->assignRole('Admin');
+        User::create(['name'=>'Gabriel','email'=>'gabriel@gmail.com','telefono'=>'99915',
+            'password'=>Hash::make('gabriel$'),'activo'=>true,'IdDepto'=>$IdDeptoAdmin])->assignRole('Admin');
+        User::create(['name'=>'Victor','email'=>'victor@gmail.com','telefono'=>'99916',
+            'password'=>Hash::make('victor$'),'activo'=>true,'IdDepto'=>$IdDeptoAdmin])->assignRole('Admin');
     }
 }

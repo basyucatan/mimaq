@@ -40,7 +40,7 @@ class {{modelName}}s extends Component
     }
     public function resetInput()
     {
-        $this->reset();
+        $this->resetExcept('keyWord');
     }
     public function edit($id)
     {

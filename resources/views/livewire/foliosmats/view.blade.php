@@ -53,7 +53,7 @@
                                                 </div>
                                             @endif
                                         </td>
-                                        <td>{{ $row->rol }}</td>
+                                        <td>{{ $row->tipo->tipo }}</td>
                                         <td>{{  Util::Miles($row->cantidad,0) }}</td>
                                         <td>{{  Util::Miles($row->pesoG,4) }}</td>
 <td width="60">

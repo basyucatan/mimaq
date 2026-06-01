@@ -87,6 +87,7 @@ class Arbolfacturas extends Component
             [
                 'pedimento' => $this->pedimento,
                 'regimen' => $this->regimen,
+                'tipoCambio' => $this->tipoCambio,
                 'fecha' => $this->fecha
             ]
         );

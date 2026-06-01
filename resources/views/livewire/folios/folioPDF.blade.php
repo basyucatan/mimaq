@@ -25,18 +25,15 @@
             <span class="negrita">ORDEN DE PRODUCCIÓN</span>
             <div class="contenedor-principal">
                 <div class="columna-izquierda">
-                    <div class="grupo">I. Identificación</div>
+<div class="grupo">I. Identificación</div>
                     <table class="cuadro-borde">
                         <tr>
-                            <td colspan="4">
+                            <td colspan="6">
                                 <table style="width: 100%; border-collapse: collapse; margin: 0;">
                                     <tr>
                                         <td style="width: 80%; border: none; padding: 5px 0;" class="centro">
                                             <img style="display: inline-block; vertical-align: middle;"
-                                                src="data:image/png;base64,{{ DNS2D::getBarcodePNG((string) 
-                                                    $folio->periodo.'-'.$folio->consecutivoMensual.'-'.$bandeja->numeroBandeja, 'QRCODE', 3, 3) }}">
-                                        {{-- <img style="display: inline-block; vertical-align: middle;"
-                                            src="data:image/png;base64,{{ DNS1D::getBarcodePNG((string)$bandeja->id, 'EAN13', 2.5, 45, [0,0,0], false) }}"> --}}
+                                                src="data:image/png;base64,{{ DNS1D::getBarcodePNG((string)$bandeja->id, 'EAN13', 2.5, 45, [0,0,0], false) }}">
                                         </td>
                                         <td style="width: 20%; border: none;" class="centro">
                                             @if(!empty($folio->Estilo?->foto))
@@ -49,35 +46,55 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="gris negrita">Folio:</td>
+                            <td style="width: 12%;" class="gris negrita">Producto</td>
+                            <td style="width: 55%;" colspan="3">{{ $folio->productoFinal ?? '1R/36D/1RF 14KP' }}</td>
+                            <td style="width: 13%;" class="gris negrita">JobStyle</td>
+                            <td style="width: 20%;">{{ $folio->jobStyle ?? '91970' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="gris negrita">Folio</td>
                             <td class="negrita">{{ $folio->periodo.'-'.$folio->consecutivoMensual.'-'.$bandeja->numeroBandeja }}</td>
-                            <td class="gris negrita">Bandeja:</td>
+                            <td class="gris negrita">Bandeja</td>
                             <td class="negrita">{{ $bandeja->numeroBandeja }} de {{ $folio->totalBandejas }}</td>
-                        </tr>
-                        <tr>
-                            <td class="gris negrita">Pzas Bandeja:</td>
-                            <td class="negrita">{{ $bandeja->cantidad }}</td>
-                            <td class="gris negrita">Pzas Folio:</td>
-                            <td>{{ $folio->cantidad }}</td>
-                        </tr>
-                        <tr>
-                            <td class="gris negrita">Lote:</td>
+                            <td class="gris negrita">Lote</td>
                             <td>{{ $folio->lote?->lote }}</td>
-                            <td class="gris negrita">Pzas Lote:</td>
+                        </tr>
+                        <tr>
+                            <td class="gris negrita">Pzas</td>
+                            <td class="negrita">{{ $bandeja->cantidad }}</td>
+                            <td class="gris negrita">Pzas Folio</td>
+                            <td>{{ $folio->cantidad }}</td>
+                            <td class="gris negrita">Pzas Lote</td>
                             <td>{{ $folio->lote?->adicionales['piezasLote'] ?? '15' }}</td>
                         </tr>
                         <tr>
-                            <td class="gris negrita">Producto:</td>
-                            <td>{{ $folio->productoFinal ?? '1R/36D/1RF 14KP' }}</td>
-                            <td class="gris negrita">JobStyle:</td>
-                            <td>{{ $folio->jobStyle ?? '91970' }}</td>
-                        </tr>
-                        <tr>
-                            <td class="gris negrita">Vencimiento:</td>
+                            <td class="gris negrita">Vence</td>
                             <td>{{ \Carbon\Carbon::parse($folio->fechaVen)->format('d/M/Y') }}</td>
-                            <td class="gris negrita">Cliente:</td>
-                            <td>{{ $folio->lote?->orden?->cliente?->cliente ?? '1388 85B' }}</td>
+                            <td class="gris negrita">Cliente</td>
+                            <td colspan="3">{{ $folio->lote?->orden?->cliente?->cliente ?? '1388 85B' }}</td>
                         </tr>
+                        @if(($folio->alertas['penalty'] ?? false) || ($folio->alertas['rush'] ?? false) || !empty($folio->alertas['alertaGeneral'] ?? ''))
+                            <tr>
+                                <td class="gris negrita">Alertas</td>
+                                <td colspan="5">
+                                    <table style="width: 100%; border-collapse: collapse; margin: 0;">
+                                        <tr>
+                                            <td style="border: none; padding: 0;">
+                                                @if($folio->alertas['rush'] ?? false)
+                                                    <span style="background-color: #dc3545; color: #ffffff; padding: 1px 4px; font-size: 7.5pt; font-weight: bold; border-radius: 2px; margin-right: 5px;">RUSH</span>
+                                                @endif
+                                                @if($folio->alertas['penalty'] ?? false)
+                                                    <span style="background-color: #ffc107; color: #000000; padding: 1px 4px; font-size: 7.5pt; font-weight: bold; border-radius: 2px; margin-right: 5px;">PENALTY</span>
+                                                @endif
+                                                @if(!empty($folio->alertas['alertaGeneral'] ?? ''))
+                                                    <span style="font-size: 8pt; color: #b00000; font-weight: bold;">{{ $folio->alertas['alertaGeneral'] }}</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        @endif
                     </table>
                     <div class="grupo">II. Observaciones de Manufactura</div>
                     <div>
@@ -99,7 +116,7 @@
                                     <tr class="{{ $loop->parent->iteration % 2 == 0 ? 'gris' : '' }}">
                                         <td class="centro">{{ number_format($mat->cantidad / max($folio->cantidad, 1), 2) }}</td>
                                         <td class="centro negrita">{{ number_format(($mat->cantidad / max($folio->cantidad, 1)) * $bandeja->cantidad, 0) }}</td>
-                                        <td>{{ $mat->material?->material ?? 'Componente' }}</td>
+                                        <td>{{ $mat->material?->material ?? '' }} {{ $mat->facimportsdet->propsTot ?? '' ?? '' }} </td>
                                         <td class="derecha">{{ number_format(($mat->pesoG / max($folio->cantidad, 1)) * $bandeja->cantidad, 4) }} g</td>
                                     </tr>
                                 @endforeach

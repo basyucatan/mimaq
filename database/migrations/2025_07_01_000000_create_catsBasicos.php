@@ -95,7 +95,8 @@ return new class extends Migration
         });                              
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
-            $table->string('empleado',50);
+            $table->smallInteger('numero')->unique();
+            $table->string('empleado',100);
             $table->foreignId('IdDepto')->constrained('deptos')->restrictOnDelete();
             $table->boolean('vigente')->default(true);
             $table->json('adicionales')->nullable();

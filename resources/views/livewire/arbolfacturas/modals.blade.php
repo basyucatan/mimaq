@@ -21,11 +21,6 @@
                                     <label class="etiBase">Date</label>
                                     <input wire:model="fecha" type="date" class="inpBase"  onfocus="this.select()">
                                     @error('fecha') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                            
-                                <div class="col-md-4">
-                                    <label class="etiBase">Exchange Rate (USD/MXN)</label>
-                                    <input wire:model="tipoCambio" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('tipoCambio') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="col-md-4">
                                     <label class="etiBase">Shipping Method</label>
@@ -80,6 +75,11 @@
                                 <div class="col-md-6">
                                     <label for="pedimento" class="etiBase">Entry Number</label>
                                     <input wire:model="pedimento" type="text" class="inpBase"  onfocus="this.select()" id="pedimento">@error('pedimento') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="etiBase">Exchange Rate (USD/MXN)</label>
+                                    <input wire:model="tipoCambio" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('tipoCambio') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label for="fecha" class="etiBase">Date</label>

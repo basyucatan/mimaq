@@ -39,10 +39,10 @@
                                         <td>{{ $row->estiloY }}</td>
                                         <td width="60">
                                             <div class="d-flex justify-content-around align-items-center gap-1">
-                                                <button wire:click="edit({{ $row->id }})" class="bot botNaranja" title="Edit">
+                                                <button wire:click="edit({{ $row->id }})" class="bot botNaranja botChico" title="Edit">
                                                     <i class="bi-pencil-square"></i>
                                                 </button>
-                                                <button wire:click="destroy({{ $row->id }})" class="bot botRojo" onclick="confirm('Are you sure you want to delete this record?') || event.stopImmediatePropagation()">
+                                                <button wire:click="destroy({{ $row->id }})" class="bot botRojo botChico" onclick="confirm('Are you sure you want to delete this record?') || event.stopImmediatePropagation()">
                                                     <i class="bi-trash3-fill"></i>
                                                 </button>
                                             </div>

@@ -7,11 +7,14 @@ use Livewire\WithPagination;
 use App\Models\Empleado;
 use Livewire\Attributes\Computed;
 use App\Models\{Util};
+use Illuminate\Support\Facades\DB;
+
 class Empleados extends Component
 {
     use WithPagination;
 	protected $paginationTheme = 'bootstrap';
-    public $verModalEmpleado=false, $selected_id, $keyWord, $empleado, $IdDepto, $vigente;
+    public $verModalEmpleado=false, $selected_id, $keyWord, $numero, $empleado, $IdDepto, $vigente;
+	
 	public $adicionales = [], $deptos = [];
     public function mount(){
         $this->deptos = Util::getArray('deptos');
@@ -24,6 +27,7 @@ class Empleados extends Component
 		return Empleado::Where('id','>',0)
 			->where(function ($query) use ($keyWord) {
 				$query
+						->orWhere('numero', 'LIKE', $keyWord)
 						->orWhere('empleado', 'LIKE', $keyWord)
 						->orWhere('IdDepto', 'LIKE', $keyWord)
 						->orWhere('vigente', 'LIKE', $keyWord);
@@ -43,7 +47,7 @@ class Empleados extends Component
     }
     public function resetInput()
     {
-        $this->resetExcept('deptos');
+        $this->resetExcept('keyWord','deptos');
     }
     public function edit($id)
     {
@@ -54,21 +58,24 @@ class Empleados extends Component
     public function create()
     {
         $this->resetInput();
-        $this->vigente = true;
         $this->verModalEmpleado = true;
     }    
     public function save()
     {
         $this->validate([
+		'numero' => 'required',
 		'empleado' => 'required',
 		'IdDepto' => 'required',
+		'vigente' => 'required',
         ]);
+
         Empleado::updateOrCreate(
 			['id' => $this->selected_id],
 			[
-				'empleado' => strtoupper($this->empleado),
-				'IdDepto' => $this->IdDepto,
-				'vigente' => $this->vigente,
+				'numero' => $this-> numero,
+				'empleado' => $this-> empleado,
+				'IdDepto' => $this-> IdDepto,
+				'vigente' => $this-> vigente
 			]
 		);
         $this->resetInput();

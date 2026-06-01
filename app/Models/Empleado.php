@@ -13,7 +13,7 @@ class Empleado extends Model
 
     protected $table = 'empleados';
 
-    protected $fillable = ['empleado','IdDepto','vigente','adicionales'];
+    protected $fillable = ['numero','empleado','IdDepto','vigente','adicionales'];
     protected $casts = [
         'adicionales' => 'array'
     ];

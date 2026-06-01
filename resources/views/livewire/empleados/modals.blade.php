@@ -14,6 +14,11 @@
                                 @endif
 
                                 <div class="col-md-6">
+                                    <label class="etiBase">Numero</label>
+                                    <input wire:model="numero" type="text" class="inpBase"  onfocus="this.select()">
+                                    @error('numero') <span class="error text-danger">{{ $message }}</span> @enderror
+                                </div>                            
+                                <div class="col-md-6">
                                     <label class="etiBase">Empleado</label>
                                     <input wire:model="empleado" type="text" class="inpBase"  onfocus="this.select()">
                                     @error('empleado') <span class="error text-danger">{{ $message }}</span> @enderror
@@ -27,12 +32,12 @@
                                         @endforeach
                                     </select>
                                     @error('IdDepto') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>                                                     
-                                <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                </div>                            
+                                <div class="col-md-6 d-flex align-items-center justify-content-center">
                                     <div class="form-check form-switch shadow-sm p-2 rounded border" style="background-color: #f8f9fa; min-width: 150px;">
                                         <input wire:model.live="vigente" class="form-check-input ms-0" type="checkbox" role="switch" id="switchEstatus" style="cursor: pointer; width: 2.5em; height: 1.25em;">
                                         <label class="form-check-label fw-bold mb-0 ms-2" for="switchEstatus" style="cursor: pointer; font-size: 0.9rem;">
-                                            {{ $vigente ? 'VIGENTE' : 'BAJA' }}
+                                            {{ $vigente ? 'Sí' : 'No' }}
                                         </label>
                                     </div>
                                 </div> 

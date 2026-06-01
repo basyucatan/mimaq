@@ -96,7 +96,7 @@ public function validarDisponibilidad()
         }
     }
 }
-    private function cargarReferencias()
+private function cargarReferencias()
     {
         $this->referencias = [];
         $idDeptoBoveda = DB::table('deptos')->where('depto', '0 BOVEDA')->value('id');
@@ -109,11 +109,20 @@ public function validarDisponibilidad()
             ->where(function($query) {
                 $query->where('cantidad', '>', 0)->orWhere('IdFacImportsDet', $this->IdFacImportsDet);
             })->get();
-        $this->referencias = $queryExistencias->mapWithKeys(function ($item) {
+        $coleccionOrdenada = $queryExistencias->sortBy(function ($item) {
+            $tieneFolio = $item->facimportsdet?->folio?->id ? 1 : 0;
+            $idDetalle = $item->facimportsdet?->id ?? 0;
+            return [$tieneFolio, $idDetalle];
+        });
+        $this->referencias = $coleccionOrdenada->mapWithKeys(function ($item) {
             $det = $item->facimportsdet;
+            if (!$det) return [];
             $entrada = $det->IdEntradaMex ?? 'S/N';
             $stock = number_format($item->cantidad, 0, '.', '');
-            return [$item->IdFacImportsDet => "{$entrada} [{$stock} pz] - {$det->propsTot}"];
+            $propiedades = $det->propsTot ?? '';
+            $idFolio = $det->folio?->id ?? null;
+            $textoFolio = !empty($idFolio) ? " F:{$idFolio}" : '';
+            return [$item->IdFacImportsDet => "{$entrada} [{$stock}pz] - {$propiedades}{$textoFolio}"];
         })->toArray();
     }
 public function edit($id)
@@ -135,10 +144,12 @@ public function save()
         'cantidad' => 'required|numeric|min:0.001',
         'pesoG' => 'required|numeric',
     ]);
+    $material = Material::find($this->IdMaterial);
     Foliosmat::updateOrCreate(['id' => $this->selected_id], [
         'IdFolio' => $this->IdFolio,
         'IdFacImportsDet' => $this->IdFacImportsDet ?: null,
         'IdMaterial' => $this->IdMaterial,
+        'IdTipo' => $material->clase->IdTipo,
         'cantidad' => $this->cantidad,
         'pesoG' => $this->pesoG,
         'integrado' => $this->integrado // Se guarda el estado previo o false por defecto

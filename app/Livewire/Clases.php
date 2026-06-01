@@ -39,9 +39,7 @@ class Clases extends Component
 
 	public function render()
 	{
-		return view('livewire.clases.view', [
-			'clases' => $this->filteredClases,
-		]);
+		return view('livewire.clases.view', ['clases' => $this->filteredClases,]);
 	}
     public function cancel()
     {

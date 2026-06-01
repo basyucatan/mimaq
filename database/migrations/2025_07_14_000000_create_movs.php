@@ -45,6 +45,7 @@ return new class extends Migration
             $table->string('pedimento', 25)->unique();
             $table->enum('regimen', ['IN', 'RT', 'AF']); // IN=Import, RT=Export
             $table->date('fecha');
+            $table->decimal('tipoCambio',12,4);
             $table->json('adicionales')->nullable();
             $table->timestamps();
         }); 
@@ -53,8 +54,8 @@ return new class extends Migration
             $table->string('factura',20);
             $table->foreignId('IdPedimento')->nullable()->constrained('pedimentos')->nullOnDelete();
             $table->date('fecha');
-            $table->decimal('tipoCambio',12,4);
             $table->enum('estatus',['abierto','recibido','cerrado'])->default('abierto');
+            $table->json('guias')->nullable();
             $table->json('adicionales')->nullable();
             $table->timestamps();
             $table->index(['factura','IdPedimento']);
@@ -125,6 +126,8 @@ return new class extends Migration
             $table->integer('numeroBandeja');
             $table->foreignId('IdFacturaExport')->nullable()->constrained('facturas')->nullOnDelete();
             $table->integer('cantidad');
+            $table->decimal('precioU', 12, 4)->nullable();
+            $table->decimal('valorA', 12, 4)->nullable();
             $table->decimal('castingIni', 12, 4);
             $table->decimal('castingFin', 12, 4);
             $table->decimal('piedrasG', 12, 4)->default(0);
@@ -143,6 +146,7 @@ return new class extends Migration
             $table->foreignId('IdBandeja')->constrained('bandejas')->cascadeOnDelete();
             $table->foreignId('IdProceso')->constrained('procesos')->restrictOnDelete();
             $table->foreignId('IdUser')->nullable()->constrained('users')->restrictOnDelete();
+            $table->foreignId('IdRegistrador')->nullable()->constrained('empleados')->nullOnDelete();
             $table->foreignId('IdEmpleado')->nullable()->constrained('empleados')->nullOnDelete();
             $table->decimal('pesoEntrada', 12, 4);
             $table->decimal('pesoSalida', 12, 4)->nullable();
@@ -157,7 +161,8 @@ Schema::create('facExportsDets', function (Blueprint $table) {
     $table->string('productoFinal', 100);
     $table->string('arancel', 20);
     $table->integer('cantidad');
-    $table->decimal('precioU', 12, 4);
+    $table->decimal('precioU', 12, 4)->nullable();
+    $table->decimal('valorA', 6, 2)->nullable();
     $table->decimal('pesoG', 12, 4);
     $table->decimal('castingIni', 12, 4);
     $table->decimal('castingG', 12, 4);
