@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="cardPrin">
-                <div class="cardPrin-header">{{ __('Login') }}</div>
+                <div class="cardPrin-header" style="cursor: move;">{{ __('Login') }}</div>
                 <div class="cardPrin-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf

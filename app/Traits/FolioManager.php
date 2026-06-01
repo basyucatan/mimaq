@@ -1,8 +1,9 @@
 <?php
 namespace App\Traits;
-use App\Models\{Facimportsdet, Existencia, Referenciasmov, Bandeja, Bandejasmov, Foliosmat, Estilosdet, Folio};
+use App\Models\{Facimportsdet, Existencia, Referenciasmov, Bandeja, 
+    Empleado, Bandejasmov, Foliosmat, Estilosdet, Folio};
 use Illuminate\Support\Facades\DB; 
-trait FolioManager
+trait FolioManager 
 {
 public function procesar()
 {
@@ -90,13 +91,16 @@ public function procesar()
                     'estatus' => 'proceso'
                 ]
             );
+            $control = Empleado::where('numero', 999)->first();
             Bandejasmov::updateOrCreate(
                 ['IdBandeja' => $bandeja->id, 'IdProceso' => 1],
                 [
                     'IdUser' => Auth()->user()->id,
+                    'IdEmpleado' => $control->id,
+                    'IdRegistrador' => $control->id,
                     'pesoEntrada' => round(($pesoMetal + $pesoPiedras + $pesoDiamantes + $pesoMisc) * $factor, 4),
-                    'fechaHEntrada' => now(),
-                    'fechaHSalida' => now()
+                    'fechaHEntrada' => now()->tz('America/Mexico_City'),
+                    'fechaHSalida' => now()->tz('America/Mexico_City')
                 ]
             );
             $piezasRestantes -= $piezasBandeja;

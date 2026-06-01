@@ -5,27 +5,34 @@
 </head>
 <body>
 <div class="cabecera">
-    <table width="100%" style="font-family: sans-serif;">
+    <table width="100%" style="font-family: sans-serif; table-layout: fixed;">
         <tr>
-            <td width="30%" rowspan="2" valign="middle" style="border: none;">
+            <td width="25%" rowspan="2" valign="middle" style="border: none;">
                 <img src="{{ public_path('img/logo.png') }}" width="40">
                 <span class="negrita">EMA INC.</span>
             </td>
-            <td width="20%" valign="top" style="border: none;">
+            <td width="15%" valign="top" style="border: none;">
                 <span class="negrita">De:</span> MEX<br>
                 <span class="negrita">Para:</span> USA
             </td>
-            <td width="25%" valign="top" style="border: none;">
-                <span class="negrita">GUÍA:</span> {{ $factura->adicionales['guiaA'] ?? '' }}<br>
-                <span class="negrita">FECHA:</span> {{ \Carbon\Carbon::parse($factura->fecha)->format('m/d/Y') }}
-            </td>
-            <td width="25%" valign="top" style="border: none;">
-                <span class="negrita">FACTURA:</span> {{ $factura->factura }}<br>
+            <td width="60%" valign="top" style="border: none;" class="derecha">
+                <span class="negrita">Via:</span> {{ $factura->adicionales['viadE'] ?? 'FEDEX' }}<br>
+                @php
+                    $arregloGuias = $factura->guias;
+                    if (is_string($arregloGuias)) {
+                        $arregloGuias = json_decode($arregloGuias, true);
+                    }
+                @endphp
+                @if(!empty($arregloGuias) && is_array($arregloGuias))
+                    <span class="negrita">GUÍA(S):</span> {{ implode(', ', $arregloGuias) }}<br>
+                @endif
+                <span class="negrita">FECHA:</span> {{ \Carbon\Carbon::parse($factura->fecha)->format('m/d/Y') }} &nbsp;&nbsp;
+                <span class="negrita">FACTURA:</span> {{ $factura->factura }} &nbsp;&nbsp;
                 <span class="negrita">PEDIMENTO:</span> {{ $factura->pedimento?->pedimento ?? 'N/A' }}
             </td>
         </tr>
         <tr>
-            <td colspan="3" valign="top" style="border: none;">
+            <td colspan="2" valign="top" style="border: none;">
                 <span class="negrita">LISTA DE EMPAQUE (EXPORTACIÓN)</span>
             </td>
         </tr>

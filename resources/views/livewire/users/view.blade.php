@@ -3,7 +3,7 @@
     <div class="row g-0 justify-content-center">
         <div class="col-12">
             <div class="cardPrin">
-                <div class="cardPrin-header">
+                <div class="cardPrin-header" style="cursor: move;">
                     <span>Users</span>
                     <div class="me-2 position-relative" style="display:inline-block;">
                         <input wire:model.lazy="keyWord" class="inpSolo" 

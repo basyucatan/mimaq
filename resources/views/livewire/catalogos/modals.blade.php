@@ -3,7 +3,7 @@
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" style="width: 80%;">
             <div class="modal-content">
                 <div class="cardPrin" style="overflow-y: auto; height: 60vh; min-height: 200px;">
-                    <div class="cardPrin-header">{{ $selected_id ? 'Editar' : 'Crear' }}</div>
+                    <div class="cardPrin-header" style="cursor: move;">{{ $selected_id ? 'Editar' : 'Crear' }}</div>
                     <div class="cardPrin-body">
                         @foreach($campos as $key => $valor)
                             <div style="margin-bottom: 15px;">

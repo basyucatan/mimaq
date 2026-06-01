@@ -5,7 +5,7 @@ use Livewire\Attributes\{Computed, On};
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Folio;
-use App\Traits\{Utilfun, FolioManager}; 
+use App\Traits\{Utilfun, FolioManager};
 class Folios extends Component
 {
     use WithPagination, Utilfun, FolioManager;

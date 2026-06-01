@@ -2,8 +2,8 @@
     <div class="modal-overlay">
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" wire:ignore.self>            
             <div class="modal-content">
-                <div class="cardPrin" style="cursor: move;">
-                    <div class="cardPrin-header">
+                <div class="cardPrin">
+                    <div class="cardPrin-header" style="cursor: move;">
                         <span>{{ $selected_id ? 'Editar Pedimento' : 'Crear Pedimento' }}</span>
                     </div>
                     <div class="cardPrin-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">

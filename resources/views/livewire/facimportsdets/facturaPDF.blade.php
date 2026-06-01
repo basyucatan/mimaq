@@ -35,20 +35,28 @@
             </td>
         </tr>
     </table>
-    <table style="margin-bottom: 5px; border: none;">
+<table style="margin-bottom: 5px; border: none; table-layout: fixed; width: 100%;">
         <tr>
-            <td width="30%" style="border: none;">
+            <td width="25%" style="border: none; vertical-align: top;">
                 <span class="negrita">FACTURA:</span> {{ $factura->factura }}<br>
                 <span class="negrita">FECHA:</span> {{ Util::formatFecha($factura->fecha,'MM/DD/YY') }}
             </td>
-            <td width="40%" style="border: none;" class="centro"></td>
-            <td width="30%" style="border: none;" class="derecha">
+            <td width="20%" style="border: none;"></td>
+            <td width="55%" style="border: none; vertical-align: top;" class="derecha">
                 <span class="negrita">Via:</span> {{ $factura->adicionales['viadE'] ?? '' }}<br>
-                <span class="negrita">Guia:</span> {{ $factura->adicionales['guiaA'] ?? '' }}<br>
+                @php
+                    $arregloGuias = $factura->guias;
+                    if (is_string($arregloGuias)) {
+                        $arregloGuias = json_decode($arregloGuias, true);
+                    }
+                @endphp
+                @if(!empty($arregloGuias) && is_array($arregloGuias))
+                    <span class="negrita">Guia(s):</span> {{ implode(', ', $arregloGuias) }}<br>
+                @endif
                 <span class="negrita"># Paq:</span> {{ $factura->adicionales['nPaq'] ?? '' }}
             </td>
         </tr>
-    </table>    
+    </table>   
     <table>
         <thead>
             <tr>

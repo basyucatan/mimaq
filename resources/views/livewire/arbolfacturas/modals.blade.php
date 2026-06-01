@@ -1,9 +1,9 @@
-@if($verModalFacimport)
+@if($verModalFactura)
     <div class="modal-overlay">
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" wire:ignore.self>            
             <div class="modal-content">
-                <div class="cardPrin" style="cursor: move;">
-                    <div class="cardPrin-header">
+                <div class="cardPrin">
+                    <div class="cardPrin-header" style="cursor: move;">
                         <span>{{ $selected_id ? 'Edit Invoice' : 'Create Invoice' }}</span>
                     </div>
                     <div class="cardPrin-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">
@@ -28,11 +28,6 @@
                                     @error('viadE') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="etiBase">Air Waybill (AWB)</label>
-                                    <input wire:model="guiaA" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('guiaA') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-4">
                                     <label class="etiBase">Packages</label>
                                     <input wire:model="nPaq" type="text" class="inpBase"  onfocus="this.select()">
                                     @error('nPaq') <span class="error text-danger">{{ $message }}</span> @enderror
@@ -44,7 +39,24 @@
                                             {{ $cerrado ? 'CLOSED' : 'OPEN' }}
                                         </label>
                                     </div>
-                                </div>                             
+                                </div>                               
+                                <div class="col-12 mt-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label class="etiBase mb-0">Air Waybills (AWB)</label>
+                                        <button type="button" wire:click="agregarGuia" class="btn btn-sm btn-secondary py-0 px-2">+</button>
+                                    </div>
+                                    <div class="row g-2">
+                                        @foreach($guias as $indice => $guia)
+                                            <div class="col-md-4 d-flex gap-1">
+                                                <div class="w-100">
+                                                    <input wire:model="guias.{{ $indice }}" type="text" class="inpBase" onfocus="this.select()" placeholder="Guía #{{ $indice + 1 }}">
+                                                    @error("guias.$indice") <span class="error text-danger small">{{ $message }}</span> @enderror
+                                                </div>
+                                                <button type="button" wire:click="removerGuia({{ $indice }})" class="btn btn-sm btn-outline-danger px-2" style="height: 31px;">&times;</button>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -57,13 +69,12 @@
         </div>
     </div>
 @endif
-
 @if($verModalPedimento)
     <div class="modal-overlay">
         <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" wire:ignore.self>            
             <div class="modal-content">
-                <div class="cardPrin" style="cursor: move;">
-                    <div class="cardPrin-header">
+                <div class="cardPrin">
+                    <div class="cardPrin-header" style="cursor: move;">
                         <span>{{ $selected_id ? 'Edit Customs Entry' : 'Create Customs Entry' }}</span>
                     </div>
                     <div class="cardPrin-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">

@@ -38,19 +38,28 @@
     </thead>
     <tbody>
         <tr>
-            <td valign="top" style="border: none; padding: 8px 5px;">
+            <td valign="top" style="border: none; padding: 8px 5px;" width="40%">
                 <span class="negrita">EMA JEWELRY INC.</span><br>
                 2 EXECUTIVE DRIVE SUITE 270<br>
                 FORT LEE, N.J. 07024 U.S.A<br>
                 TELEFONO (212) 575-89-89<br>
                 TAX ID: 132908878
             </td>
-            <td valign="top" style="border: none; padding: 8px 5px;">
+            <td valign="top" style="border: none; padding: 8px 5px;" width="60%">
                 <span class="negrita">EMA JEWELRY INC.</span><br>
                 2 EXECUTIVE DRIVE SUITE 270<br>
                 FORT LEE, N.J. 07024 U.S.A<br>
                 TELEFONO (212) 575-89-89<br>
-                VIA EMBARQUE: FEDEX &nbsp;&nbsp; GUIA: {{ $factura->adicionales['guiaA'] ?? '' }}
+                VIA EMBARQUE: {{ $factura->adicionales['viadE'] ?? 'FEDEX' }}<br>
+                @php
+                    $arregloGuias = $factura->guias;
+                    if (is_string($arregloGuias)) {
+                        $arregloGuias = json_decode($arregloGuias, true);
+                    }
+                @endphp
+                @if(!empty($arregloGuias) && is_array($arregloGuias))
+                    GUIA(S): {{ implode(', ', $arregloGuias) }}
+                @endif
             </td>
         </tr>
     </tbody>

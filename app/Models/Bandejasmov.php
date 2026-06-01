@@ -13,7 +13,7 @@ class Bandejasmov extends Model
 
     protected $table = 'bandejasmovs';
 
-    protected $fillable = ['IdBandeja','IdProceso','IdUser','IdEmpleado','pesoEntrada',
+    protected $fillable = ['IdBandeja','IdProceso','IdUser','IdEmpleado','IdRegistrador','pesoEntrada',
         'pesoSalida','fechaHEntrada','fechaHSalida'];
     
 	
@@ -28,7 +28,7 @@ class Bandejasmov extends Model
     }
     public function registrador()
     {
-        return $this->hasOne('App\Models\Empleado', 'id', 'IdRegostrador');
+        return $this->hasOne('App\Models\Empleado', 'id', 'IdRegistrador');
     }
 public function proceso()
 {

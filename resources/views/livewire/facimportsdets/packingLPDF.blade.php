@@ -11,27 +11,33 @@
 </head>
 <body>
 <div class="cabecera">
-    <table width="100%" style="font-family: sans-serif;">
+    <table width="100%" style="font-family: sans-serif; table-layout: fixed;">
         <tr>
-            <td width="30%" rowspan="2" valign="middle">
+            <td width="25%" rowspan="2" valign="middle">
                 <img src="{{ public_path('img/logo.png') }}" width="40">
                 <span>EMA INC.</span>
             </td>
-            <td width="20%" valign="top">
+            <td width="15%" valign="top">
                 <strong>De</strong> USA<br>
                 <strong>Para</strong> MEX
             </td>
-            <td width="25%" valign="top">
-                <strong>GUÍA:</strong> {{$factura->adicionales['guiaA'] ?? ''}}<br>
-                <strong>FECHA:</strong> {{ Util::formatFecha($factura->fecha,'DD/MMM/AA') }}
-            </td>
-            <td width="25%" valign="top">
-                <strong>FACTURA:</strong> {{ $factura->factura }}<br>
+            <td width="60%" valign="top" class="derecha">
+                @php
+                    $arregloGuias = $factura->guias;
+                    if (is_string($arregloGuias)) {
+                        $arregloGuias = json_decode($arregloGuias, true);
+                    }
+                @endphp
+                @if(!empty($arregloGuias) && is_array($arregloGuias))
+                    <strong>GUÍA(S):</strong> {{ implode(', ', $arregloGuias) }}<br>
+                @endif
+                <strong>FECHA:</strong> {{ Util::formatFecha($factura->fecha,'DD/MMM/AA') }} &nbsp;&nbsp;
+                <strong>FACTURA:</strong> {{ $factura->factura }} &nbsp;&nbsp;
                 <strong>PÁGINA:</strong> <span class="pagina"></span>
             </td>
         </tr>
         <tr>
-            <td colspan="3" valign="top">
+            <td colspan="2" valign="top">
                 <strong>LISTA DE EMPAQUE</strong>
             </td>
         </tr>

@@ -7,12 +7,11 @@ use App\Traits\Utilfun;
 class Arbolfacturas extends Component
 {
     use Utilfun;
-    public $keyWord = '', $verModalFacimport = false, $verModalPedimento = false, $cerrado = false;
+    public $keyWord = '', $verModalFactura = false, $verModalPedimento = false, $cerrado = false;
     public $selected_id, $factura, $IdPedimento, $fecha, $pedimento, 
-        $viadE, $guiaA, $nPaq, $estatus, 
+        $viadE, $nPaq, $estatus, 
         $regimen = 'IN', $tipoCambio;
-    public $expandir = ['Pedimento' => [], 'Factura' => []], $adicionales=[];
-
+    public $expandir = ['Pedimento' => [], 'Factura' => []], $guias=[], $adicionales=[];
     public function alternarNodo($tipo, $id)
     {
         $this->expandir[$tipo][$id] = !($this->expandir[$tipo][$id] ?? false);
@@ -54,9 +53,9 @@ class Arbolfacturas extends Component
         $this->IdPedimento = $idPedimento;
         $this->selected_id = null;
         $this->viadE='FEDEX';
-        $this->guiaA='';
+        $this->guias = [''];
         $this->nPaq = 1;        
-        $this->verModalFacimport = true;
+        $this->verModalFactura = true;
     }
     public function editarPedimento($id)
     {
@@ -74,10 +73,10 @@ class Arbolfacturas extends Component
         $this->fill($registro->toArray());
         $this->selected_id = $id;
         $this->viadE = $registro->adicionales['viadE'] ?? null;
-        $this->guiaA = $registro->adicionales['guiaA'] ?? null;
+        $this->guias = $registro->guias ?? [''];
         $this->nPaq = $registro->adicionales['nPaq'] ?? null;
         $this->cerrado = ($registro->estatus === 'cerrado');
-        $this->verModalFacimport = true;
+        $this->verModalFactura = true;
     }
     public function savePedimento()
     {
@@ -93,20 +92,30 @@ class Arbolfacturas extends Component
         );
         $this->cancel();
     }
-
+    public function agregarGuia()
+    {
+        $this->guias[] = '';
+    }
+    public function removerGuia($indice)
+    {
+        unset($this->guias[$indice]);
+        $this->guias = array_values($this->guias);
+        if (empty($this->guias)) {
+            $this->guias[] = '';
+        }
+    }
     public function saveFactura()
     {
         $this->validate([
-            'factura' => 'required|unique:facturas',
+            'factura' => 'required|unique:facturas,factura,' . $this->selected_id,
             'IdPedimento' => 'required|exists:pedimentos,id',
             'fecha' => 'required',
-            'tipoCambio' => 'required|numeric',
+            'guias.*' => 'required|string|distinct',
         ]);
         $factura = $this->selected_id ? Factura::find($this->selected_id) : null;
         $adActual = $factura?->adicionales ?? [];
         $this->adicionales = array_merge($adActual, [
             'viadE' => $this->viadE,
-            'guiaA' => $this->guiaA,
             'nPaq' => $this->nPaq,
         ]);
         Factura::updateOrCreate(
@@ -115,15 +124,16 @@ class Arbolfacturas extends Component
             'IdPedimento' => $this->IdPedimento, 
             'fecha' => $this->fecha, 
             'estatus' => $this->cerrado ? 'cerrado' : 'abierto',
-            'adicionales' => $this->adicionales, 
-            'tipoCambio' => $this->tipoCambio]
+            'guias' => array_values(array_filter($this->guias)),
+            'adicionales' => $this->adicionales
+            ]
         );
         $this->dispatch('IdFacturaElecta',$this->selected_id);
         $this->cancel();
     }
     public function cancel()
     {
-        $this->verModalFacimport = false;
+        $this->verModalFactura = false;
         $this->verModalPedimento = false;
         $this->resetInput();
     }

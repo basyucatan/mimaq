@@ -3,7 +3,7 @@
     <div class="row g-0 justify-content-center">
         <div class="col-12">
             <div class="cardPrin">
-<div class="cardPrin-header">
+<div class="cardPrin-header" style="cursor: move;">
     <span>Productos</span>
     <div class="me-2 position-relative" style="display:inline-block;">
         <input wire:model.lazy="keyWord" class="inpSolo" wire:keydown.escape="$set('keyWord','')" onfocus="this.select()" placeholder="Buscar...">

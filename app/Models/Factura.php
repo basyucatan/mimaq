@@ -13,8 +13,9 @@ class Factura extends Model
 
     protected $table = 'facturas';
 
-    protected $fillable = ['factura','IdPedimento', 'fecha', 'tipoCambio','estatus','adicionales'];
+    protected $fillable = ['factura','IdPedimento', 'fecha', 'tipoCambio','estatus','guias','adicionales'];
     protected $casts = [
+        'guias' => 'array',
         'adicionales' => 'array'
     ];
     public function getNextIdEntradaMex()

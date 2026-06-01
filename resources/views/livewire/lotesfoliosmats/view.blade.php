@@ -3,7 +3,7 @@
     <div class="row g-0 justify-content-center">
         <div class="col-12">
             <div class="cardPrin">
-                <div class="cardPrin-header">
+                <div class="cardPrin-header" style="cursor: move;">
                     <span>Lotesfoliosmats</span>
                     <div>
                         <input wire:model.live="keyWord" type="text" class="inpSolo"  onfocus="this.select()" placeholder="Buscar">
