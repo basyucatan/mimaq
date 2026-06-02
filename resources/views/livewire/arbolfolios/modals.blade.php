@@ -19,25 +19,29 @@
                                                 <option value="{{ $nombre }}">
                                             @endforeach
                                         </datalist>
-                                        @error('IdCliente')
-                                            <span class="error text-danger">Seleccione un cliente válido</span>
-                                        @enderror
+                                        @error('IdCliente') <span class="error text-danger">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label class="etiBase">Número de Orden</label>
                                         <input wire:model="orden" type="text" class="inpBase"
                                             onfocus="this.select()">
-                                        @error('orden')
-                                            <span class="inpBase">{{ $message }}</span>
-                                        @enderror
+                                        @error('orden') <span class="error text-danger">{{ $message }}</span> @enderror
                                     </div>
                                 @elseif($tipoModal == 'Lote')
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <label class="etiBase">Número de Lote</label>
                                         <input wire:model="lote" type="text" class="inpBase" onfocus="this.select()">
-                                        @error('lote')
-                                            <span class="inpBase">{{ $message }}</span>
-                                        @enderror
+                                        @error('lote') <span class="error text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="etiBase">Pertenece a la Orden</label>
+                                        <select wire:model="IdOrden" class="form-select form-select-sm inpBase">
+                                            <option value=""></option>
+                                            @foreach ($ordens as $o)
+                                                <option value="{{ $o->id }}">{{ $o->orden }} (#: {{ $o->id }})</option>
+                                            @endforeach
+                                        </select>
+                                        @error('IdOrden') <span class="error text-danger">{{ $message }}</span> @enderror
                                     </div>
                                 @elseif($tipoModal == 'Folio')
                                     <div class="col-md-2">
@@ -48,9 +52,7 @@
                                         <label class="etiBase">Piezas</label>
                                         <input wire:model="cantidad" wire:change="generarDef"type="number"
                                             class="inpBase">
-                                        @error('cantidad')
-                                            <span class="inpBase">{{ $message }}</span>
-                                        @enderror
+                                        @error('cantidad') <span class="error text-danger">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="col-md-3">
                                         <label class="etiBase">Estilo</label>
@@ -60,23 +62,17 @@
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
-                                        @error('IdEstilo')
-                                            <span class="inpBase">{{ $message }}</span>
-                                        @enderror
+                                        @error('IdEstilo') <span class="error text-danger">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="col-md-2">
                                         <label class="etiBase">Bandejas</label>
                                         <input wire:model="totalBandejas" type="number" class="inpBase">
-                                        @error('totalBandejas')
-                                            <span class="inpBase">{{ $message }}</span>
-                                        @enderror
+                                        @error('totalBandejas') <span class="error text-danger">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="col-md-3">
                                         <label class="etiBase">Vencimiento</label>
                                         <input wire:model="fechaVen" type="date" class="inpBase">
-                                        @error('fechaVen')
-                                            <span class="inpBase">{{ $message }}</span>
-                                        @enderror
+                                        @error('fechaVen') <span class="error text-danger">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="col-md-3">
                                         <label class="etiBase d-block">Kilataje</label>

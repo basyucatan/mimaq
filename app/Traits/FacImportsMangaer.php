@@ -10,7 +10,7 @@ trait FacImportsMangaer
     public $verModalFacimportsdet = false, $verModalEstilos = false, $verModalImpresiones = false;
     public $selected_id, $keyWord, $IdFactura, $factura, $arancel;
     public $IdEntradaMex, $IdOrigen, $IdMaterial, $cantidad, $precioU, $pesoEnUMat,
-        $IdEstilo, $IdFolio, $IdTipo,
+        $IdEstilo, $IdFolio, $IdTipo, $unidadP,
         $estiloY, $IdCliente, $orden, $lote, $cantidadEstilo, $pesoG, $IdSize, $IdForma, $kt, $color;
     public $adicionales = [], $origens = [], $materials = [], $clientes = [], $folios = [],
         $kts = [], $colors = [], $sizes = [], $formas = [], $estilos = [], $tipos = [];
@@ -76,6 +76,7 @@ public function actualizarDatosFolio()
         $importDet = Facimportsdet::with('Material.Clase')->findOrFail($id);
         $this->fill($importDet->toArray());
         $this->IdTipo = $importDet->Material?->Clase?->IdTipo;
+        $this->unidadP = $importDet->Material?->UnidadP?->unidad;
         $this->cargarMateriales();
         $this->kt = $this->adicionales['kt'] ?? null;
         $this->color = $this->adicionales['color'] ?? null;

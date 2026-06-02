@@ -2,6 +2,7 @@
 namespace App\Livewire;
 use Livewire\Component;
 use App\Models\{Util, Facimportsdet, Cliente, Orden, Lote, Folio, Estilo};
+use Illuminate\Support\Facades\DB;
 use App\Traits\Utilfun;
 class Arbolfolios extends Component
 {
@@ -12,7 +13,7 @@ class Arbolfolios extends Component
         $kt = '', $color = '',
         $fechaVen, $estatus = 'abierto';
     public $expandir = ['Orden' => [], 'Lote' => []], $estilos = [], $clientes = [], $adicionales = [],
-        $alertas = [], $kts = [], $colors = [];
+        $alertas = [], $kts = [], $colors = [], $ordens = [];
     protected $listeners = ['estilosDetsActualizado' => 'generarDef'];
     public function updated($propertyName)
     {
@@ -85,12 +86,16 @@ class Arbolfolios extends Component
         $this->lote = $ultimoLote ? $ultimoLote + 1 : 1;
         $this->tipoModal = 'Lote';
     }
-    public function editarLote($id)
+public function editarLote($id)
     {
-        $registro = Lote::findOrFail($id);
+        $registro = Lote::with('orden')->findOrFail($id);
         $this->selected_id = $id;
         $this->lote = $registro->lote;
         $this->IdOrden = $registro->IdOrden;
+        $this->ordens = DB::table('ordens')
+            ->where('IdCliente', $registro->orden->IdCliente)
+            ->orderByDesc('id')
+            ->get();
         $this->tipoModal = 'Lote';
     }
     public function nuevoFolio($idLote)
@@ -146,6 +151,7 @@ class Arbolfolios extends Component
     public function guardar()
     {
         if ($this->tipoModal == 'Orden') {
+            $this->orden = strtoupper(trim($this->orden));
             $this->IdCliente = array_search(trim($this->cliente), $this->clientes) ?: null;
             $this->validate([
                 'orden' => 'required',
@@ -154,7 +160,13 @@ class Arbolfolios extends Component
             ], [
                 'IdCliente.required' => 'El cliente escrito no es válido. Por favor, selecciona uno de la lista.'
             ]);
-            Orden::updateOrCreate(['id' => $this->selected_id], [
+            $ordenExistente = Orden::where('orden', $this->orden)->first();
+            if ($ordenExistente && $ordenExistente->id != $this->selected_id) {
+                $this->addError('orden', 'Esta orden ya existe');
+                return;
+            }
+            $idBusqueda = $this->selected_id ?: ($ordenExistente?->id ?? null);
+            Orden::updateOrCreate(['id' => $idBusqueda], [
                 'orden' => $this->orden,
                 'IdCliente' => $this->IdCliente,
                 'estatus' => $this->estatus,

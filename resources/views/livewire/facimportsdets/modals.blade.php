@@ -41,8 +41,8 @@
                                     <input wire:model="precioU" type="text" class="inpBase"  onfocus="this.select()">
                                     @error('precioU') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
-                                <div class="col-md-2">
-                                    <label class="etiBase">Weight</label>
+                                <div class="col-md-2"> 
+                                    <label class="etiBase">Weight ({{ $unidadP ?? '' }})</label>
                                     <input wire:model="pesoEnUMat" type="text" class="inpBase"  onfocus="this.select()">
                                     @error('pesoEnUMat') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>

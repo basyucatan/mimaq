@@ -19,7 +19,8 @@ class Facimportsdets extends Component
     public function elegirMaterial()
     {
         $material = Material::find($this->IdMaterial);
-        $this->arancel = $material->clase->arancel->arancel;
+        $this->arancel = $material?->clase?->arancel?->arancel;
+        $this->unidadP = $material?->UnidadP?->unidad;
     }     
     public function mount()
     {

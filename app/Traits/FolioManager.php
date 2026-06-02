@@ -92,13 +92,15 @@ public function procesar()
                 ]
             );
             $control = Empleado::where('numero', 999)->first();
+            $peso = round(($pesoMetal + $pesoPiedras + $pesoDiamantes + $pesoMisc) * $factor, 4);
             Bandejasmov::updateOrCreate(
                 ['IdBandeja' => $bandeja->id, 'IdProceso' => 1],
                 [
                     'IdUser' => Auth()->user()->id,
                     'IdEmpleado' => $control->id,
                     'IdRegistrador' => $control->id,
-                    'pesoEntrada' => round(($pesoMetal + $pesoPiedras + $pesoDiamantes + $pesoMisc) * $factor, 4),
+                    'pesoEntrada' => $peso,
+                    'pesoSalida' => $peso,
                     'fechaHEntrada' => now()->tz('America/Mexico_City'),
                     'fechaHSalida' => now()->tz('America/Mexico_City')
                 ]
