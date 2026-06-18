@@ -151,6 +151,7 @@ public function procesar()
                 Foliosmat::create([
                     'IdFolio' => $this->IdFolio,
                     'IdMaterial' => $row->IdMaterial,
+                    'IdTipo' => $row->Material->Clase->IdTipo,
                     'cantidad' => $row->cantidad * $this->folio->cantidad,
                     'pesoG' => 0,
                     'integrado' => false,
