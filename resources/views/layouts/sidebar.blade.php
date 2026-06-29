@@ -42,9 +42,10 @@
                             <ul class="submenu d-none list-unstyled ps-2 border-start">
                                 <li><a href="{{ url('/facimports') }}" class="nav-link small">🌍 Import</a></li>
                                 <li><a href="{{ url('/recibirimports') }}" class="nav-link small">📥 Recepción de Import</a></li>
-                                <li><a href="{{ url('/adminfolios') }}" class="nav-link small">🏷️ Folios</a></li>
-                                <li><a href="{{ url('/bandejas') }}" class="nav-link small">📥 Bandejas</a></li>
+                                <li><a href="{{ url('/adminfolios') }}" class="nav-link small">📚 Folios</a></li>
+                                <li><a href="{{ url('/bandejas') }}" class="nav-link small">📁 Bandejas</a></li>
                                 <li><a href="{{ url('/facexports') }}" class="nav-link small">↗️ Export</a></li>
+                                <li><a href="{{ url('/kardex') }}" class="nav-link small">💶 Kardex</a></li>
                                 <li><a href="{{ url('#') }}" class="nav-link small">🔌 API Go Aduanas</a></li>
                             </ul>
                         </li>
