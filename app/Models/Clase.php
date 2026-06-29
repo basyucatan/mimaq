@@ -13,7 +13,7 @@ class Clase extends Model
 
     protected $table = 'clases';
 
-    protected $fillable = ['IdAccess','IdTipo','IdArancel','clase','claseI','adicionales'];
+    protected $fillable = ['IdTipo','IdArancel','clase','claseI','adicionales'];
     protected $casts = [
         'adicionales' => 'array'
     ];
@@ -22,10 +22,10 @@ class Clase extends Model
     {
         return $this->hasOne('App\Models\Arancel', 'id', 'IdArancel');
     }
-   
-    public function estiloys()
+    
+    public function estilos()
     {
-        return $this->hasMany('App\Models\Estiloy', 'IdClase', 'id');
+        return $this->hasMany('App\Models\Estilo', 'IdClase', 'id');
     }
     
     public function materials()

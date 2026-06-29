@@ -34,7 +34,7 @@ class Clases extends Component
                     ->orWhere('clase', 'LIKE', $keyWord)
                     ->orWhere('claseI', 'LIKE', $keyWord);
 			})
-			->paginate(12);
+			->get();
 	}
 
 	public function render()
