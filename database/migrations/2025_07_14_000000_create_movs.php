@@ -175,7 +175,7 @@ Schema::create('facExportsDets', function (Blueprint $table) {
 Schema::create('facExportsMats', function (Blueprint $table) {
     $table->id();
     $table->foreignId('IdFacExportsDet')->constrained('facExportsDets')->cascadeOnDelete();
-    $table->foreignId('IdFacImportsDet')->constrained('facimportsdets')->cascadeOnDelete();
+    $table->foreignId('IdFacImportsDet')->constrained('facImportsDets')->cascadeOnDelete();
     $table->decimal('cantidad', 12, 4);
     $table->decimal('pesoG', 12, 4);
     $table->index(['IdFacExportsDet', 'IdFacImportsDet'], 'idx_exports_mats_imports');
