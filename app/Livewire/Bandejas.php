@@ -5,7 +5,7 @@ use Livewire\WithPagination;
 use App\Models\Bandeja;
 use App\Models\Bandejasmov;
 use Livewire\Attributes\Computed;
-use App\Models\{Util, Empleado, Facexportsdet, FacExportsMat};
+use App\Models\{Util, Empleado, Facexportsdet, Facexportsmat};
 use Illuminate\Support\Facades\DB;
 use App\Traits\Utilfun;
 class Bandejas extends Component
@@ -74,7 +74,7 @@ public function exportar()
                 if ($cantidadRequeridaBandeja <= 0) {
                     break;
                 }
-                $consumidoPreviamente = FacExportsMat::where('IdFacImportsDet', $mat->IdFacImportsDet)
+                $consumidoPreviamente = Facexportsmat::where('IdFacImportsDet', $mat->IdFacImportsDet)
                     ->whereHas('facExportsDet', function ($query) use ($folio) {
                         $query->where('IdBandeja', '!=', 0)
                             ->whereHas('bandeja', function ($q) use ($folio) {
@@ -88,7 +88,7 @@ public function exportar()
                 $pesoUnitarioImportacion = $mat->cantidad > 0 ? ($mat->pesoG / $mat->cantidad) : 0;
                 $cantidadADescargar = min($cantidadRequeridaBandeja, $saldoDisponibleInm);
                 $pesoADescargar = $cantidadADescargar * $pesoUnitarioImportacion;
-                FacExportsMat::create([
+                Facexportsmat::create([
                     'IdFacExportsDet' => $exportDet->id,
                     'IdFacImportsDet' => $mat->IdFacImportsDet,
                     'cantidad' => $cantidadADescargar,

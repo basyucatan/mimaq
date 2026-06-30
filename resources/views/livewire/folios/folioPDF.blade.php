@@ -66,7 +66,7 @@
                             <td class="gris negrita">Pzas Folio</td>
                             <td>{{ $folio->cantidad }}</td>
                             <td class="gris negrita">Pzas Lote</td>
-                            <td>{{ $folio->lote?->adicionales['piezasLote'] ?? '15' }}</td>
+                            <td>{{ $folio->lote?->adicionales['piezasLote'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <td class="gris negrita">Vence</td>
