@@ -57,7 +57,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Bandeja</th>
-                                <th class="text-center">Cliente | Lote | Estilo | Producto</th>
+                                <th class="text-left">Cliente | Lote | Estilo | Producto</th>
                                 <th class="text-center">Proceso Actual</th>
                                 <th class="text-center">Bóveda</th>
                                 <th class="text-center">Estatus</th>
@@ -72,7 +72,7 @@
                                         <span class="badge bg-secondary text-white">{{ $row->codigoBandeja }}</span>
                                         <strong class="text-primary">{{ $row->cantidad }} Pz</strong>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-left">
                                         {{ $row->folio->ascendencia ?? '' }}
                                     </td>
                                     <td class="text-center">

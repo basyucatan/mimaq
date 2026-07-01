@@ -36,10 +36,20 @@ class Folio extends Model
             $cliente->cliente ?? null,
             $lote->lote ?? null,
             $this->estilo->estilo ?? null,
-            $this->abreviatura ?? null
+            $this->abreviatura ?? null,
+            $this->ktCol ?? null
         ]);
         return implode('📌', $datos);
     }
+    public function getKtColAttribute()
+{
+    $adicionales = $this->adicionales ?? [];
+    $kt = $adicionales['kt'] ?? '';
+    $color = $adicionales['color'] ?? '';
+    $vKt = is_array($kt) ? ($kt['valor'] ?? '') : ($kt ?? '');
+    $vCol = is_array($color) ? ($color['valor'] ?? '') : ($color ?? '');
+    return trim("$vKt $vCol");
+}
     public function getCodigoFolioAttribute()
     {
         return $this->periodo . '-' . $this->consecutivoMensual;

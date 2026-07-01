@@ -3,10 +3,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
-    {  
+    {
         Schema::create('ordens', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdCliente')->nullable()->constrained('clientes')->restrictOnDelete();
@@ -14,14 +13,14 @@ return new class extends Migration
             $table->enum('estatus', ['abierto', 'cerrado'])->default('abierto');
             $table->date('fechaVen');
             $table->json('adicionales')->nullable();
-        });   
+        });
         Schema::create('lotes', function (Blueprint $table) {
             $table->id();
             $table->integer('lote')->unsigned();
             $table->foreignId('IdOrden')->constrained('ordens')->cascadeOnDelete();
             $table->json('adicionales')->nullable();
-            $table->unique(['IdOrden','lote']);
-        });        
+            $table->unique(['IdOrden', 'lote']);
+        });
         Schema::create('folios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdLote')->constrained('lotes')->cascadeOnDelete();
@@ -39,33 +38,33 @@ return new class extends Migration
             $table->json('alertas')->nullable();
             $table->json('adicionales')->nullable();
             $table->timestamps();
-        });       
+        });
         Schema::create('pedimentos', function (Blueprint $table) {
             $table->id();
             $table->string('pedimento', 25)->unique();
             $table->enum('regimen', ['IN', 'RT', 'AF']); // IN=Import, RT=Export
             $table->date('fecha');
-            $table->decimal('tipoCambio',12,4);
+            $table->decimal('tipoCambio', 12, 4);
             $table->json('adicionales')->nullable();
             $table->timestamps();
-        }); 
+        });
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            $table->string('factura',20);
+            $table->string('factura', 20);
             $table->foreignId('IdPedimento')->nullable()->constrained('pedimentos')->nullOnDelete();
             $table->date('fecha');
-            $table->enum('estatus',['abierto','recibido','cerrado'])->default('abierto');
+            $table->enum('estatus', ['abierto', 'recibido', 'cerrado'])->default('abierto');
             $table->json('guias')->nullable();
             $table->json('adicionales')->nullable();
             $table->timestamps();
-            $table->index(['factura','IdPedimento']);
-        });      
+            $table->index(['factura', 'IdPedimento']);
+        });
         Schema::create('facImportsDets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdFactura')->constrained('facturas')->cascadeOnDelete();
             $table->foreignId('IdMaterial')->nullable()->constrained('materials')->restrictOnDelete();
             $table->string('IdEntradaMex', 20)->unique();
-            $table->string('arancel',20);
+            $table->string('arancel', 20);
             $table->foreignId('IdOrigen')->nullable()->constrained('origens')->nullOnDelete();
             $table->foreignId('IdFolio')->nullable()->constrained('folios')->nullOnDelete();
             $table->decimal('cantidad', 12, 4);
@@ -92,7 +91,7 @@ return new class extends Migration
             $table->boolean('integrado')->default(false);
             $table->timestamps();
             $table->index(['IdFolio', 'IdFacImportsDet']);
-        });         
+        });
         Schema::create('referenciasMovs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdFacImportsDet')->constrained('facImportsDets')->restrictOnDelete();
@@ -109,11 +108,11 @@ return new class extends Migration
             $table->enum('estatus', ['abierto', 'cerrado'])->default('abierto');
             $table->timestamps();
             $table->index(['IdFacImportsDet', 'IdDeptoOri', 'IdDeptoDes'], 'idx_trazabilidad');
-        });       
+        });
         Schema::create('existencias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('IdFacImportsDet')->constrained('facImportsDets')->cascadeOnDelete();
-            $table->foreignId('IdDepto')->constrained('deptos')->cascadeOnDelete(); 
+            $table->foreignId('IdDepto')->constrained('deptos')->cascadeOnDelete();
             $table->decimal('cantidad', 12, 4)->default(0);
             $table->decimal('pesoG', 12, 4)->default(0);
             $table->unique(['IdFacImportsDet', 'IdDepto']);
@@ -145,6 +144,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('IdBandeja')->constrained('bandejas')->cascadeOnDelete();
             $table->foreignId('IdProceso')->constrained('procesos')->restrictOnDelete();
+            $table->foreignId('IdProcesoSig')->constrained('procesos')->restrictOnDelete();
             $table->foreignId('IdUser')->nullable()->constrained('users')->restrictOnDelete();
             $table->foreignId('IdRegistrador')->nullable()->constrained('empleados')->nullOnDelete();
             $table->foreignId('IdEmpleado')->nullable()->constrained('empleados')->nullOnDelete();
@@ -155,32 +155,32 @@ return new class extends Migration
             $table->json('adicionales')->nullable();
             $table->timestamps();
         });
-Schema::create('facExportsDets', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('IdFactura')->constrained('facturas')->cascadeOnDelete();
-    $table->foreignId('IdBandeja')->nullable()->constrained('bandejas')->nullOnDelete();
-    $table->string('productoFinal', 100);
-    $table->string('arancel', 20);
-    $table->integer('cantidad');
-    $table->decimal('precioU', 12, 4)->nullable();
-    $table->decimal('valorA', 6, 2)->nullable();
-    $table->decimal('pesoG', 12, 4);
-    $table->decimal('castingIni', 12, 4);
-    $table->decimal('castingG', 12, 4);
-    $table->decimal('piedrasG', 12, 4)->default(0);
-    $table->decimal('diamantesG', 12, 4)->default(0);
-    $table->decimal('miscG', 12, 4)->default(0);
-    $table->json('adicionales')->nullable();
-    $table->index(['IdFactura', 'IdBandeja']);
-});
-Schema::create('facExportsMats', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('IdFacExportsDet')->constrained('facExportsDets')->cascadeOnDelete();
-    $table->foreignId('IdFacImportsDet')->constrained('facImportsDets')->cascadeOnDelete();
-    $table->decimal('cantidad', 12, 4);
-    $table->decimal('pesoG', 12, 4);
-    $table->index(['IdFacExportsDet', 'IdFacImportsDet'], 'idx_exports_mats_imports');
-});
+        Schema::create('facExportsDets', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('IdFactura')->constrained('facturas')->cascadeOnDelete();
+            $table->foreignId('IdBandeja')->nullable()->constrained('bandejas')->nullOnDelete();
+            $table->string('productoFinal', 100);
+            $table->string('arancel', 20);
+            $table->integer('cantidad');
+            $table->decimal('precioU', 12, 4)->nullable();
+            $table->decimal('valorA', 6, 2)->nullable();
+            $table->decimal('pesoG', 12, 4);
+            $table->decimal('castingIni', 12, 4);
+            $table->decimal('castingG', 12, 4);
+            $table->decimal('piedrasG', 12, 4)->default(0);
+            $table->decimal('diamantesG', 12, 4)->default(0);
+            $table->decimal('miscG', 12, 4)->default(0);
+            $table->json('adicionales')->nullable();
+            $table->index(['IdFactura', 'IdBandeja']);
+        });
+        Schema::create('facExportsMats', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('IdFacExportsDet')->constrained('facExportsDets')->cascadeOnDelete();
+            $table->foreignId('IdFacImportsDet')->constrained('facImportsDets')->cascadeOnDelete();
+            $table->decimal('cantidad', 12, 4);
+            $table->decimal('pesoG', 12, 4);
+            $table->index(['IdFacExportsDet', 'IdFacImportsDet'], 'idx_exports_mats_imports');
+        });
 
     }
 };

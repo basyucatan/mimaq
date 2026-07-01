@@ -48,41 +48,49 @@ class Bandejas extends Component
     #[Computed]
     public function filteredBandejas()
     {
-        $query = Bandeja::query();
+        $query = Bandeja::with(['ultimoMovimiento.proceso.depto', 'folio.lote.orden.cliente', 'folio.estilo']);
         if (!empty($this->keyWord)) {
             $partes = explode('-', $this->keyWord);
             $totalPartes = count($partes);
-            if ($totalPartes === 1 && strlen($partes[0]) === 4 && is_numeric($partes[0])) {
-                $query->whereHas('folio', function ($q) use ($partes) {
+            if ($totalPartes >= 1 && strlen($partes[0]) === 4 && is_numeric($partes[0])) {
+                $query->whereHas('folio', function ($q) use ($partes, $totalPartes) {
                     $q->where('periodo', $partes[0]);
+                    if ($totalPartes >= 2 && !empty($partes[1])) {
+                        $q->where('consecutivoMensual', $partes[1]);
+                    }
                 });
-            } elseif ($totalPartes === 2 && strlen($partes[0]) === 4 && !empty($partes[1])) {
-                $query->whereHas('folio', function ($q) use ($partes) {
-                    $q->where('periodo', $partes[0])->where('consecutivoMensual', $partes[1]);
-                });
-            } elseif ($totalPartes === 3 && strlen($partes[0]) === 4 && !empty($partes[1]) && !empty($partes[2])) {
-                $query->whereHas('folio', function ($q) use ($partes) {
-                    $q->where('periodo', $partes[0])->where('consecutivoMensual', $partes[1]);
-                });
-                $query->where('numeroBandeja', $partes[2]);
+                if ($totalPartes >= 3 && !empty($partes[2])) {
+                    $query->where('numeroBandeja', $partes[2]);
+                }
             } else {
                 $buscarParcial = '%' . $this->keyWord . '%';
                 $query->where(function ($q) use ($buscarParcial) {
-                    $q->whereHas('folio', function ($subQuery) use ($buscarParcial) {
-                        $subQuery->where('consecutivoMensual', 'LIKE', $buscarParcial)
+                    $q->whereHas('folio', function ($sub) use ($buscarParcial) {
+                        $sub->where('consecutivoMensual', 'LIKE', $buscarParcial)
                             ->orWhere('jobStyle', 'LIKE', $buscarParcial)
                             ->orWhere('productoFinal', 'LIKE', $buscarParcial)
-                            ->orWhereHas('lote', function ($qLote) use ($buscarParcial) {
-                                $qLote->where('lote', 'LIKE', $buscarParcial)
-                                    ->orWhereHas('orden', function ($qOrden) use ($buscarParcial) {
-                                        $qOrden->where('orden', 'LIKE', $buscarParcial)
-                                            ->orWhereHas('cliente', function ($qCliente) use ($buscarParcial) {
-                                                $qCliente->where('cliente', 'LIKE', $buscarParcial);
+                            ->orWhere('abreviatura', 'LIKE', $buscarParcial)
+                            ->orWhereHas('estilo', function ($qE) use ($buscarParcial) {
+                                $qE->where('estilo', 'LIKE', $buscarParcial);
+                            })
+                            ->orWhereHas('lote', function ($qL) use ($buscarParcial) {
+                                $qL->where('lote', 'LIKE', $buscarParcial)
+                                    ->orWhereHas('orden', function ($qO) use ($buscarParcial) {
+                                        $qO->where('orden', 'LIKE', $buscarParcial)
+                                            ->orWhereHas('cliente', function ($qC) use ($buscarParcial) {
+                                                $qC->where('cliente', 'LIKE', $buscarParcial);
                                             });
                                     });
                             });
-                    })->orWhere('id', 'LIKE', $buscarParcial)
-                        ->orWhere('estatus', 'LIKE', $buscarParcial);
+                    })
+                    ->orWhere('id', 'LIKE', $buscarParcial)
+                    ->orWhere('estatus', 'LIKE', $buscarParcial)
+                    ->orWhereHas('ultimoMovimiento.proceso', function ($qP) use ($buscarParcial) {
+                        $qP->where('proceso', 'LIKE', $buscarParcial)
+                            ->orWhereHas('depto', function ($qD) use ($buscarParcial) {
+                                $qD->where('depto', 'LIKE', $buscarParcial);
+                            });
+                    });
                 });
             }
         }
