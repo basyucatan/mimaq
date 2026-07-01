@@ -34,10 +34,11 @@ class Folio extends Model
         $cliente = $orden ? $orden->cliente : null;
         $datos = array_filter([
             $cliente->cliente ?? null,
-            $orden->orden ?? null,
-            $lote->lote ?? null
+            $lote->lote ?? null,
+            $this->estilo->estilo ?? null,
+            $this->abreviatura ?? null
         ]);
-        return implode(' | ', $datos);
+        return implode('📌', $datos);
     }
     public function getCodigoFolioAttribute()
     {

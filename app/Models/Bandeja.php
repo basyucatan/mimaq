@@ -18,10 +18,10 @@ class Bandeja extends Model
     protected $casts = [
         'adicionales' => 'array'
     ];
-public function ultimoMovimiento()
-{
-    return $this->hasOne(Bandejasmov::class, 'IdBandeja', 'id')->latestOfMany();
-}
+    public function ultimoMovimiento()
+    {
+        return $this->hasOne(Bandejasmov::class, 'IdBandeja', 'id')->latestOfMany();
+    }
     protected static function booted()
     {
         static::creating(function ($bandeja) {

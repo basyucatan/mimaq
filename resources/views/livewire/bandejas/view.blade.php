@@ -57,12 +57,11 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Bandeja</th>
-                                <th class="text-center">Factura</th>
-                                <th class="text-center">Piezas</th>
-                                <th class="text-center">Cliente | Orden | Lote</th>
+                                <th class="text-center">Cliente | Lote | Estilo | Producto</th>
                                 <th class="text-center">Proceso Actual</th>
                                 <th class="text-center">Bóveda</th>
                                 <th class="text-center">Estatus</th>
+                                <th class="text-center">Factura</th>
                                 <th class="text-end pe-3">Acciones</th>
                             </tr>
                         </thead>
@@ -71,12 +70,7 @@
                                 <tr>
                                     <td class="text-center">
                                         <span class="badge bg-secondary text-white">{{ $row->codigoBandeja }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="text-dark">{{ $row->factura->factura ?? '' }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <strong class="fs-6 text-primary">{{ $row->cantidad }} pzs</strong>
+                                        <strong class="text-primary">{{ $row->cantidad }} Pz</strong>
                                     </td>
                                     <td class="text-center">
                                         {{ $row->folio->ascendencia ?? '' }}
@@ -104,10 +98,16 @@
                                                 style="cursor: pointer;">
                                         </div>
                                     </td>
+                                    <td class="text-center">
+                                        <span class="text-dark">{{ $row->factura->factura ?? '' }}</span>
+                                    </td>
                                     <td>
                                         <div class="d-flex justify-content-end align-items-center gap-1">
                                             <button wire:model = "selected_id" wire:click="traspasar({{ $row->id }})"
                                                 class="bot botNaranja botChico" title="Traspasar">➡️
+                                            </button>
+                                            <button wire:model = "selected_id" wire:click="recibir({{ $row->id }})"
+                                                class="bot botNaranja botChico" title="Traspasar">⬇️
                                             </button>
                                             <button wire:click="verHistorial({{ $row->id }})"
                                                 class="bot botNegro botChico" title="Historial">

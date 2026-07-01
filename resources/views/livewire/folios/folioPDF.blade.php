@@ -65,37 +65,32 @@
                             <td class="negrita">{{ $bandeja->cantidad }}</td>
                             <td class="gris negrita">Pzas Folio</td>
                             <td>{{ $folio->cantidad }}</td>
-                            <td class="gris negrita">Pzas Lote</td>
-                            <td>{{ $folio->lote?->adicionales['piezasLote'] ?? '' }}</td>
-                        </tr>
-                        <tr>
                             <td class="gris negrita">Vence</td>
                             <td>{{ \Carbon\Carbon::parse($folio->fechaVen)->format('d/M/Y') }}</td>
-                            <td class="gris negrita">Cliente</td>
-                            <td colspan="3">{{ $folio->lote?->orden?->cliente?->cliente ?? '1388 85B' }}</td>
                         </tr>
-                        @if(($folio->alertas['penalty'] ?? false) || ($folio->alertas['rush'] ?? false) || !empty($folio->alertas['alertaGeneral'] ?? ''))
-                            <tr>
-                                <td class="gris negrita">Alertas</td>
-                                <td colspan="5">
-                                    <table style="width: 100%; border-collapse: collapse; margin: 0;">
-                                        <tr>
-                                            <td style="border: none; padding: 0;">
-                                                @if($folio->alertas['rush'] ?? false)
-                                                    <span style="background-color: #dc3545; color: #ffffff; padding: 1px 4px; font-size: 7.5pt; font-weight: bold; border-radius: 2px; margin-right: 5px;">RUSH</span>
-                                                @endif
-                                                @if($folio->alertas['penalty'] ?? false)
-                                                    <span style="background-color: #ffc107; color: #000000; padding: 1px 4px; font-size: 7.5pt; font-weight: bold; border-radius: 2px; margin-right: 5px;">PENALTY</span>
-                                                @endif
-                                                @if(!empty($folio->alertas['alertaGeneral'] ?? ''))
-                                                    <span style="font-size: 8pt; color: #b00000; font-weight: bold;">{{ $folio->alertas['alertaGeneral'] }}</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        @endif
+                        <tr>
+                            <td class="gris negrita">Cliente</td>
+                            <td>{{ $folio->lote?->orden?->cliente?->cliente ?? '' }}</td>
+                            @if(($folio->alertas['penalty'] ?? false) || ($folio->alertas['rush'] ?? false) || !empty($folio->alertas['alertaGeneral'] ?? ''))
+                                    <td class="gris negrita">Alertas</td>
+                                    <td colspan="3">
+                                        <table style="width: 100%; border-collapse: collapse; margin: 0;">
+                                            <tr>
+                                                <td style="border: none; padding: 0;">
+                                                    @if($folio->alertas['rush'] ?? false)
+                                                        <span style="background-color: #dc3545; color: #ffffff; padding: 1px 4px; font-size: 7.5pt; font-weight: bold; border-radius: 2px; margin-right: 5px;">RUSH</span>
+                                                    @endif
+                                                    @if($folio->alertas['penalty'] ?? false)
+                                                        <span style="background-color: #ffc107; color: #000000; padding: 1px 4px; font-size: 7.5pt; font-weight: bold; border-radius: 2px; margin-right: 5px;">PENALTY</span>
+                                                    @endif
+                                                    @if(!empty($folio->alertas['alertaGeneral'] ?? ''))
+                                                        <span style="font-size: 8pt; color: #b00000; font-weight: bold;">{{ $folio->alertas['alertaGeneral'] }}</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                            @endif
                     </table>
                     <div class="grupo">II. Observaciones de Manufactura</div>
                     <div>

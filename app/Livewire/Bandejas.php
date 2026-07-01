@@ -2,127 +2,24 @@
 namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Bandeja;
-use App\Models\Bandejasmov;
 use Livewire\Attributes\Computed;
-use App\Models\{Util, Empleado, Facexportsdet, Facexportsmat};
 use Illuminate\Support\Facades\DB;
-use App\Traits\Utilfun;
+use App\Models\{Util, Bandeja, Bandejasmov};
+use App\Traits\{TraspasoManager, Utilfun};
 class Bandejas extends Component
 {
-    use WithPagination, Utilfun;
+    use WithPagination, Utilfun, TraspasoManager;
     protected $paginationTheme = 'bootstrap';
-    public $verModalBandeja=false, $verModalTraspaso = false, $verModalDividir = false,
-        $verModalUnir = false, $verModalHistorial = false,
-        $selected_id, $keyWord, $IdFolio, $IdFactura, $codigoBandeja,
-        $IdFacturaExport, $cantidad, $castingIni, $castingFin, $piedrasG, 
-        $piezasADividir = 1, $IdBandejaDestino,
-        $diamantesG, $miscG, $IdProcesoActual, $enBoveda, $habilitada, $estatus;
+    public $verModalBandeja = false, $verModalTraspaso = false, $verModalDividir = false,
+    $verModalUnir = false, $verModalHistorial = false,
+    $selected_id, $keyWord, $IdFolio, $IdFactura, $codigoBandeja,
+    $IdFacturaExport, $cantidad, $castingIni, $castingFin, $piedrasG,
+    $piezasADividir = 1, $IdBandejaDestino,
+    $diamantesG, $miscG, $IdProcesoActual, $enBoveda, $habilitada, $estatus;
     public $adicionales = [], $procesos = [], $empleados = [], $facturas = [];
-    public $idBandejaTraspaso, $idProcesoDestino, $empTraspaso, $regTraspaso, 
-        $pesoEntrada, $pesoSalida;
-public function exportar()
-{
-    if (empty($this->IdFactura)) {
-        return;
-    }
-    $bandejas = Bandeja::where('estatus', 'terminado')
-        ->where('adicionales->IdFactura', $this->IdFactura)
-        ->with([
-            'folio.estilo.clase.arancel',
-            'folio.foliosmats.material.clase',
-            'folio.foliosmats.facImportsDet'
-        ])
-        ->get();
-    if ($bandejas->isEmpty()) {
-        return;
-    }
-    foreach ($bandejas as $bandeja) {
-        $folio = $bandeja->folio;
-        if (!$folio || $folio->cantidad <= 0) {
-            continue;
-        }
-        $arancel = $folio->estilo?->clase?->arancel?->arancel ?? '';
-        $pesoTotal = $bandeja->castingFin + $bandeja->piedrasG + $bandeja->diamantesG + $bandeja->miscG;
-        $exportDet = FacExportsDet::create([
-            'IdFactura' => $this->IdFactura,
-            'IdBandeja' => $bandeja->id,
-            'productoFinal' => $folio->productoFinal ?? '--',
-            'arancel' => $arancel,
-            'cantidad' => $bandeja->cantidad,
-            'precioU' => $folio->precioU(),
-            'pesoG' => $pesoTotal,
-            'castingIni' => $bandeja->castingIni,
-            'castingG' => $bandeja->castingFin,
-            'piedrasG' => $bandeja->piedrasG,
-            'diamantesG' => $bandeja->diamantesG,
-            'miscG' => $bandeja->miscG,
-            'adicionales' => null
-        ]);
-        $composicion = $folio->adicionales['composicion'] ?? [];
-        foreach ($composicion as $indice => $datosComponente) {
-            $cantidadPorPieza = $datosComponente['cantidad'] ?? 0;
-            $idTipo = $datosComponente['idTipo'] ?? null;
-            $cantidadRequeridaBandeja = $cantidadPorPieza * $bandeja->cantidad;
-            if ($cantidadRequeridaBandeja <= 0 || !$idTipo) {
-                continue;
-            }
-            $materialesFolio = $folio->foliosmats->filter(function ($item) use ($idTipo) {
-                return $item->IdTipo == $idTipo;
-            })->sortBy('id');
-            foreach ($materialesFolio as $mat) {
-                if ($cantidadRequeridaBandeja <= 0) {
-                    break;
-                }
-                $consumidoPreviamente = Facexportsmat::where('IdFacImportsDet', $mat->IdFacImportsDet)
-                    ->whereHas('facExportsDet', function ($query) use ($folio) {
-                        $query->where('IdBandeja', '!=', 0)
-                            ->whereHas('bandeja', function ($q) use ($folio) {
-                                $q->where('IdFolio', $folio->id);
-                            });
-                    })->sum('cantidad');
-                $saldoDisponibleInm = $mat->cantidad - $consumidoPreviamente;
-                if ($saldoDisponibleInm <= 0) {
-                    continue;
-                }
-                $pesoUnitarioImportacion = $mat->cantidad > 0 ? ($mat->pesoG / $mat->cantidad) : 0;
-                $cantidadADescargar = min($cantidadRequeridaBandeja, $saldoDisponibleInm);
-                $pesoADescargar = $cantidadADescargar * $pesoUnitarioImportacion;
-                Facexportsmat::create([
-                    'IdFacExportsDet' => $exportDet->id,
-                    'IdFacImportsDet' => $mat->IdFacImportsDet,
-                    'cantidad' => $cantidadADescargar,
-                    'pesoG' => $pesoADescargar
-                ]);
-                $cantidadRequeridaBandeja -= $cantidadADescargar;
-            }
-        }
-        $bandeja->IdFacturaExport = $this->IdFactura;
-        $bandeja->estatus = 'exportado';
-        $bandeja->save();
-    }
-    $this->dispatch('render');
-}
-public function terminar($id)
-{
-    $this->validate([
-        'IdFactura' => 'required'
-    ]);
-    $bandeja = Bandeja::find($id);
-    if ($bandeja) {
-        $adicionales = $bandeja->adicionales ?? [];
-        if ($bandeja->estatus === 'terminado') {
-            $bandeja->estatus = 'proceso';
-            unset($adicionales['IdFactura']);
-        } else {
-            $bandeja->estatus = 'terminado';
-            $adicionales['IdFactura'] = $this->IdFactura;
-        }
-        $bandeja->adicionales = $adicionales;
-        $bandeja->save();
-    }
-}
-    public function elegirFactura(){}
+    public $idBandejaTraspaso, $idProcesoDestino, $empTraspaso, $regTraspaso,
+    $pesoEntrada, $pesoSalida;
+    public function elegirFactura(){} //habilitar el envío a export
     public function verHistorial($id)
     {
         $this->selected_id = $id;
@@ -133,139 +30,65 @@ public function terminar($id)
         $this->verModalHistorial = false;
         $this->reset('selected_id');
     }
-    public function traspasar($id){
-        $bandeja = Bandeja::find($id);
-        if ($bandeja) {
-            $this->iniciarTraspaso($bandeja->id);
-        } else {
-            $this->dispatch('error', ['message' => 'La bandeja escaneada no existe.']);
-        }
-    }    
-    public function escanear()
+    public function mount()
     {
-        if (empty($this->selected_id)) {return;}
-        $this->traspasar($this->selected_id);
-        $this->reset('selected_id');
-    } 
-    public function iniciarTraspaso($id)
-    {
-        $this->idBandejaTraspaso = $id;
-        $bandeja = Bandeja::findOrFail($id);
-        $this->codigoBandeja = $bandeja->codigoBandeja;
-        $this->idProcesoDestino = null;
-        $ultimoMov = Bandejasmov::where('IdBandeja', $id)
-            ->latest('id')
-            ->first();
-        if ($ultimoMov) {
-            $this->pesoEntrada = $ultimoMov->pesoSalida;
-        } else {
-            $this->pesoEntrada = null;
-        }
-        $this->empTraspaso = null;
-        $this->regTraspaso = null;
-        $this->pesoSalida = null;
-        $this->verModalTraspaso = true;
-    }
-
-public function guardarTraspaso()
-{
-    $this->validate([
-        'idProcesoDestino' => 'required|exists:procesos,id',
-        'empTraspaso' => 'required|exists:empleados,numero',
-        'regTraspaso' => 'required|exists:empleados,numero',
-        'pesoSalida' => 'required|numeric',
-    ]);
-    $empleado = Empleado::where('numero', $this->empTraspaso)->first();
-    $registrador = Empleado::where('numero', $this->regTraspaso)->first();
-    $movimientoActivo = Bandejasmov::where('IdBandeja', $this->idBandejaTraspaso)
-        ->whereNull('fechaHSalida')
-        ->latest('id')
-        ->first();
-    if ($movimientoActivo) {
-        $movimientoActivo->update([
-            'pesoSalida' => $this->pesoSalida,
-            'fechaHSalida' => now()->tz('America/Mexico_City')
-        ]);
-    }
-    Bandejasmov::create([
-        'IdBandeja' => $this->idBandejaTraspaso,
-        'IdProceso' => $this->idProcesoDestino,
-        'IdEmpleado' => $empleado->id,
-        'IdRegistrador' => $registrador->id,
-        'pesoEntrada' => $this->pesoEntrada,
-        'pesoSalida' => $this->pesoSalida,
-        'fechaHEntrada' => now()->tz('America/Mexico_City'),
-        'fechaHSalida' => now()->tz('America/Mexico_City'),
-    ]);
-    $this->verModalTraspaso = false;
-    $this->reset([
-        'idBandejaTraspaso',
-        'idProcesoDestino',
-        'empTraspaso',
-        'pesoEntrada',
-        'pesoSalida'
-    ]);
-}
-    public function cerrarModalTraspaso()
-    {
-        $this->verModalTraspaso = false;
-        $this->reset(['idBandejaTraspaso', 'idProcesoDestino', 'empTraspaso', 'pesoEntrada', 'pesoSalida']);
-    }       
-    public function mount(){
         $this->procesos = util::getArray('procesos');
         $this->empleados = util::getArray('empleados');
         $this->facturas = DB::table('facturas')
-            ->join('pedimentos','pedimentos.id','=','facturas.IdPedimento')
+            ->join('pedimentos', 'pedimentos.id', '=', 'facturas.IdPedimento')
             ->where('pedimentos.regimen', 'RT')
             ->orderby('facturas.fecha', 'desc')
-            ->pluck('facturas.factura','facturas.id')
-            ->toArray();         
+            ->pluck('facturas.factura', 'facturas.id')
+            ->toArray();
     }
-    public function updatedKeyWord(){$this->resetPage();}
+    public function updatedKeyWord()
+    {
+        $this->resetPage();
+    }
     #[Computed]
-public function filteredBandejas()
-{
-    $query = Bandeja::query();
-    if (!empty($this->keyWord)) {
-        $partes = explode('-', $this->keyWord);
-        $totalPartes = count($partes);
-        if ($totalPartes === 1 && strlen($partes[0]) === 4 && is_numeric($partes[0])) {
-            $query->whereHas('folio', function ($q) use ($partes) {
-                $q->where('periodo', $partes[0]);
-            });
-        } elseif ($totalPartes === 2 && strlen($partes[0]) === 4 && !empty($partes[1])) {
-            $query->whereHas('folio', function ($q) use ($partes) {
-                $q->where('periodo', $partes[0])->where('consecutivoMensual', $partes[1]);
-            });
-        } elseif ($totalPartes === 3 && strlen($partes[0]) === 4 && !empty($partes[1]) && !empty($partes[2])) {
-            $query->whereHas('folio', function ($q) use ($partes) {
-                $q->where('periodo', $partes[0])->where('consecutivoMensual', $partes[1]);
-            });
-            $query->where('numeroBandeja', $partes[2]);
-        } else {
-            $buscarParcial = '%' . $this->keyWord . '%';
-            $query->where(function ($q) use ($buscarParcial) {
-                $q->whereHas('folio', function ($subQuery) use ($buscarParcial) {
-                    $subQuery->where('consecutivoMensual', 'LIKE', $buscarParcial)
-                        ->orWhere('jobStyle', 'LIKE', $buscarParcial)
-                        ->orWhere('productoFinal', 'LIKE', $buscarParcial)
-                        ->orWhereHas('lote', function ($qLote) use ($buscarParcial) {
-                            $qLote->where('lote', 'LIKE', $buscarParcial)
-                                ->orWhereHas('orden', function ($qOrden) use ($buscarParcial) {
-                                    $qOrden->where('orden', 'LIKE', $buscarParcial)
-                                        ->orWhereHas('cliente', function ($qCliente) use ($buscarParcial) {
-                                            $qCliente->where('cliente', 'LIKE', $buscarParcial);
-                                        });
-                                });
-                        });
-                })->orWhere('id', 'LIKE', $buscarParcial)
-                ->orWhere('estatus', 'LIKE', $buscarParcial);
-            });
+    public function filteredBandejas()
+    {
+        $query = Bandeja::query();
+        if (!empty($this->keyWord)) {
+            $partes = explode('-', $this->keyWord);
+            $totalPartes = count($partes);
+            if ($totalPartes === 1 && strlen($partes[0]) === 4 && is_numeric($partes[0])) {
+                $query->whereHas('folio', function ($q) use ($partes) {
+                    $q->where('periodo', $partes[0]);
+                });
+            } elseif ($totalPartes === 2 && strlen($partes[0]) === 4 && !empty($partes[1])) {
+                $query->whereHas('folio', function ($q) use ($partes) {
+                    $q->where('periodo', $partes[0])->where('consecutivoMensual', $partes[1]);
+                });
+            } elseif ($totalPartes === 3 && strlen($partes[0]) === 4 && !empty($partes[1]) && !empty($partes[2])) {
+                $query->whereHas('folio', function ($q) use ($partes) {
+                    $q->where('periodo', $partes[0])->where('consecutivoMensual', $partes[1]);
+                });
+                $query->where('numeroBandeja', $partes[2]);
+            } else {
+                $buscarParcial = '%' . $this->keyWord . '%';
+                $query->where(function ($q) use ($buscarParcial) {
+                    $q->whereHas('folio', function ($subQuery) use ($buscarParcial) {
+                        $subQuery->where('consecutivoMensual', 'LIKE', $buscarParcial)
+                            ->orWhere('jobStyle', 'LIKE', $buscarParcial)
+                            ->orWhere('productoFinal', 'LIKE', $buscarParcial)
+                            ->orWhereHas('lote', function ($qLote) use ($buscarParcial) {
+                                $qLote->where('lote', 'LIKE', $buscarParcial)
+                                    ->orWhereHas('orden', function ($qOrden) use ($buscarParcial) {
+                                        $qOrden->where('orden', 'LIKE', $buscarParcial)
+                                            ->orWhereHas('cliente', function ($qCliente) use ($buscarParcial) {
+                                                $qCliente->where('cliente', 'LIKE', $buscarParcial);
+                                            });
+                                    });
+                            });
+                    })->orWhere('id', 'LIKE', $buscarParcial)
+                        ->orWhere('estatus', 'LIKE', $buscarParcial);
+                });
+            }
         }
+        return $query->latest()->paginate(12);
     }
-    return $query->latest()->paginate(12);
-}
-	public function render()
+    public function render()
     {
         return view('livewire.bandejas.view', [
             'bandejas' => $this->filteredBandejas,
@@ -274,10 +97,13 @@ public function filteredBandejas()
     }
     public function compatibles()
     {
-        if (!$this->selected_id) return collect();
+        if (!$this->selected_id)
+            return collect();
         $bandejaActual = Bandeja::find($this->selected_id);
-        if (!$bandejaActual) return collect();
-        if ($bandejaActual->IdFacturaExport) return collect();
+        if (!$bandejaActual)
+            return collect();
+        if ($bandejaActual->IdFacturaExport)
+            return collect();
         return Bandeja::where('IdFolio', $bandejaActual->IdFolio)
             ->where('id', '!=', $this->selected_id)
             ->where('IdProcesoActual', $bandejaActual->IdProcesoActual)
@@ -293,7 +119,7 @@ public function filteredBandejas()
     }
     public function resetInput()
     {
-        $this->resetExcept('procesos', 'empleados','keyWord', 'facturas');
+        $this->resetExcept('procesos', 'empleados', 'keyWord', 'facturas');
     }
     public function edit($id)
     {
@@ -311,7 +137,7 @@ public function filteredBandejas()
     {
         $this->resetInput();
         $this->verModalBandeja = true;
-    }    
+    }
     public function save()
     {
         $this->validate([
@@ -336,18 +162,18 @@ public function filteredBandejas()
         Bandeja::updateOrCreate(
             ['id' => $this->selected_id],
             [
-                'IdFolio' => $this-> IdFolio,
-                'IdFacturaExport' => $this-> IdFacturaExport,
-                'cantidad' => $this-> cantidad,
-                'castingIni' => $this-> castingIni,
-                'castingFin' => $this-> castingFin,
-                'piedrasG' => $this-> piedrasG,
-                'diamantesG' => $this-> diamantesG,
-                'miscG' => $this-> miscG,
-                'IdProcesoActual' => $this-> IdProcesoActual,
-                'enBoveda' => $this-> enBoveda,
-                'habilitada' => $this-> habilitada,
-                'estatus' => $this-> estatus
+                'IdFolio' => $this->IdFolio,
+                'IdFacturaExport' => $this->IdFacturaExport,
+                'cantidad' => $this->cantidad,
+                'castingIni' => $this->castingIni,
+                'castingFin' => $this->castingFin,
+                'piedrasG' => $this->piedrasG,
+                'diamantesG' => $this->diamantesG,
+                'miscG' => $this->miscG,
+                'IdProcesoActual' => $this->IdProcesoActual,
+                'enBoveda' => $this->enBoveda,
+                'habilitada' => $this->habilitada,
+                'estatus' => $this->estatus
             ]
         );
         $this->resetInput();
@@ -381,14 +207,15 @@ public function filteredBandejas()
         $this->piezasADividir = 1;
         $this->verModalDividir = true;
     }
-	public function procesarDivision()
+    public function procesarDivision()
     {
         $this->validate([
             'piezasADividir' => 'required|integer|min:1|max:' . ($this->cantidad - 1)
         ]);
         DB::transaction(function () {
             $origen = Bandeja::lockForUpdate()->findOrFail($this->selected_id);
-            if ($origen->IdFacturaExport) return;
+            if ($origen->IdFacturaExport)
+                return;
             $piezasOriginales = $origen->cantidad;
             $factorNueva = $this->piezasADividir / $piezasOriginales;
             $factorOrigen = ($piezasOriginales - $this->piezasADividir) / $piezasOriginales;
@@ -447,7 +274,7 @@ public function filteredBandejas()
         });
         $this->resetInput();
     }
-	public function iniciarUnion($id)
+    public function iniciarUnion($id)
     {
         $bandeja = Bandeja::findOrFail($id);
         if ($bandeja->IdFacturaExport) {
@@ -466,7 +293,8 @@ public function filteredBandejas()
         DB::transaction(function () {
             $origen = Bandeja::lockForUpdate()->findOrFail($this->selected_id);
             $destino = Bandeja::lockForUpdate()->findOrFail($this->IdBandejaDestino);
-            if ($origen->IdFacturaExport || $destino->IdFacturaExport) return;
+            if ($origen->IdFacturaExport || $destino->IdFacturaExport)
+                return;
             if ($origen->IdFolio !== $destino->IdFolio || $origen->IdProcesoActual !== $destino->IdProcesoActual) {
                 return;
             }

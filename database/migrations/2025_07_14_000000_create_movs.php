@@ -152,6 +152,7 @@ return new class extends Migration
             $table->decimal('pesoSalida', 12, 4)->nullable();
             $table->dateTime('fechaHEntrada');
             $table->dateTime('fechaHSalida');
+            $table->json('adicionales')->nullable();
             $table->timestamps();
         });
 Schema::create('facExportsDets', function (Blueprint $table) {
