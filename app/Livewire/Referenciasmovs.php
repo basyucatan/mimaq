@@ -71,8 +71,8 @@ class Referenciasmovs extends Component
         $registro = Referenciasmov::findOrFail($id);
         $this->IdMaterial = $registro->Referencia->IdMaterial;
         $this->fill($registro->toArray());
-        if (is_array($registro->diferencias)) {
-            $soloTexto = collect($registro->diferencias)->first(fn($v, $k) => is_numeric($k));
+        if (is_array($registro->Referencia->diferencias)) {
+            $soloTexto = collect($registro->Referencia->diferencias)->first(fn($v, $k) => is_numeric($k));
             $this->diferencias = $soloTexto;
         }
         $this->verModalReferenciasmov = true;
@@ -91,22 +91,28 @@ public function save()
         'pesoG' => 'required',
     ]);
     $nuevasDiferencias = [];
+    if ($this->diferencias) {
+        $nuevasDiferencias[] = $this->diferencias;
+    }
     if ($this->IdFacImportsDet) {
-        $refFiscal = Facimportsdet::find($this->IdFacImportsDet);
-        if ($refFiscal) {
-            if ($this->IdMaterial != $refFiscal->IdMaterial) {
+        $refImport = Facimportsdet::find($this->IdFacImportsDet);
+        if ($refImport) {
+            if ($this->IdMaterial != $refImport->IdMaterial) {
                 $materialReal = Material::find($this->IdMaterial);
                 $nuevasDiferencias['material'] = "Físicamente llegó: " . ($materialReal->material ?? 'S/N');
             }
-            if ($this->cantidad != $refFiscal->cantidad) {
-                $nuevasDiferencias['cantidad'] = $this->cantidad - $refFiscal->cantidad;
+            if ($this->cantidad != $refImport->cantidad) {
+                $nuevasDiferencias['cantidad'] = $this->cantidad - $refImport->cantidad;
             }
-            if ($this->pesoG != $refFiscal->pesoG) {
-                $nuevasDiferencias['pesoG'] = round($this->pesoG - $refFiscal->pesoG, 4);
+            if ($this->pesoG != $refImport->pesoG) {
+                $nuevasDiferencias['pesoG'] = round($this->pesoG - $refImport->pesoG, 4);
             }
-            $diferenciasActuales = $refFiscal->diferencias ?? [];
+            $diferenciasActuales = $refImport->diferencias ?? [];
+            if (is_array($diferenciasActuales)) {
+                $diferenciasActuales = collect($diferenciasActuales)->reject(fn($v, $k) => is_numeric($k) || $k === 'cantidad' || $k === 'pesoG' || $k === 'material')->toArray();
+            }
             $diferenciasFinales = array_merge($diferenciasActuales, $nuevasDiferencias);
-            $refFiscal->update([
+            $refImport->update([
                 'diferencias' => !empty($diferenciasFinales) ? $diferenciasFinales : null
             ]);
         }
@@ -128,7 +134,6 @@ public function save()
     $this->verModalReferenciasmov = false;
     $this->dispatch('refreshRefsMovs');
 }
-
     public function paginationView()
     {
         return 'livewire.paginacionBase';

@@ -11,11 +11,11 @@ class Bandejas extends Component
     use WithPagination, Utilfun, TraspasoManager;
     protected $paginationTheme = 'bootstrap';
     public $verModalBandeja = false, $verModalTraspaso = false, $verModalDividir = false,
-    $verModalUnir = false, $verModalHistorial = false,
+    $verModalUnir = false, $verModalHistorial = false, 
     $selected_id, $keyWord, $IdFolio, $IdFactura, $codigoBandeja,
     $IdFacturaExport, $cantidad, $castingIni, $castingFin, $piedrasG,
     $piezasADividir = 1, $IdBandejaDestino,
-    $diamantesG, $miscG, $IdProcesoActual, $enBoveda, $habilitada, $estatus;
+    $diamantesG, $miscG, $IdProcesoActual,  $enBoveda, $habilitada, $estatus;
     public $adicionales = [], $procesos = [], $empleados = [], $facturas = [];
     public $idBandejaTraspaso, $idProcesoDestino, $empTraspaso, $regTraspaso,
     $pesoEntrada, $pesoSalida;

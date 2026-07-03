@@ -166,7 +166,7 @@
                                 <input type="number" wire:model="pesoEntrada" class="inpBase" readonly>
                             </div>
                             <div class="col-6">
-                                <label class="etiBase">Peso Salida Proceso Anterior (g)</label>
+                                <label class="etiBase">Peso Salida (g)</label>
                                 <input type="number" wire:model="pesoSalida" class="inpBase">
                                 @error('pesoSalida') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>

@@ -12,9 +12,8 @@ class Referenciasmov extends Model
     public $timestamps = true;
     protected $table = 'referenciasmovs';
     protected $fillable = ['IdFacImportsDet','IdMaterial','IdDeptoOri','IdDeptoDes','tipo','estatus',
-        'cantidad','pesoG','tipoDoc','IdDoc','glosa','diferencias','adicionales'];
+        'cantidad','pesoG','tipoDoc','IdDoc','glosa','adicionales'];
     protected $casts = [
-        'diferencias' => 'array',
         'adicionales' => 'array'
     ];
     public function getDifsFormatAttribute()

@@ -113,22 +113,6 @@ trait TraspasoManager
             $this->dispatch('error', ['message' => 'La bandeja no existe.']);
         }
     }
-    public function recibir($id)
-    {
-        $bandeja = Bandeja::find($id);
-        if (!$bandeja) {
-            $this->dispatch('error', ['message' => 'La bandeja no existe.']);
-            return;
-        }
-        $ultimoMov = $bandeja->ultimoMovimiento;
-        if ($ultimoMov) {
-            $this->pesoEntrada = $ultimoMov->pesoEntrada;
-            $this->empTraspaso = $ultimoMov->empTraspaso;
-            $this->regTraspaso = $ultimoMov->regTraspaso;
-            $this->pesoSalida = null;
-        }
-        $this->verModalTraspaso = true;
-    }
     public function escanear()
     {
         if (empty($this->selected_id)) {
@@ -141,12 +125,16 @@ trait TraspasoManager
     {
         $this->idBandejaTraspaso = $id;
         $bandeja = Bandeja::findOrFail($id);
+        if ($bandeja->IdFacturaExport) {
+            $this->alerta('⛔ Bandeja ya integrada a Exportación.', 'warning');
+            return;
+        }
         $this->codigoBandeja = $bandeja->codigoBandeja;
         $this->idProcesoDestino = null;
         $ultimoMov = $bandeja->ultimoMovimiento;
-        if ($ultimoMov) {
+        if($ultimoMov->fechaHSalida){ //Entrada
             $this->pesoEntrada = $ultimoMov->pesoSalida;
-        } else {
+        } else { //Salida
             $this->pesoEntrada = null;
         }
         $this->empTraspaso = null;

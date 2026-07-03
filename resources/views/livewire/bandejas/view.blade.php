@@ -106,9 +106,6 @@
                                             <button wire:model = "selected_id" wire:click="traspasar({{ $row->id }})"
                                                 class="bot botNaranja botChico" title="Traspasar">➡️
                                             </button>
-                                            <button wire:model = "selected_id" wire:click="recibir({{ $row->id }})"
-                                                class="bot botNaranja botChico" title="Traspasar">⬇️
-                                            </button>
                                             <button wire:click="verHistorial({{ $row->id }})"
                                                 class="bot botNegro botChico" title="Historial">
                                                 📈
