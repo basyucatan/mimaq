@@ -151,7 +151,7 @@ return new class extends Migration {
             $table->decimal('pesoEntrada', 12, 4);
             $table->decimal('pesoSalida', 12, 4)->nullable();
             $table->dateTime('fechaHEntrada');
-            $table->dateTime('fechaHSalida');
+            $table->dateTime('fechaHSalida')->nullable();
             $table->json('adicionales')->nullable();
             $table->timestamps();
         });

@@ -104,81 +104,89 @@ trait TraspasoManager
             $bandeja->save();
         }
     }
-    public function traspasar($id)
-    {
-        $bandeja = Bandeja::find($id);
-        if ($bandeja) {
-            $this->iniciarTraspaso($bandeja->id);
-        } else {
-            $this->dispatch('error', ['message' => 'La bandeja no existe.']);
-        }
-    }
     public function escanear()
     {
         if (empty($this->selected_id)) {
             return;
         }
-        $this->traspasar($this->selected_id);
+        $this->iniciarTraspaso($this->selected_id);
         $this->reset('selected_id');
     }
-    public function iniciarTraspaso($id)
-    {
-        $this->idBandejaTraspaso = $id;
-        $bandeja = Bandeja::findOrFail($id);
-        if ($bandeja->IdFacturaExport) {
-            $this->alerta('⛔ Bandeja ya integrada a Exportación.', 'warning');
-            return;
-        }
-        $this->codigoBandeja = $bandeja->codigoBandeja;
-        $this->idProcesoDestino = null;
-        $ultimoMov = $bandeja->ultimoMovimiento;
-        if($ultimoMov->fechaHSalida){ //Entrada
-            $this->pesoEntrada = $ultimoMov->pesoSalida;
-        } else { //Salida
-            $this->pesoEntrada = null;
-        }
-        $this->empTraspaso = null;
-        $this->regTraspaso = null;
-        $this->pesoSalida = null;
-        $this->verModalTraspaso = true;
+public function iniciarTraspaso($id)
+{
+    $this->resetInput();
+    $this->idBandejaTraspaso = $id;
+    $bandeja = Bandeja::findOrFail($id);
+    if ($bandeja->IdFacturaExport) {
+        $this->alerta('⛔ Bandeja ya integrada a Exportación.', 'warning');
+        return;
+    }
+    $this->codigoBandeja = $bandeja->codigoBandeja;
+    $ultimoMov = $bandeja->ultimoMovimiento;
+    $this->esSalida = $ultimoMov && !$ultimoMov->fechaHSalida;
+    if ($this->esSalida) {
+        $this->pesoEntrada = $ultimoMov->pesoEntrada;
+        $this->idProcesoDestino = $ultimoMov->IdProceso;
+    } else {
+        $this->pesoEntrada = $ultimoMov?->pesoSalida;
+    }
+    $this->verModalTraspaso = true;
+}
+
+public function guardarTraspaso()
+{
+    $ultimoMov = Bandejasmov::where('IdBandeja', $this->idBandejaTraspaso)
+        ->latest('id')
+        ->first();
+
+    $esPrimerMovimiento = is_null($ultimoMov);
+    $esNuevaEntrada = $esPrimerMovimiento || $ultimoMov->fechaHSalida;
+
+    $reglas = [
+        'regTraspaso' => 'required|exists:empleados,numero',
+    ];
+
+    if ($esNuevaEntrada) {
+        $reglas['idProcesoDestino'] = 'required|exists:procesos,id';
+        $reglas['pesoEntrada'] = 'required|numeric|gt:0';
+    } else {
+        $reglas['empTraspaso'] = 'required|exists:empleados,numero';
+        $reglas['pesoSalida'] = 'required|numeric|gt:0';
     }
 
-    public function guardarTraspaso()
-    {
-        $this->validate([
-            'idProcesoDestino' => 'required|exists:procesos,id',
-            'regTraspaso' => 'required|exists:empleados,numero',
-            'pesoSalida' => 'required|numeric',
-        ]);
-        $empleado = Empleado::where('numero', $this->empTraspaso)->first();
-        $registrador = Empleado::where('numero', $this->regTraspaso)->first();
-        $movimientoActivo = Bandejasmov::where('IdBandeja', $this->idBandejaTraspaso)
-            ->whereNull('fechaHSalida')
-            ->latest('id')
-            ->first();
-        if ($movimientoActivo) {
-            $movimientoActivo->update([
-                'pesoSalida' => $this->pesoSalida,
-                'fechaHSalida' => now()->tz('America/Mexico_City')
-            ]);
-        }
+    $this->validate($reglas);
+
+    $registrador = Empleado::where('numero', $this->regTraspaso)->first();
+
+    if ($esNuevaEntrada) {
         Bandejasmov::create([
             'IdBandeja' => $this->idBandejaTraspaso,
             'IdProceso' => $this->idProcesoDestino,
-            'IdEmpleado' => $empleado->id,
+            'IdEmpleado' => null,
             'IdRegistrador' => $registrador->id,
             'pesoEntrada' => $this->pesoEntrada,
-            'pesoSalida' => $this->pesoSalida,
+            'pesoSalida' => null,
             'fechaHEntrada' => now()->tz('America/Mexico_City'),
+            'fechaHSalida' => null,
+        ]);
+    } else {
+        $empleado = Empleado::where('numero', $this->empTraspaso)->first();
+
+        $ultimoMov->update([
+            'IdEmpleado' => $empleado->id,
+            'IdRegistrador' => $registrador->id,
+            'pesoSalida' => $this->pesoSalida,
             'fechaHSalida' => now()->tz('America/Mexico_City'),
         ]);
-        $this->verModalTraspaso = false;
+    }
+
+    $this->verModalTraspaso = false;
+    $this->resetInput();
+}
+    public function resetInput(){
         $this->reset([
-            'idBandejaTraspaso',
-            'idProcesoDestino',
-            'empTraspaso',
-            'pesoEntrada',
-            'pesoSalida'
+            'idProcesoDestino','empTraspaso','regTraspaso','pesoEntrada','pesoSalida',
+            'fechaHEntrada','fechaHSalida'
         ]);
     }
     public function cerrarModalTraspaso()

@@ -141,35 +141,39 @@
                     </div>
                     <div class="cardPrin-body p-3">
                         <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="etiBase">Proceso Destino</label>
-                                <select wire:model="idProcesoDestino" class="inpBase">
-                                    <option value=""></option>
-                                    @foreach ($procesos as $key => $value)
-                                        <option value="{{ $key }}">{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                                @error('idProcesoDestino') <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <label class="etiBase">Empleado</label>
-                                <input type="number" wire:model="empTraspaso" class="inpBase">
-                                @error('empTraspaso') <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <label class="etiBase">Registrador</label>
-                                <input type="number" wire:model="regTraspaso" class="inpBase">
-                                @error('regTraspaso') <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="col-6">
-                                <label class="etiLectura">Peso Entrada (g)</label>
-                                <input type="number" wire:model="pesoEntrada" class="inpBase" readonly>
-                            </div>
-                            <div class="col-6">
-                                <label class="etiBase">Peso Salida (g)</label>
-                                <input type="number" wire:model="pesoSalida" class="inpBase">
-                                @error('pesoSalida') <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
+<div class="col-md-6">
+    <label class="{{ $esSalida ? 'etiLectura' : 'etiBase' }}">Proceso</label>
+    <select wire:model="idProcesoDestino" class="inpBase" @disabled($esSalida)>
+        <option value=""></option>
+        @foreach ($procesos as $key => $value)
+            <option value="{{ $key }}">{{ $value }}</option>
+        @endforeach
+    </select>
+    @error('idProcesoDestino') <span class="text-danger">{{ $message }}</span> @enderror
+</div>
+
+<div class="col-md-3">
+    <label class="etiBase">Empleado</label>
+    <input type="number" wire:model="empTraspaso" class="inpBase">
+    @error('empTraspaso') <span class="text-danger">{{ $message }}</span> @enderror
+</div>
+
+<div class="col-md-3">
+    <label class="etiBase">Registrador</label>
+    <input type="number" wire:model="regTraspaso" class="inpBase">
+    @error('regTraspaso') <span class="text-danger">{{ $message }}</span> @enderror
+</div>
+
+<div class="col-6">
+    <label class="{{ $esSalida ? 'etiLectura' : 'etiBase' }}">Peso Entrada (g)</label>
+    <input type="number" wire:model="pesoEntrada" class="inpBase" @readonly($esSalida)>
+</div>
+
+<div class="col-6">
+    <label class="{{ !$esSalida ? 'etiLectura' : 'etiBase' }}">Peso Salida (g)</label>
+    <input type="number" wire:model="pesoSalida" class="inpBase" @readonly(!$esSalida)>
+    @error('pesoSalida') <span class="text-danger">{{ $message }}</span> @enderror
+</div>
                         </div>
                     </div>
                     <div class="cardPrin-footer d-flex justify-content-end gap-2">
