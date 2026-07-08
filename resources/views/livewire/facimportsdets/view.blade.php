@@ -26,15 +26,15 @@
                                 <i class="bi bi-file-earmark-plus"></i>
                             </button>
                         @endif
-                        <button class="bot botVerde botChico" wire:click="imprimirPL" 
-                            wire:loading.attr="disabled" wire:target="imprimirPL" title="Print Packing List">
-                            <span wire:loading.remove wire:target="imprimirPL"><i class="bi bi-printer"></i></span>
-                            <span wire:loading wire:target="imprimirPL">⏳</span>
-                        </button>
                         <button class="bot botMorado botChico" wire:click="imprimirPLProduccion" 
-                            wire:loading.attr="disabled" wire:target="imprimirPLProduccion" title="Print Packing List">
+                            wire:loading.attr="disabled" wire:target="imprimirPLProduccion" title="Packing List">
                             <span wire:loading.remove wire:target="imprimirPLProduccion"><i class="bi bi-printer"></i></span>
                             <span wire:loading wire:target="imprimirPLProduccion">⏳</span>
+                        </button>
+                        <button class="bot botVerde botChico" wire:click="imprimirPL" 
+                            wire:loading.attr="disabled" wire:target="imprimirPL" title="Packing List Español">
+                            <span wire:loading.remove wire:target="imprimirPL"><i class="bi bi-printer"></i></span>
+                            <span wire:loading wire:target="imprimirPL">⏳</span>
                         </button>
                         <button class="bot botAzul botChico" wire:click="imprimirFactura" 
                             wire:loading.attr="disabled" wire:target="imprimirFactura" title="Print Invoice">

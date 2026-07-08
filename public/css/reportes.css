@@ -8,7 +8,6 @@ body {
 .cabecera {
     width: 100%;
     position: relative;
-    margin-bottom: 15px;
     text-align: center;
 }
 .logo {
@@ -20,7 +19,6 @@ body {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 10px;
     font-family: sans-serif;
     font-size: 10px;
 }
@@ -28,8 +26,7 @@ th {
     background: #001060;
     color: #ffffff;
     padding: 6px 5px;
-    text-transform: uppercase;
-    font-size: 8pt;
+    font-size: 10pt;
     border: none;
     font-weight: bold;
 }
@@ -42,31 +39,34 @@ td {
     vertical-align: middle;
     border: none;
 }
-tr.fila-separadora td {
+tr.separadora td {
     border-bottom: 1px solid #000;
     padding-top: 6px;
     padding-bottom: 4px;
     font-size: 10px;
     background-color: #f8f9fa;
 }
-tr.fila-material td {
+tr.detalle td {
     vertical-align: top;
     border-bottom: 0.1pt solid #e0e0e0;
 }
-tr.fila-subtotal td {
+tr.subtotal td {
     border-top: 1px dashed #000;
     border-bottom: 1px solid #000;
     padding: 4px;
     font-weight: bold;
     background-color: #f1f1f1;
 }
-.total-general-contenedor td {
+.totales {
+    margin-top: 10px;
+}
+.totales td {
     font-size: 11px;
     margin-top: 25px;
 }
-.borde-total-general {
-    border-top: 1px solid #000;
-    border-bottom: 2px double #000;
+.bordes {
+    border-top: 2px double gray;
+    border-bottom: 2px double gray;
 }
 .gris {
     background-color: #f1f8fe;
