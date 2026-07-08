@@ -1,14 +1,23 @@
 <?php
 namespace App\Livewire;
 use Livewire\{Component, WithPagination};
-use App\Models\{Util, Material, Factura, Facimportsdet, Cliente, Orden, 
-    Lote, Foliosmat, Folio, Estilosdet};
+use App\Models\{Cliente, Orden, Lote, Folio, Material, Factura, 
+    Facimportsdet, Estilosdet, Util};
 use Livewire\Attributes\Computed;
-use App\Traits\FacImportsMangaer; 
+use App\Traits\FacImportsManager;
+use App\Traits\Utilfun;
 class Facimportsdets extends Component
 {
-    use WithPagination, FacImportsMangaer;
+    use WithPagination, Utilfun, FacImportsManager;
     protected $paginationTheme = 'bootstrap';
+    public $verModalFacimportsdet = false, $verPrecaptura = false, $verModalImpresiones = false;
+    public $selected_id, $keyWord, $IdFactura, $factura, $arancel;
+    public $IdEntradaMex, $IdOrigen, $IdMaterial, $cantidad, $precioU, $pesoEnUMat,
+        $IdEstilo, $IdFolio, $IdTipo, $unidadP, $forzarGuardado = false,
+        $estiloY, $IdCliente, $orden, $lote, $cantidadEstilo, $pesoG, $IdSize, $IdForma, $kt, $color;
+    public $adicionales = [], $origens = [], $materials = [], $clientes = [], $folios = [],
+        $precaptura = [],
+        $kts = [], $colors = [], $sizes = [], $formas = [], $estilos = [], $tipos = [];
     protected $listeners = [
         'IdFacturaElecta' => 'IdFacturaElecta',
     ];
@@ -55,60 +64,110 @@ class Facimportsdets extends Component
     {
         return view('livewire.facimportsdets.view', ['facimportsdets' => $this->filteredFacimportsdets]);
     }
-public function generarConEstilo()
-{
-    $this->validate([
-        'IdEstilo' => 'required', 
-        'cantidadEstilo' => 'required|numeric',
-        'IdCliente' => 'required',
-        'orden' => 'required',
-        'lote' => 'required|numeric'
-    ]);
-
-    if (!empty($this->IdCliente) && !empty($this->orden) && !empty($this->lote)) {
+    public function generarConEstilo()
+    {
+        $this->validate([
+            'IdEstilo' => 'required',
+            'cantidadEstilo' => 'required|numeric',
+            'IdCliente' => 'required',
+            'orden' => 'required',
+            'lote' => 'required|numeric'
+        ]);
+        $this->precaptura = [];
+        $detalles = Estilosdet::with(['material.clase'])->where('IdEstilo', $this->IdEstilo)->get();
+        foreach ($detalles as $det) {
+            $idTipoDetectado = $det->material?->clase?->IdTipo;
+            $esCasting = ($idTipoDetectado == 1);
+            $esMetalAux = ($idTipoDetectado == 6);
+            $this->precaptura[] = [
+                'IdFactura' => $this->IdFactura,
+                'IdEntradaMex' => '',
+                'IdOrigen' => 2,
+                'IdMaterial' => $det->IdMaterial,
+                'arancel' => null,
+                'cantidad' => $this->cantidadEstilo * $det->cantidad,
+                'precioU' => 1,
+                'pesoEnUMat' => 0,
+                'pesoG' => 0,
+                'IdSize' => $esCasting ? null : $det->IdSize,
+                'IdForma' => $esCasting ? null : $det->IdForma,
+                'IdFolio' => null,
+                'IdEstilo' => $esCasting ? $this->IdEstilo : null,
+                'estiloY' => $esMetalAux ? $det->estiloY : '',
+                'diferencias' => null,
+                'adicionales' => null,
+                'IdTipo' => $idTipoDetectado,
+                'kt' => $esCasting ? '' : null,
+                'color' => $esCasting ? '' : null,
+                'unidadP' => $det->material?->unidadP?->unidad ?? ''
+            ];
+        }
+    }
+    public function agregar()
+    {
+        if (empty($this->precaptura)) return;
         $objCliente = Cliente::find($this->IdCliente);
+        if (!$this->forzarGuardado) {
+            $objOrden = Orden::where('orden', strtoupper($this->orden))->first();
+            if ($objOrden) {
+                $objLote = Lote::where('IdOrden', $objOrden->id)->where('lote', strtoupper($this->lote))->first();
+                if ($objLote) {
+                    $existeEstilo = Folio::where('IdLote', $objLote->id)->where('IdEstilo', $this->IdEstilo)->exists();
+                    if ($existeEstilo) {
+                        $this->forzarGuardado = true;
+                        $this->alerta('El estilo ya existe en este lote. Confirma intentándolo de nuevo.', 'warning',2500);
+                        return;
+                    }
+                }
+            }
+        }
+        $this->forzarGuardado = false;
         $objOrden = Orden::firstOrCreate(['orden' => strtoupper($this->orden)], [
             'IdCliente' => $objCliente->id,
             'fechaVen' => now()->addDays(7),
             'estatus' => 'abierto'
         ]);
         $objLote = Lote::firstOrCreate(['IdOrden' => $objOrden->id, 'lote' => strtoupper($this->lote)]);
-
         $objFolio = new Folio();
         $objFolio->IdLote = $objLote->id;
         $objFolio->precioU = 0;
         $objFolio->fechaVen = $objOrden->fechaVen;
         $objFolio->estatus = 'abierto';
-        
-        // Llamada con los dos parámetros solicitados
         $objFolio->definirProducto($this->IdEstilo, $this->cantidadEstilo);
-        
         $objFolio->save();
-
-        $this->IdFolio = $objFolio->id;
-        $detalles = Estilosdet::where('IdEstilo', $this->IdEstilo)->get();
-
-        foreach ($detalles as $det) {
-            // Aquí asumo que llamas a una función interna o save del trait/componente para los materiales
-            $this->IdMaterial = $det->IdMaterial;
-            $this->IdOrigen = 2;
-            $this->cantidad = $objFolio->cantidad * $det->cantidad;
-            $this->IdFolio = $objFolio->id;
-            $this->IdSize = $det->IdSize;
-            $this->IdForma = $det->IdForma;
-            $this->estiloY = $det->estiloY;
-            $this->pesoEnUMat = 0;
-            $this->precioU = 1;
-            $this->save(); 
+        $idEntradaMex = $this->factura->getNextIdEntradaMex();
+        foreach ($this->precaptura as $linea) {
+            $material = Material::with('Clase.Arancel')->find($linea['IdMaterial']);
+            $adicionales = [
+                'kt' => $linea['kt'] ?? null,
+                'color' => $linea['color'] ?? null
+            ];
+            Facimportsdet::create([
+                'IdFactura' => $this->IdFactura,
+                'IdEntradaMex' => $idEntradaMex++,
+                'IdOrigen' => $linea['IdOrigen'],
+                'IdMaterial' => $linea['IdMaterial'],
+                'IdFolio' => $objFolio->id,
+                'arancel' => $material?->Clase?->Arancel?->arancel,
+                'cantidad' => $linea['cantidad'],
+                'precioU' => $linea['precioU'],
+                'pesoEnUMat' => $linea['pesoEnUMat'],
+                'pesoG' => $material?->getPesoG($linea['pesoEnUMat']) ?? 0,
+                'IdSize' => $linea['IdSize'],
+                'IdForma' => $linea['IdForma'],
+                'IdEstilo' => $linea['IdEstilo'],
+                'estiloY' => $linea['estiloY'],
+                'adicionales' => $adicionales
+            ]);
         }
+        $this->clientes = Util::getArray('clientes');
+        $this->alerta('Estilo agregado', 'success');
+        $this->cancel();
     }
-    
-    $this->clientes = Util::getArray('clientes');
-}
     public function crearEstilo()
     {
         $this->resetInput();
-        $this->verModalEstilos = true;
+        $this->verPrecaptura = true;
     }    
     public function paginationView()
     {

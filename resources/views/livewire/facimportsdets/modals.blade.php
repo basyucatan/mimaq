@@ -33,17 +33,17 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="etiBase">Quantity</label>
-                                    <input wire:model="cantidad" type="text" class="inpBase"  onfocus="this.select()">
+                                    <input wire:model="cantidad" type="text" class="inpBase">
                                     @error('cantidad') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-2">
                                     <label class="etiBase">Unit Price</label>
-                                    <input wire:model="precioU" type="text" class="inpBase"  onfocus="this.select()">
+                                    <input wire:model="precioU" type="text" class="inpBase">
                                     @error('precioU') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>                            
                                 <div class="col-md-2"> 
                                     <label class="etiBase">Weight ({{ $unidadP ?? '' }})</label>
-                                    <input wire:model="pesoEnUMat" type="text" class="inpBase"  onfocus="this.select()">
+                                    <input wire:model="pesoEnUMat" type="text" class="inpBase">
                                     @error('pesoEnUMat') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="col-md-2">
@@ -98,7 +98,7 @@
                                 </div>                                                                                                                                                                                                                                           
                                 <div class="col-md-2">
                                     <label class="etiBase">Assembly</label>
-                                    <input wire:model="estiloY" type="text" class="inpBase"  onfocus="this.select()">
+                                    <input wire:model="estiloY" type="text" class="inpBase">
                                     @error('estiloY') <span class="error text-danger">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="col-md-2">
@@ -140,72 +140,6 @@
                     <div class="cardPrin-footer mt-3 d-flex justify-content-end gap-2">
                         <button wire:click.prevent="cancel()" class="bot botNegro">Close</button>
                         <button wire:click.prevent="save()" class="bot botVerde">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@endif
-
-@if($verModalEstilos)
-    <div class="modal-overlay">
-        <div x-data="{}" x-init="dragModal($el)" class="modal-dialog" wire:ignore.self>            
-            <div class="modal-content">
-                <div class="cardPrin">
-                    <div class="cardPrin-header" style="cursor: move;">
-                        <span>Add Materials based on Style</span>
-                    </div>
-                    <div class="cardPrin-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">
-                        <form>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="etiBase">Quantity</label>
-                                    <input wire:model="cantidadEstilo" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('cantidadEstilo') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="etiBase">Style</label>
-                                    <select wire:model="IdEstilo" wire:change="$refresh" class="inpBase">
-                                        <option value=""></option>
-                                        @foreach ($estilos as $key => $value)
-                                            <option value="{{ $key }}">{{ $value }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('IdEstilo') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="etiBase">Customer</label>
-                                    <select wire:model="IdCliente" wire:change="$refresh" class="inpBase">
-                                        <option value=""></option>
-                                        @foreach ($clientes as $key => $value)
-                                            <option value="{{ $key }}">{{ $value }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('IdCliente') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="etiBase">Order</label>
-                                    <input wire:model="orden" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('orden') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="etiBase">Lot</label>
-                                    <input wire:model="lote" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('lote') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
-                        </form>                      
-                    </div>
-                    @if($IdEstilo)
-                        <div class="cardSec">
-                            <div class="cardSec-body">
-                                @livewire('estilosdets', ['IdEstilo' => $IdEstilo], key('estilosdets-'.$IdEstilo))
-                            </div>
-                        </div>
-                    @endif                      
-                    <div class="cardPrin-footer mt-3 d-flex justify-content-end gap-2">
-                        <button wire:click.prevent="cancel()" class="bot botNegro">Close</button>
-                        <button wire:click.prevent="generarConEstilo()" class="bot botVerde">Generate</button>
                     </div>
                 </div>
             </div>

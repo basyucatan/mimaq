@@ -16,7 +16,7 @@ class Recibirimports extends Component
         $this->selected_id = $id;
         $this->factura = Factura::find($id);
     }
-public function confirmarIngreso()
+public function confirmarIngreso() 
 {
     if (!$this->factura) return;
     $movimientosAbiertos = Referenciasmov::where('IdDoc', $this->factura->id)

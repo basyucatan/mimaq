@@ -5,19 +5,8 @@ use Luecano\NumeroALetras\NumeroALetras;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\{Facimportsdet, Factura, Material, Util, Folio};
 use Illuminate\Support\Facades\DB; 
-trait FacImportsMangaer
+trait FacImportsManager
 {
-    public $verModalFacimportsdet = false, $verModalEstilos = false, $verModalImpresiones = false;
-    public $selected_id, $keyWord, $IdFactura, $factura, $arancel;
-    public $IdEntradaMex, $IdOrigen, $IdMaterial, $cantidad, $precioU, $pesoEnUMat,
-        $IdEstilo, $IdFolio, $IdTipo, $unidadP,
-        $estiloY, $IdCliente, $orden, $lote, $cantidadEstilo, $pesoG, $IdSize, $IdForma, $kt, $color;
-    public $adicionales = [], $origens = [], $materials = [], $clientes = [], $folios = [],
-        $kts = [], $colors = [], $sizes = [], $formas = [], $estilos = [], $tipos = [];
-    public function impresiones()
-    {
-        $this->verModalImpresiones = true;
-    }
     public function updatedIdTipo()
     {
         if (!$this->IdTipo) {
@@ -135,6 +124,10 @@ public function actualizarDatosFolio()
     }
     $this->cancel();
 }
+public function impresiones()
+{
+    $this->verModalImpresiones = true;
+}
 private function getFactura()
 {
     $factura = Factura::with([
@@ -162,6 +155,23 @@ private function getFactura()
             $primerItem = $grupo->first();
             return $primerItem->material?->clase?->IdAccess ?? '';
         });
+    return [$factura, $itemsAgrupados];
+}
+private function getPLProduccion()
+{
+    $factura = Factura::with([
+        'facimportsdets.material.clase.arancel',
+        'facimportsdets.material.unidad',
+        'facimportsdets.origen',
+        'facimportsdets.Estilo',
+        'facimportsdets.Size',
+        'facimportsdets.Forma',
+        'facimportsdets.folio.lote.orden'
+    ])->findOrFail($this->IdFactura);
+    $itemsAgrupados = $factura->facimportsdets->groupBy('IdFolio')->sortBy(function ($grupo) {
+        $primerItem = $grupo->first();
+        return $primerItem->folio?->lote?->lote ?? '';
+    });
     return [$factura, $itemsAgrupados];
 }
 public function imprimirFactura()
@@ -197,7 +207,21 @@ public function imprimirPL()
         'Content-Disposition' => 'inline; filename="PackingList.pdf"'
     ]);
 }
-
+public function imprimirPLProduccion()
+{
+    [$factura, $itemsAgrupados] = $this->getPLProduccion();
+    $htmlPL = view('livewire.facimportsdets.packingLProduccionPDF', compact('itemsAgrupados', 'factura'))->render();
+    $instanciaDompdf = PDF::loadHTML($htmlPL);
+    $instanciaDompdf->setPaper('letter', 'portrait');
+    $contenidoPdf = $instanciaDompdf->output();
+    $rutaArchivo = 'imports/packingList_' . $factura->factura . '.pdf';
+    Storage::disk('public')->put($rutaArchivo, $contenidoPdf);
+    $rutaFisica = storage_path('app/public/' . $rutaArchivo);
+    return response()->file($rutaFisica, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="PackingList.pdf"'
+    ]);
+}
     public function resetInput()
     {
         $this->resetexcept('keyWord', 'selected_id', 'IdFactura', 'factura', 'folios', 'tipos',
@@ -207,7 +231,7 @@ public function imprimirPL()
     {
         $this->resetInput();
         $this->verModalFacimportsdet = false;
-        $this->verModalEstilos = false;
+        $this->verPrecaptura = false;
         $this->verModalImpresiones = false;
     }
     public function destroy($id)

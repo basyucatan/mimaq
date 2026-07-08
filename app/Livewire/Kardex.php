@@ -9,20 +9,16 @@ use Livewire\Attributes\Computed;
 class Kardex extends Component
 {
     use WithPagination;
-
     protected $paginationTheme = 'bootstrap';
     public $buscar, $filtroDepto, $filtroTipoDoc;
-
     public function updatedBuscar()
     {
         $this->resetPage();
     }
-
     #[Computed]
     public function movimientos()
     {
         $keyWord = '%' . $this->buscar . '%';
-
         return Referenciasmov::with([
                 'Referencia.material', 
                 'Referencia.Estilo', 
@@ -47,10 +43,12 @@ class Kardex extends Component
             ->orderBy('created_at', 'desc')
             ->paginate(15);
     }
-
+    public function paginationView()
+    {
+        return 'livewire.paginacionBase';
+    }
     public function render()
     {
-        // Sugerencia: Cargar los departamentos para el filtro del header
         $deptos = \DB::table('deptos')->orderBy('orden')->get();
         return view('livewire.kardex.view', compact('deptos'));
     }

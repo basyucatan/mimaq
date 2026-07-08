@@ -62,9 +62,9 @@
                     <table class="table tabBase ch">
                         <thead>
                             <tr>
-                                <th class="text-center">Bandeja</th>
-                                <th class="text-left">Cliente | Lote | Estilo | Producto</th>
-                                <th class="text-center">Proceso</th>
+                                <th class="text-left">Bandeja</th>
+                                <th class="text-left">Cant | Cliente | Lote | Estilo | Producto</th>
+                                <th class="text-left">Proceso</th>
                                 <th class="text-center">
                                     <i class="bi bi-shield-check text-danger fs-6"></i>
                                 </th>
@@ -76,14 +76,14 @@
                         <tbody>
                             @forelse($bandejas as $row)
                                 <tr>
-                                    <td class="text-center">
+                                    <td class="text-left">
                                         <span class="badge bg-secondary text-white">{{ $row->codigoBandeja }}</span>
                                     </td>
                                     <td class="text-left">
                                         <strong class="text-primary">{{ $row->cantidad }} Pz</strong>
                                         {{ $row->folio->ascendencia ?? '' }}
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-left">
                                         <span class="d-inline-block styleProceso">
                                             {{ substr($row->ultimoMovimiento?->proceso?->proceso ?? 'Sin Proceso', 0, 6) }}
                                             |

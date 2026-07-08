@@ -31,14 +31,21 @@
                             <span wire:loading.remove wire:target="imprimirPL"><i class="bi bi-printer"></i></span>
                             <span wire:loading wire:target="imprimirPL">⏳</span>
                         </button>
+                        <button class="bot botMorado botChico" wire:click="imprimirPLProduccion" 
+                            wire:loading.attr="disabled" wire:target="imprimirPLProduccion" title="Print Packing List">
+                            <span wire:loading.remove wire:target="imprimirPLProduccion"><i class="bi bi-printer"></i></span>
+                            <span wire:loading wire:target="imprimirPLProduccion">⏳</span>
+                        </button>
                         <button class="bot botAzul botChico" wire:click="imprimirFactura" 
                             wire:loading.attr="disabled" wire:target="imprimirFactura" title="Print Invoice">
                             <span wire:loading.remove wire:target="imprimirFactura"><i class="bi bi-printer"></i></span>
                             <span wire:loading wire:target="imprimirFactura">⏳</span>
                         </button>
+                        imprimirPLProd
                     </div>
                 </div>
                 <div class="cardPrin-body">
+                    @include('livewire.facimportsdets.porEstilo')
                     <div class="d-flex justify-content-end mb-2">
                         {{ $facimportsdets->links() }}
                     </div>
@@ -47,11 +54,9 @@
                         <table class="table tabBase ch">
                             <thead>
                                 <tr>
-                                    <th>Reference</th>
+                                    <th>Index</th>
                                     <th>Origin</th>
                                     <th>Material</th>
-                                    <th>Quantity</th>
-                                    <th>Unit Price</th>
                                     <th>Weight</th>
                                     <th>Actions</th>
                                 </tr>
@@ -62,13 +67,13 @@
                                         <td>{{ $row->IdEntradaMex }}</td>
                                         <td>{{ $row->Origen->origen ?? ''}}</td>
                                         <td>
+                                            <span class="badge bg-success">{{ Util::Miles($row->cantidad) }}</span>
                                             <strong>{{ $row->Material->materialI }}</strong> {{ $row->propsTot }}
                                             @if($row->ordenInfo)
                                                 <br><small class="text-muted">{{ $row->ordenInfo }}</small>
                                             @endif
+                                            <span class="badge bg-secondary">$ {{ Util::Miles($row->precioU,2) }}</span>
                                         </td>
-                                        <td>{{ Util::Miles($row->cantidad) }}</td>
-                                        <td>{{ Util::Miles($row->precioU,2) }}</td>
                                         <td>{{ Util::Miles($row->pesoEnUMat,3) }} {{ $row->material->unidadP->unidad ?? '' }}</td>
                                         <td width="60">
                                             @if($factura->estatus === 'abierto')
