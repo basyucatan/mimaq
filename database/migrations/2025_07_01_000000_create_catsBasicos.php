@@ -49,6 +49,7 @@ return new class extends Migration
             $table->id();
             $table->string('tipo',20)->unique();
             $table->string('tipoI',20)->unique();
+            $table->tinyInteger('orden')->default(10);
             $table->json('adicionales')->nullable();
         });                   
         Schema::create('clases', function (Blueprint $table) {

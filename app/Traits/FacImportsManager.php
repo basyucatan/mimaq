@@ -157,23 +157,6 @@ private function getFactura()
         });
     return [$factura, $itemsAgrupados];
 }
-private function getPLProduccion()
-{
-    $factura = Factura::with([
-        'facimportsdets.material.clase.arancel',
-        'facimportsdets.material.unidad',
-        'facimportsdets.origen',
-        'facimportsdets.Estilo',
-        'facimportsdets.Size',
-        'facimportsdets.Forma',
-        'facimportsdets.folio.lote.orden'
-    ])->findOrFail($this->IdFactura);
-    $itemsAgrupados = $factura->facimportsdets->groupBy('IdFolio')->sortBy(function ($grupo) {
-        $primerItem = $grupo->first();
-        return $primerItem->folio?->lote?->lote ?? '';
-    });
-    return [$factura, $itemsAgrupados];
-}
 public function imprimirFactura()
 {
     [$factura, $itemsAgrupados] = $this->getFactura();
@@ -206,6 +189,28 @@ public function imprimirPL()
         'Content-Type' => 'application/pdf',
         'Content-Disposition' => 'inline; filename="PackingList.pdf"'
     ]);
+}
+private function getPLProduccion()
+{
+    $factura = Factura::with([
+        'facimportsdets.material.clase.tipo',
+        'facimportsdets.material.clase.arancel',
+        'facimportsdets.material.unidad',
+        'facimportsdets.origen',
+        'facimportsdets.Estilo',
+        'facimportsdets.Size',
+        'facimportsdets.Forma',
+        'facimportsdets.folio.lote.orden'
+    ])->findOrFail($this->IdFactura);
+    $itemsAgrupados = $factura->facimportsdets->groupBy('IdFolio')->sortBy(function ($grupo) {
+        $primerItem = $grupo->first();
+        return $primerItem->folio?->lote?->lote ?? '';
+    })->map(function ($grupo) {
+        return $grupo->sortBy(function ($item) {
+            return $item->material?->clase?->tipo?->orden ?? 0;
+        });
+    });
+    return [$factura, $itemsAgrupados];
 }
 public function imprimirPLProduccion()
 {

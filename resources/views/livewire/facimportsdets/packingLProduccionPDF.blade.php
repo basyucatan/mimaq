@@ -8,16 +8,6 @@
 <html>
 <head>
     <link rel="stylesheet" href="{{ public_path('css/reportes.css') }}">
-    <style>
-        .tabla-pl { width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 11px; margin-bottom: 15px; }
-        .tabla-pl th { background-color: #f2f2f2; padding: 5px; border: 1px solid #ddd; text-align: center; }
-        .tabla-pl td { padding: 5px; border: 1px solid #ddd; }
-        .encabezado-folio { background-color: #e6f2ff; font-weight: bold; padding: 6px; border: 1px solid #b3d7ff; }
-        .derecha { text-align: right; }
-        .centro { text-align: center; }
-        .negrita { font-weight: bold; }
-        .subtotal-row { background-color: #fafafa; font-style: italic; }
-    </style>
 </head>
 <body>
 <div class="cabecera">
@@ -48,68 +38,90 @@
         </tr>
         <tr>
             <td colspan="2" valign="top">
-                <strong>LISTA DE EMPAQUE (PACKING LIST)</strong>
+                <strong>LISTA DE EMPAQUE</strong>
             </td>
         </tr>
     </table>
 </div>
-@foreach($itemsAgrupados as $idFolio => $detalles)
-    @php
-        $primerItem = $detalles->first();
-        $nombreEstilo = $primerItem->Estilo->estilo ?? $primerItem->estiloY ?? 'S/E';
-        $numeroLote = $primerItem->folio?->lote?->lote ?? 'S/L';
-        $numeroOrden = $primerItem->folio?->lote?->orden?->orden ?? 'S/O';
-        $subCant = $detalles->sum('cantidad');
-        $subPeso = $detalles->sum('pesoG');
-        $subImp = $detalles->sum(fn($item) => $item->cantidad * $item->precioU);
-    @endphp
-    <div class="encabezado-folio">
-        Estilo: {{ $nombreEstilo }} &nbsp;|&nbsp; Lote: {{ $numeroLote }} &nbsp;|&nbsp; Orden: {{ $numeroOrden }}
-    </div>
-    <table class="tabla-pl">
-        <thead>
-            <tr>
-                <th width="40%">Descripción del Material</th>
-                <th width="15%">Fracción</th>
-                <th width="10%">Cant.</th>
-                <th width="15%">Peso (gr)</th>
-                <th width="10%">Precio/U</th>
-                <th width="10%">Total</th>
+<table width="100%" style="table-layout: fixed;">
+    <thead>
+        <tr>
+            <th width="10%" style="text-align: left;">Lot #</th>
+            <th width="37%" style="text-align: left;">Description</th>
+            <th width="8%" class="derecha">Qty</th>
+            <th width="12%" class="derecha">Weight</th>
+            <th width="10%" class="derecha">Grms</th>
+            <th width="10%" class="derecha">UnitPr</th>
+            <th width="12%" class="derecha">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($itemsAgrupados as $idFolio => $detalles)
+            @php
+                $primerItem = $detalles->first();
+                $folioObj = $primerItem->folio;
+                $loteObj = $folioObj?->lote;
+                $ordenObj = $loteObj?->orden;
+                $clienteObj = $ordenObj?->cliente;
+                $loteIdentificador = $loteObj->lote ?? '-';
+                $ordenNombre = $ordenObj->orden ?? '';
+                $clienteNombre = $clienteObj->cliente ?? '';
+                $cantidadFolio = $folioObj->cantidad ?? 0;
+                $fechaVencimiento = $folioObj?->fechaVen ? Util::formatFecha($folioObj->fechaVen, 'MM/DD/YYYY') : '';
+                $subPeso = $detalles->sum('pesoG');
+                $subImp = $detalles->sum(fn($item) => $item->cantidad * $item->precioU);
+            @endphp
+            <tr class="fila-separadora">
+                <td class="negrita">{{ $loteIdentificador }}</td>
+                <td>
+                    Order# <span class="negrita">{{ $ordenNombre }}</span> &nbsp;&nbsp; Cust.: <span class="negrita">{{ $clienteNombre }}</span> @if($fechaVencimiento) &nbsp;&nbsp; Due Date: <span class="negrita">{{ $fechaVencimiento }}</span> @endif
+                </td>
+                <td class="derecha negrita">
+                    {{ number_format($cantidadFolio, 2) }}
+                </td>
+                <td colspan="4"></td>
             </tr>
-        </thead>
-        <tbody>
             @foreach($detalles as $item)
                 @php
                     $imp = $item->cantidad * $item->precioU;
                     $totalGralCant += $item->cantidad;
                     $totalGralPeso += $item->pesoG;
                     $totalGralImp += $imp;
+                    $esCasting = ($item->material?->clase?->IdTipo == 1);
                     $filaNum++;
                 @endphp
-                <tr style="background-color: {{ $filaNum % 2 != 0 ? '#ffffff' : '#f9f9f9' }};">
-                    <td>{!! $item->material->material ?? 'N/A' !!} {!! $item->propiedades !!}</td>
-                    <td class="centro">{{ $item->arancel ?? '-' }}</td>
+                <tr class="fila-material {{ $filaNum % 2 != 0 ? 'gris' : '' }}">
+                    <td></td>
+                    <td>
+                        {{ $item->material->material ?? '' }}<strong> {{ $item->propsTot }}</strong>
+                    </td>
                     <td class="derecha">{{ number_format($item->cantidad, 2) }}</td>
+                    <td class="derecha" style="font-size: 9px; color: #444;">
+                        @if($item->pesoEnUMat > 0)
+                            {{ number_format($item->pesoEnUMat, 2) }} {{ $item->material->unidadP->unidad ?? '' }}
+                        @endif
+                    </td>
                     <td class="derecha">{{ number_format($item->pesoG, 3) }}</td>
                     <td class="derecha">{{ number_format($item->precioU, 2) }}</td>
-                    <td class="derecha negrita">{{ number_format($imp, 2) }}</td>
+                    <td class="derecha">{{ number_format($imp, 2) }}</td>
                 </tr>
             @endforeach
-            <tr class="subtotal-row">
-                <td colspan="2" class="derecha negrita">Subtotal Estilo:</td>
-                <td class="derecha negrita">{{ number_format($subCant, 2) }}</td>
-                <td class="derecha negrita">{{ number_format($subPeso, 3) }}</td>
-                <td></td>
-                <td class="derecha negrita">{{ number_format($subImp, 2) }}</td>
+            <tr class="fila-subtotal">
+                <td colspan="4"></td>
+                <td class="derecha">{{ number_format($subPeso, 3) }}</td>
+                <td class="derecha"></td>
+                <td class="derecha">{{ number_format($subImp, 2) }}</td>
             </tr>
-        </tbody>
-    </table>
-@endforeach
-<table width="100%" style="font-family: sans-serif; font-size: 12px; margin-top: 20px; border-collapse: collapse;">
+        @endforeach
+    </tbody>
+</table>
+<table width="100%" class="total-general-contenedor" style="table-layout: fixed;">
     <tr>
-        <td width="60%" class="derecha negrita" style="padding: 8px;">TOTAL GENERAL:</td>
-        <td width="20%" class="derecha negrita" style="padding: 8px; border: 1px solid #ddd;">{{ number_format($totalGralPeso, 3) }} gr</td>
-        <td width="20%" class="derecha negrita" style="padding: 8px; background:#eee; border: 1px solid #ddd; font-size: 14px;">$ {{ number_format($totalGralImp, 2) }}</td>
+        <td width="53%"></td>
+        <td width="10%" class="derecha negrita">TOTAL GENERAL:</td>
+        <td width="10%" class="derecha negrita borde-total-general">{{ number_format($totalGralPeso, 3) }}</td>
+        <td width="15%" class="derecha"></td>
+        <td width="12%" class="derecha negrita borde-total-general">{{ number_format($totalGralImp, 2) }}</td>
     </tr>
 </table>
 </body>
