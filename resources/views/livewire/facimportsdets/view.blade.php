@@ -41,7 +41,6 @@
                             <span wire:loading.remove wire:target="imprimirFactura"><i class="bi bi-printer"></i></span>
                             <span wire:loading wire:target="imprimirFactura">⏳</span>
                         </button>
-                        imprimirPLProd
                     </div>
                 </div>
                 <div class="cardPrin-body">
