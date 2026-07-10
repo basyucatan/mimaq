@@ -54,7 +54,10 @@
                         ">
                         Generate
                     </button>
-                    <button class="bot botNaranja botChico" wire:click="agregar" title="agregar a factura">
+                    <button type="button" class="bot botAzul" wire:click="nuevoComponente" title="Agregar material">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="bot botNaranja" wire:click="agregar" title="agregar a factura">
                         <i class="fas fa-save"></i>
                     </button>
                 </div>

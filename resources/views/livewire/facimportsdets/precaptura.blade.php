@@ -4,7 +4,7 @@
             <table class="table tabBase ch">
                 <thead>
                     <tr>
-                        <th style="width:22%">Material</th>
+                        <th style="width:20%">Material</th>
                         <th style="width:7%">Qty</th>
                         <th style="width:7%">UnitPr</th>
                         <th style="width:10%">Weight</th>
@@ -14,27 +14,26 @@
                         <th style="width:10%">Size</th>
                         <th style="width:8%">Shape</th>
                         <th style="width:7%">Assembly</th>
-                        <th style="width:8%">Origin</th>
+                        <th style="width:7%">Origin</th>
+                        <th style="width:2%"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($precaptura as $index => $linea)
-                        <tr>
+                        <tr wire:key="fila-precaptura-{{ $index }}">
                             <td>
-                                <select wire:model="precaptura.{{ $index }}.IdMaterial" class="inpSolo inpChico">
+                                <select wire:change="cambiarMaterial({{ $index }}, $event.target.value)" class="inpSolo inpChico">
                                     <option value=""></option>
                                     @foreach ($materials as $key => $value)
-                                        <option value="{{ $key }}">{{ $value }}</option>
+                                        <option value="{{ $key }}" {{ $linea['IdMaterial'] == $key ? 'selected' : '' }}>{{ $value }}</option>
                                     @endforeach
                                 </select>
                             </td>
                             <td>
-                                <input type="text" wire:model="precaptura.{{ $index }}.cantidad"
-                                    class="inpSolo inpChico">
+                                <input type="text" wire:model="precaptura.{{ $index }}.cantidad" class="inpSolo inpChico">
                             </td>
                             <td>
-                                <input type="text" wire:model="precaptura.{{ $index }}.precioU"
-                                    class="inpSolo inpChico">
+                                <input type="text" wire:model="precaptura.{{ $index }}.precioU" class="inpSolo inpChico">
                             </td>
                             <td>
                                 <div class="input-group input-group-sm flex-nowrap" style="max-width: 120px;">
@@ -85,8 +84,7 @@
                                 </select>
                             </td>
                             <td>
-                                <input type="text" wire:model="precaptura.{{ $index }}.estiloY"
-                                    class="inpSolo inpChico">
+                                <input type="text" wire:model="precaptura.{{ $index }}.estiloY" class="inpSolo inpChico">
                             </td>
                             <td>
                                 <select wire:model="precaptura.{{ $index }}.IdOrigen" class="inpSolo inpChico">
@@ -95,6 +93,11 @@
                                         <option value="{{ $key }}">{{ $value }}</option>
                                     @endforeach
                                 </select>
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="bot botRojo botChico" wire:click="eliminarComponente({{ $index }})" title="Eliminar fila">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
                             </td>
                         </tr>
                     @endforeach

@@ -103,6 +103,47 @@ class Facimportsdets extends Component
             ];
         }
     }
+public function nuevoComponente()
+    {
+        $this->precaptura[] = [
+            'IdFactura' => $this->IdFactura,
+            'IdEntradaMex' => '',
+            'IdOrigen' => 2,
+            'IdMaterial' => null,
+            'arancel' => null,
+            'cantidad' => 1,
+            'precioU' => 1,
+            'pesoEnUMat' => 0,
+            'pesoG' => 0,
+            'IdSize' => null,
+            'IdForma' => null,
+            'IdFolio' => null,
+            'IdEstilo' => null,
+            'estiloY' => '',
+            'diferencias' => null,
+            'adicionales' => null,
+            'IdTipo' => null,
+            'kt' => null,
+            'color' => null,
+            'unidadP' => ''
+        ];
+    }
+public function eliminarComponente($index)
+    {
+        unset($this->precaptura[$index]);
+        $this->precaptura = array_values($this->precaptura);
+    }
+public function cambiarMaterial($index, $value)
+    {
+        $this->precaptura[$index]['IdMaterial'] = $value;
+        if (!empty($value)) {
+            $material = Material::with(['unidadP'])->find($value);
+            $this->precaptura[$index]['unidadP'] = $material?->unidadP?->unidad ?? '';
+            $this->precaptura[$index]['IdEstilo'] = null;
+        } else {
+            $this->precaptura[$index]['unidadP'] = '';
+        }
+    }
     public function agregar()
     {
         if (empty($this->precaptura)) return;
