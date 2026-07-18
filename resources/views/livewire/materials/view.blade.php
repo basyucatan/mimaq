@@ -1,7 +1,7 @@
 @section('title', __('Materials'))
 <div class="container-fluid p-0">
     <div class="row g-0 justify-content-center">
-        <div class="col-12">
+        <div class="col-12"> 
             <div class="cardPrin">
                 <div class="cardPrin-header" style="cursor: move;">
                     <span>Materials</span>
@@ -36,11 +36,10 @@
                                         {{ $row->material }} ( {{ $row->abreviatura }} )
                                     </div>
                                     <div class="cardSec-body">
-                                        <strong>{{ $row->Clase->IdAccess }}</strong>, 
                                         Inglés: <strong>{{ $row->materialI }}</strong><br>
                                         Unidad: <strong>{{ $row->Unidad->unidad }}</strong>
                                         Unidad Peso: <strong>{{ $row->UnidadP->unidad }}</strong><br>
-                                        Descripción Fiscal: <strong>{{ $row->materialFiscal }}</strong>
+                                        Clase: <strong>{{ $row->Clase->clase }}</strong>
                                     </div>
                                     <div class="cardSec-footer">
                                         <button wire:click="edit({{ $row->id }})"

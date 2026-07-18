@@ -11,12 +11,7 @@
                             <div class="row">
                                 @if ($selected_id)
                                     <input type="hidden" wire:model="selected_id">
-                                @endif
-                                <div class="col-md-6">
-                                    <label class="etiBase">Código</label>
-                                    <input wire:model="IdAccess" type="text" class="inpBase"  onfocus="this.select()">
-                                    @error('IdAccess') <span class="error text-danger">{{ $message }}</span> @enderror
-                                </div>                                  
+                                @endif                                
                                 <div class="col-md-6">
                                     <label class="etiBase">Tipo</label>
                                     <select wire:model="IdTipo" class="inpBase">

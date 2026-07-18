@@ -36,7 +36,7 @@ class Materials extends Component
 						->orWhere('materialI', 'LIKE', $keyWord)
 						->orWhere('materialFiscal', 'LIKE', $keyWord)
 						->orWhereHas('Clase', function($qE) use ($keyWord) {
-							$qE->where('IdAccess', 'like', $keyWord);
+							$qE->where('clase', 'like', $keyWord);
 						})						
 						->orWhere('abreviatura', 'LIKE', $keyWord);
 			})

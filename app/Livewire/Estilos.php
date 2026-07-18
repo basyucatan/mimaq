@@ -21,7 +21,7 @@ class Estilos extends Component
 
     public function mount(){
         $this->clases = DB::table('clases')->where('IdTipo', 1)->orWhere('IdTipo', 6)
-            ->orderBy('IdAccess', 'asc')
+            ->orderBy('clase', 'asc')
             ->pluck('clase', 'id')->toArray();
     }
     public function updatedKeyWord()
@@ -31,10 +31,10 @@ class Estilos extends Component
     #[Computed]
 	public function filteredEstilos()
 	{
-		$keyWord = '%' . $this->keyWord . '%';
+		$keyWord = $this->keyWord . '%';
 		return Estilo::Where('estilo', 'LIKE', $keyWord)
         ->orderby('estilo')
-        ->paginate(8);
+        ->paginate(40);
 	}
 	public function render()
 	{

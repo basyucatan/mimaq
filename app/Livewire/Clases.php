@@ -30,7 +30,6 @@ class Clases extends Component
 		return Clase::Where('id','>',0)
 			->where(function ($query) use ($keyWord) {
 				$query
-                    ->orWhere('IdAccess', 'LIKE', $keyWord)
                     ->orWhere('clase', 'LIKE', $keyWord)
                     ->orWhere('claseI', 'LIKE', $keyWord);
 			})
