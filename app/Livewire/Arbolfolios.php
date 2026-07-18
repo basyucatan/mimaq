@@ -1,12 +1,13 @@
 <?php
 namespace App\Livewire;
 use Livewire\Component;
-use App\Models\{Util, Facimportsdet, Cliente, Orden, Lote, Folio, Estilo};
+use App\Models\{Util, Facimportsdet, Orden, Lote, Folio, Estilo};
 use Illuminate\Support\Facades\DB;
 use App\Traits\Utilfun;
+use Livewire\WithPagination;
 class Arbolfolios extends Component
 {
-    use Utilfun;
+    use Utilfun, WithPagination;
     public $keyWord = '', $tipoModal = null;
     public $selected_id, $IdOrden, $IdCliente, $cliente, $IdLote, $orden, $lote, $IdEstilo,
         $cantidad, $totalBandejas, $jobStyle, $abreviatura, $productoFinal, 
@@ -249,37 +250,43 @@ public function editarLote($id)
     }
     public function render()
     {
-        $consulta = Orden::query()->orderBy('id', 'desc');
-
+        $consulta = Orden::query()->orderByDesc('id');
         if (!empty($this->keyWord)) {
             $keyWord = '%' . $this->keyWord . '%';
-
-            $consulta->where(function($q) use ($keyWord) {
+            $consulta->where(function ($q) use ($keyWord) {
                 $q->where('orden', 'like', $keyWord)
-                    ->orWhereHas('cliente', function($qC) use ($keyWord) {
+                    ->orWhereHas('cliente', function ($qC) use ($keyWord) {
                         $qC->where('cliente', 'like', $keyWord);
                     })
-                    ->orWhereHas('lotes', function($qL) use ($keyWord) {
+                    ->orWhereHas('lotes', function ($qL) use ($keyWord) {
                         $qL->where('lote', 'like', $keyWord)
-                            ->orWhereHas('folios', function($qF) use ($keyWord) {
+                            ->orWhereHas('folios', function ($qF) use ($keyWord) {
                                 $qF->where('id', 'like', $keyWord)
-                                    ->orWhereHas('Estilo', function($qE) use ($keyWord) {
+                                    ->orWhereHas('Estilo', function ($qE) use ($keyWord) {
                                         $qE->where('estilo', 'like', $keyWord);
                                     });
                             });
                     });
             });
-
-            $arbol = $consulta->with(['lotes.folios.Estilo'])->get();
+        }
+        $arbol = $consulta
+            ->with('lotes.folios.Estilo')
+            ->paginate(50);
+        if (!empty($this->keyWord)) {
             foreach ($arbol as $o) {
                 $this->expandir['Orden'][$o->id] = true;
+
                 foreach ($o->lotes as $l) {
                     $this->expandir['Lote'][$l->id] = true;
                 }
             }
-        } else {
-            $arbol = $consulta->with('lotes.folios.Estilo')->get();
         }
-        return view('livewire.arbolfolios.view', ['arbol' => $arbol]);
+        return view('livewire.arbolfolios.view', [
+            'arbol' => $arbol
+        ]);
+    }
+    public function paginationView()
+    {
+        return 'livewire.paginacionBase';
     }
 }

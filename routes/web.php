@@ -24,6 +24,7 @@ Route::middleware("auth")->group(function () {
     Route::view('welcome', 'livewire.welcome.index');
     Route::view('mensajes', 'livewire.mensajes.index');
     Route::view('catalogos', 'livewire.catalogos.index');
+    Route::view('homologacion', 'livewire.homologacion.index');
     
     Route::view('arancels', 'livewire.arancels.index');
     Route::view('clases', 'livewire.clases.index');

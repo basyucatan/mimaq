@@ -1,18 +1,17 @@
 <?php
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Third Party Services
-    |--------------------------------------------------------------------------
-    |
-    | This file is for storing the credentials for third party services such
-    | as Mailgun, Postmark, AWS and more. This file provides the de facto
-    | location for this type of information, allowing packages to have
-    | a conventional file to locate the various service credentials.
-    |
-    */
+'goAduanas' => [
+    'url' => env('GO_ADUANAS_URL'),
+    'token' => env('GO_ADUANAS_TOKEN'),
+    'timeout' => (int) env('GO_ADUANAS_TIMEOUT', 30),
+    'ambiente' => env('GO_ADUANAS_AMBIENTE', 'QA'),
+    'panel' => [
+        'servidor' => env('GO_ADUANAS_PANEL_SERVIDOR'),
+        'usuario' => env('GO_ADUANAS_PANEL_USUARIO'),
+        'password' => env('GO_ADUANAS_PANEL_PASSWORD'),
+    ],
+],
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),

@@ -105,9 +105,9 @@ public function actualizarDatosFolio()
     Facimportsdet::updateOrCreate(['id' => $this->selected_id], [
         'IdFactura' => $this->IdFactura,
         'IdEntradaMex' => $this->IdEntradaMex,
-        'IdOrigen' => $this->IdOrigen ?? 2,
+        'IdOrigen' => $this->IdOrigen ?: 2,
         'IdMaterial' => $this->IdMaterial,
-        'IdFolio' => $this->IdFolio, 
+        'IdFolio' => $this->IdFolio ?: null,
         'arancel' => $arancel,
         'cantidad' => $this->cantidad,
         'precioU' => $this->precioU,

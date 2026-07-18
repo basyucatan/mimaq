@@ -58,7 +58,7 @@ class Materials extends Component
 
     public function resetInput()
     {
-        $this->resetExcept('clases','unidads');
+        $this->resetExcept('clases','unidads', 'keyWord');
     }
 
     public function edit($id)

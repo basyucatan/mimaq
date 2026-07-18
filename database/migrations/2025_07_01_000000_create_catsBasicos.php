@@ -36,7 +36,6 @@ return new class extends Migration
             $table->id();
             $table->date('fecha');
             $table->string('permiso',20);
-            $table->string('IdAccess',30)->nullable();
         });        
         Schema::create('arancels', function (Blueprint $table) {
             $table->id();
@@ -54,7 +53,6 @@ return new class extends Migration
         });                   
         Schema::create('clases', function (Blueprint $table) {
             $table->id();
-            $table->string('IdAccess',20)->nullable()->unique();
             $table->foreignId('IdTipo')->constrained('tipos')->cascadeOnDelete();
             $table->foreignId('IdArancel')->constrained('arancels')->restrictOnDelete();
             $table->string('clase',50);
@@ -63,7 +61,6 @@ return new class extends Migration
         });  
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->integer('IdAccess')->nullable();
             $table->foreignId('IdClase')->constrained('clases')->cascadeOnDelete();
             $table->foreignId('IdUnidad')->constrained('unidads')->cascadeOnDelete();
             $table->foreignId('IdUnidadP')->constrained('unidads')->cascadeOnDelete();
