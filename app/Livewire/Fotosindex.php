@@ -43,11 +43,7 @@ class Fotosindex extends Component
             }
         }
         $this->conteoTotalArchivos = count($archivosValidos);
-        $fotosEnBaseDatos = Estilo::whereNotNull('foto')
-            ->where('foto', '<>', '')
-            ->pluck('foto')
-            ->map(fn($item) => strtolower(trim($item)))
-            ->toArray();
+        $fotosEnBaseDatos = Estilo::whereNotNull('foto')->where('foto', '<>', '')->pluck('foto')->map(fn($item) => strtolower(trim($item)))->toArray();
         $huerfanos = 0;
         foreach ($archivosValidos as $archivo) {
             if (!in_array(strtolower($archivo), $fotosEnBaseDatos)) {
@@ -81,17 +77,14 @@ class Fotosindex extends Component
     {
         $this->mensajeExito = '';
         $this->vistaActual = $vista;
+        $this->calcularEstadisticas();
         $this->resetPage();
     }
     public function eliminarArchivosHuerfanos()
     {
         $archivosFisicos = Storage::disk('public')->files('estilos');
         $extensionesPermitidas = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp'];
-        $fotosEnBaseDatos = Estilo::whereNotNull('foto')
-            ->where('foto', '<>', '')
-            ->pluck('foto')
-            ->map(fn($item) => strtolower(trim($item)))
-            ->toArray();
+        $fotosEnBaseDatos = Estilo::whereNotNull('foto')->where('foto', '<>', '')->pluck('foto')->map(fn($item) => strtolower(trim($item)))->toArray();
         $eliminados = 0;
         foreach ($archivosFisicos as $ruta) {
             $extension = strtolower(pathinfo($ruta, PATHINFO_EXTENSION));
@@ -107,7 +100,7 @@ class Fotosindex extends Component
         $this->calcularEstadisticas();
         $this->resetPage();
     }
-    public function vincularFotosAutomaticas()
+    public function asignarArchivosConCoincidencias()
     {
         $archivosFisicos = Storage::disk('public')->files('estilos');
         $extensionesPermitidas = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp'];
@@ -130,22 +123,19 @@ class Fotosindex extends Component
                 }
             }
         }
-        $this->mensajeExito = 'Se han vinculado ' . $vinculados . ' fotos exitosamente.';
+        $this->mensajeExito = 'Se han asignado ' . $vinculados . ' archivos con coincidencias exitosamente.';
         $this->calcularEstadisticas();
         $this->cambiarVista('con_foto');
     }
     public function render()
     {
+        $paginacion = 30;
         $elementosPaginados = [];
         $paginaActual = $this->paginators['page'] ?? 1;
         if ($this->vistaActual === 'huerfanos') {
             $archivosFisicos = Storage::disk('public')->files('estilos');
             $extensionesPermitidas = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp'];
-            $fotosEnBaseDatos = Estilo::whereNotNull('foto')
-                ->where('foto', '<>', '')
-                ->pluck('foto')
-                ->map(fn($item) => strtolower(trim($item)))
-                ->toArray();
+            $fotosEnBaseDatos = Estilo::whereNotNull('foto')->where('foto', '<>', '')->pluck('foto')->map(fn($item) => strtolower(trim($item)))->toArray();
             $coleccion = [];
             foreach ($archivosFisicos as $ruta) {
                 $extension = strtolower(pathinfo($ruta, PATHINFO_EXTENSION));
@@ -156,23 +146,11 @@ class Fotosindex extends Component
                     }
                 }
             }
-            $elementosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(
-                array_slice($coleccion, ($paginaActual - 1) * 10, 10),
-                count($coleccion),
-                10,
-                $paginaActual,
-                ['path' => url()->current()]
-            );
+            $elementosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(array_slice($coleccion, ($paginaActual - 1) * $paginacion, $paginacion), count($coleccion), $paginacion, $paginaActual, ['path' => url()->current()]);
         } elseif ($this->vistaActual === 'sin_foto') {
-            $elementosPaginados = Estilo::with('clase')
-                ->whereNull('foto')
-                ->orWhere('foto', '')
-                ->paginate(10);
+            $elementosPaginados = Estilo::with('clase')->whereNull('foto')->orWhere('foto', '')->paginate($paginacion);
         } elseif ($this->vistaActual === 'con_foto') {
-            $elementosPaginados = Estilo::with('clase')
-                ->whereNotNull('foto')
-                ->where('foto', '<>', '')
-                ->paginate(10);
+            $elementosPaginados = Estilo::with('clase')->whereNotNull('foto')->where('foto', '<>', '')->paginate($paginacion);
         } elseif ($this->vistaActual === 'vinculables') {
             $archivosFisicos = Storage::disk('public')->files('estilos');
             $extensionesPermitidas = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp'];
@@ -185,22 +163,12 @@ class Fotosindex extends Component
                     $nombreSinExtension = Str::lower(pathinfo($archivo, PATHINFO_FILENAME));
                     foreach ($estilosSinFoto as $estilo) {
                         if (Str::lower($estilo->estilo) === $nombreSinExtension) {
-                            $coleccion[] = [
-                                'IdEstilo' => $estilo->id,
-                                'estilo' => $estilo->estilo,
-                                'archivo' => $archivo
-                            ];
+                            $coleccion[] = ['IdEstilo' => $estilo->id, 'estilo' => $estilo->estilo, 'archivo' => $archivo];
                         }
                     }
                 }
             }
-            $elementosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(
-                array_slice($coleccion, ($paginaActual - 1) * 10, 10),
-                count($coleccion),
-                10,
-                $paginaActual,
-                ['path' => url()->current()]
-            );
+            $elementosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(array_slice($coleccion, ($paginaActual - 1) * $paginacion, $paginacion), count($coleccion), $paginacion, $paginaActual, ['path' => url()->current()]);
         } elseif ($this->vistaActual === 'rotos') {
             $archivosFisicos = Storage::disk('public')->files('estilos');
             $extensionesPermitidas = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp'];
@@ -211,26 +179,15 @@ class Fotosindex extends Component
                     $archivosValidosEnMinusculas[] = strtolower(basename($ruta));
                 }
             }
-            $estilosConFoto = Estilo::with('clase')
-                ->whereNotNull('foto')
-                ->where('foto', '<>', '')
-                ->get();
+            $estilosConFoto = Estilo::with('clase')->whereNotNull('foto')->where('foto', '<>', '')->get();
             $coleccion = [];
             foreach ($estilosConFoto as $estilo) {
                 if (!in_array(strtolower(trim($estilo->foto)), $archivosValidosEnMinusculas)) {
                     $coleccion[] = $estilo;
                 }
             }
-            $elementosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(
-                array_slice($coleccion, ($paginaActual - 1) * 10, 10),
-                count($coleccion),
-                10,
-                $paginaActual,
-                ['path' => url()->current()]
-            );
+            $elementosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(array_slice($coleccion, ($paginaActual - 1) * $paginacion, $paginacion), count($coleccion), $paginacion, $paginaActual, ['path' => url()->current()]);
         }
-        return view('livewire.estilos.viewfotos', [
-            'resultados' => $elementosPaginados
-        ]);
+        return view('livewire.estilos.viewfotos', ['resultados' => $elementosPaginados]);
     }
 }
