@@ -145,7 +145,6 @@
                                 <table class="table tabBase ch mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="ps-3" width="100">ID Estilo</th>
                                             <th>Estilo</th>
                                             <th>Clase</th>
                                         </tr>
@@ -153,7 +152,6 @@
                                     <tbody>
                                         @foreach($resultados as $estilo)
                                             <tr>
-                                                <td class="ps-3 font-monospace fw-bold text-secondary">{{ $estilo->id }}</td>
                                                 <td class="fw-bold text-dark">{{ $estilo->estilo }}</td>
                                                 <td class="text-muted small">{{ $estilo->clase->clase ?? 'Sin Clase' }} (Id: {{ $estilo->IdClase }})</td>
                                             </tr>
@@ -182,7 +180,6 @@
                                     <thead>
                                         <tr>
                                             <th class="ps-3" width="70">Foto</th>
-                                            <th width="100">ID Estilo</th>
                                             <th>Estilo</th>
                                             <th>Nombre de la Imagen</th>
                                         </tr>
@@ -193,7 +190,6 @@
                                                 <td class="ps-3">
                                                     <img src="{{ asset('storage/estilos/' . $estilo->foto) }}" alt="{{ $estilo->estilo }}" class="img-thumbnail" style="width: 35px; height: 35px; object-fit: cover; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalVisorFoto" onclick="document.getElementById('imgVisorContenedor').src=this.src; document.getElementById('tituloVisorFoto').innerText='{{ $estilo->estilo }} ({{ $estilo->foto }})';">
                                                 </td>
-                                                <td class="font-monospace fw-bold text-secondary">{{ $estilo->id }}</td>
                                                 <td class="fw-bold text-dark">{{ $estilo->estilo }}</td>
                                                 <td class="font-monospace text-muted small">{{ $estilo->foto }}</td>
                                             </tr>
@@ -222,7 +218,6 @@
                                     <thead>
                                         <tr>
                                             <th class="ps-3" width="80">Miniatura</th>
-                                            <th width="120">ID Estilo</th>
                                             <th>Estilo Coincidente</th>
                                             <th>Nombre del Archivo</th>
                                         </tr>
@@ -233,7 +228,6 @@
                                                 <td class="ps-3">
                                                     <img src="{{ asset('storage/estilos/' . $item['archivo']) }}" alt="{{ $item['archivo'] }}" class="img-thumbnail" style="width: 40px; height: 40px; object-fit: cover; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalVisorFoto" onclick="document.getElementById('imgVisorContenedor').src=this.src; document.getElementById('tituloVisorFoto').innerText='{{ $item['archivo'] }}';">
                                                 </td>
-                                                <td class="font-monospace fw-bold text-secondary">{{ $item['IdEstilo'] }}</td>
                                                 <td class="fw-bold text-dark">{{ $item['estilo'] }}</td>
                                                 <td class="font-monospace text-info fw-bold">{{ $item['archivo'] }}</td>
                                             </tr>
@@ -261,7 +255,6 @@
                                 <table class="table tabBase ch mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="ps-3" width="100">ID Estilo</th>
                                             <th>Estilo</th>
                                             <th>Imagen Faltante</th>
                                         </tr>
@@ -269,7 +262,6 @@
                                     <tbody>
                                         @foreach($resultados as $estilo)
                                             <tr>
-                                                <td class="ps-3 font-monospace fw-bold text-secondary">{{ $estilo->id }}</td>
                                                 <td class="fw-bold text-dark">{{ $estilo->estilo }}</td>
                                                 <td class="font-monospace text-danger fw-bold">{{ $estilo->foto }}</td>
                                             </tr>
