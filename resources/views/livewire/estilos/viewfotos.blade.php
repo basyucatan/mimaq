@@ -18,16 +18,17 @@
                             <span class="badge bg-danger fs-6 w-100 py-2">{{ $conteoHuerfanos }}</span>
                         </div>
                     </div>
-                    <div class="row g-2 align-items-center mb-2">
-                        <div class="col-9">
-                            <div class="d-flex align-items-center bg-light border rounded px-3" style="height: 38px;">
-                                <span class="fs-6 text-dark fw-bold">Archivos vinculables</span>
-                            </div>
-                        </div>
-                        <div class="col-3 text-end">
-                            <span class="badge bg-info text-dark fs-6 w-100 py-2" style="cursor: pointer;" wire:click="cambiarVista('vinculables')">{{ $conteoVinculables }}</span>
-                        </div>
-                    </div>
+<div class="row g-2 align-items-center mb-2">
+    <div class="col-9">
+        <button wire:click="cambiarVista('vinculables')" class="bot {{ $vistaActual === 'vinculables' ? 'botNegro' : 'botVerde' }} w-100" wire:loading.attr="disabled" wire:target="cambiarVista('vinculables')">
+            <span wire:loading.remove wire:target="cambiarVista('vinculables')">Archivos vinculables</span>
+            <span wire:loading wire:target="cambiarVista('vinculables')">⏳ Procesando...</span>
+        </button>
+    </div>
+    <div class="col-3 text-end">
+        <span class="badge bg-info text-dark fs-6 w-100 py-2">{{ $conteoVinculables }}</span>
+    </div>
+</div>
                     <div class="row g-2 align-items-center mb-2">
                         <div class="col-9">
                             <button wire:click="cambiarVista('sin_foto')" class="bot {{ $vistaActual === 'sin_foto' ? 'botNegro' : 'botVerde' }} w-100" wire:loading.attr="disabled" wire:target="cambiarVista('sin_foto')">
