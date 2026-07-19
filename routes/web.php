@@ -31,6 +31,7 @@ Route::middleware("auth")->group(function () {
     Route::view('deptos', 'livewire.deptos.index');
     Route::view('empleados', 'livewire.empleados.index');
     Route::view('estilos', 'livewire.estilos.index');
+    Route::view('fotosestilos', 'livewire.estilos.fotosindex');
     Route::view('formas', 'livewire.formas.index');
     Route::view('materials', 'livewire.materials.index');
     Route::view('origens', 'livewire.origens.index');
