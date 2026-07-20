@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PruebaRequestController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,7 +32,6 @@ Route::middleware("auth")->group(function () {
     Route::view('deptos', 'livewire.deptos.index');
     Route::view('empleados', 'livewire.empleados.index');
     Route::view('estilos', 'livewire.estilos.index');
-    Route::view('fotosestilos', 'livewire.estilos.fotosindex');
     Route::view('formas', 'livewire.formas.index');
     Route::view('materials', 'livewire.materials.index');
     Route::view('origens', 'livewire.origens.index');
@@ -49,5 +49,9 @@ Route::middleware("auth")->group(function () {
     Route::view('kardex', 'livewire.kardex.index');
     Route::view('bandejas', 'livewire.bandejas.index');
     Route::view('adminfolios', 'livewire.adminfolios.index');
+
+    Route::view('fotosestilos', 'livewire.estilos.fotosindex');
+    Route::view('goaduanas', 'livewire.goaduanas.index');
+
 
 });

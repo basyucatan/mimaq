@@ -1,0 +1,35 @@
+{
+    "codigo_proveedor": "EMAJ",
+    "condiciones_pago": "Contado",
+    "metodo_pago": "Transferencia electronica",
+    "moneda": "Peso mexicano",
+    "tipo_cambio": 17.5,
+    "fecha": "13/07/2026",
+    "referencia": "1200",
+    "observaciones": "Test de integracion",
+    "crear_articulos_comerciales": true,
+    "integrar_facturas_con_pedimentos": true,
+    "items": [
+        {
+            "num_item": 1,
+            "cod_articulo": "1100-1",
+            "cantidad_comercial": 10,
+            "codigo_medida": "1",
+            "precio": 1,
+            "porcentaje_descuento": 0,
+            "descripcion_ingles": "GOLD RING 10K W",
+            "descripcion": "ANILLO DE ORO 10K BLANCO",
+            "series": "",
+            "modelo": "R5321",
+            "marca": "EMA",
+            "integracion": {
+                "fecha_pago": "09/01/2023",
+                "aduana": "282",
+                "patente": "3867",
+                "pedimento": "3000127",
+                "secuencia": 1,
+                "cantidad": 1
+            }
+        }
+    ]
+}
