@@ -144,7 +144,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('IdBandeja')->constrained('bandejas')->cascadeOnDelete();
             $table->foreignId('IdProceso')->constrained('procesos')->restrictOnDelete();
-            $table->foreignId('IdProcesoSig')->constrained('procesos')->restrictOnDelete();
+            $table->foreignId('IdProcesoSig')->nullable()->constrained('procesos')->nullOnDelete();
             $table->foreignId('IdUser')->nullable()->constrained('users')->restrictOnDelete();
             $table->foreignId('IdRegistrador')->nullable()->constrained('empleados')->nullOnDelete();
             $table->foreignId('IdEmpleado')->nullable()->constrained('empleados')->nullOnDelete();

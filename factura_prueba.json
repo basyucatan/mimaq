@@ -4,15 +4,15 @@
     "metodo_pago": "Transferencia electronica",
     "moneda": "Peso mexicano",
     "tipo_cambio": 17.5,
-    "fecha": "13/07/2026",
-    "referencia": "1200",
+    "fecha": "21/07/2026",
+    "referencia": "1300",
     "observaciones": "Test de integracion",
     "crear_articulos_comerciales": true,
     "integrar_facturas_con_pedimentos": true,
     "items": [
         {
             "num_item": 1,
-            "cod_articulo": "1100-1",
+            "cod_articulo": "1300-1",
             "cantidad_comercial": 10,
             "codigo_medida": "1",
             "precio": 1,
@@ -23,12 +23,12 @@
             "modelo": "R5321",
             "marca": "EMA",
             "integracion": {
-                "fecha_pago": "09/01/2023",
+                "fecha_pago": "21/07/2026",
                 "aduana": "282",
-                "patente": "3867",
-                "pedimento": "3000127",
+                "patente": "1640",
+                "pedimento": "6017213",
                 "secuencia": 1,
-                "cantidad": 1
+                "cantidad": 10
             }
         }
     ]

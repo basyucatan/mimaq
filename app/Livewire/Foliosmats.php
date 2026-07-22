@@ -184,7 +184,6 @@ public function save()
             ->join('clases', 'clases.id', '=', 'materials.IdClase')
             ->where('foliosmats.IdFolio', $this->IdFolio)
             ->where('foliosmats.cantidad', 'LIKE', '%'.$this->keyWord.'%')
-            ->orderBy('clases.IdAccess')
             ->paginate(12);
     }
 }
