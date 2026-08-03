@@ -18,8 +18,13 @@
                         @endif
                     </div>
                     <div>
-                        <button class="bot botVerde" wire:click="create" title="Nuevo Material">
+                        <button class="bot botVerde botChico" wire:click="create" title="Nuevo Material">
                             <i class="bi bi-file-earmark-plus"></i>
+                        </button>
+                        <button class="bot botAzul botChico" wire:click="imprimir" wire:loading.attr="disabled"
+                            wire:target="imprimir" title="Packing List Español">
+                            <span wire:loading.remove wire:target="imprimir"><i class="bi bi-printer"></i></span>
+                            <span wire:loading wire:target="imprimir">⏳</span>
                         </button>
                     </div>
                 </div>

@@ -30,25 +30,38 @@ class Facimportsdet extends Model
     }
     public function getPropsTotAttribute()
     {
+        $aro = data_get($this->adicionales, 'aro');
         return collect([
             $this->propiedades,
             $this->IdEstilo ? $this->estilo?->estilo : null,
             $this->estiloY ? $this->estiloY : null,
+            $aro ? 'Aro: ' . $aro : null,
         ])->filter()->implode(' ');
     }
-    public function getOrdenInfoAttribute()
-    {
-        $folio = $this->folio;
-        $lote = $folio?->lote;
-        $orden = $lote?->orden;
-        $cliente = $orden?->cliente;
+public function getOrdenInfoAttribute()
+{
+    $info = data_get($this->adicionales, 'ordenInfo');
+    if ($info) {
+        $orden = data_get($info, 'orden');
+        $lote = data_get($info, 'lote');
+        $cliente = data_get($info, 'cliente');
         return collect([
-            $orden ? $orden->orden : null,
-            $lote ? '-' . $lote->lote : null,
-            $folio ? ' | ' . $folio->id : null,
-            $cliente ? ' (' . $cliente->cliente.')' : null
-        ])->filter()->implode(' ');
+            $orden ? $orden : null,
+            $lote ? '-' . $lote : null,
+            $cliente ? ' (' . $cliente . ')' : null
+        ])->filter()->implode('');
     }
+    $folio = $this->folio;
+    $lote = $folio?->lote;
+    $orden = $lote?->orden;
+    $cliente = $orden?->cliente;
+    return collect([
+        $orden ? $orden->orden : null,
+        $lote ? '-' . $lote->lote : null,
+        $folio ? ' | ' . $folio->id : null,
+        $cliente ? ' (' . $cliente->cliente . ')' : null
+    ])->filter()->implode('');
+}
     public function getDifsFormatAttribute()
     {
         if (!$this->diferencias) return '';

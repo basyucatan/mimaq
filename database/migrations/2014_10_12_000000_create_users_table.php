@@ -27,7 +27,7 @@ return new class extends Migration
             $table->foreignId('IdDepto')->nullable()->constrained('deptos')->nullOnDelete();
             $table->string('name')->unique();
             $table->string('telefono')->unique();
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->string('password');
             $table->boolean('activo')->default(true);
             $table->json('adicionales')->nullable();

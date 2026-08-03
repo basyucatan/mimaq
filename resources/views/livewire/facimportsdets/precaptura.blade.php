@@ -9,6 +9,7 @@
                         <th style="width:7%">UnitPr</th>
                         <th style="width:10%">Weight</th>
                         <th style="width:12%">Style</th>
+                        <th style="width:5%">Aro</th>
                         <th style="width:5%">Kt</th>
                         <th style="width:5%">Color</th>
                         <th style="width:10%">Size</th>
@@ -48,6 +49,14 @@
                                     <option value=""></option>
                                     @foreach ($estilos as $key => $value)
                                         <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <select wire:model="precaptura.{{ $loop->index }}.aro" class="inpBase inpChico">
+                                    <option value=""></option>
+                                    @foreach ($aros as $key => $value)
+                                        <option value="{{ $value }}">{{ $value }}</option>
                                     @endforeach
                                 </select>
                             </td>

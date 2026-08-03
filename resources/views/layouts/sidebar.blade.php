@@ -4,10 +4,10 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            @auth
+            @if(auth()->check() && !auth()->user()->hasRole('adminUSA'))
                 <a class="bot botNegro" href="{{ url('/adminfolios') }}" title="Folios" style="font-size: 20px;">📚</a>
                 <a class="bot botNegro" href="{{ url('/bandejas') }}" title="Bandejas" style="font-size: 20px;">📁</a>
-            @endauth
+            @endif
         </div>
         <div class="mx-auto">
             <a href="{{ url('/home') }}">
@@ -41,15 +41,18 @@
                             <a href="#" class="nav-link menu-trigger">🧩 Admin</a>
                             <ul class="submenu d-none list-unstyled ps-2 border-start">
                                 <li><a href="{{ url('/facimports') }}" class="nav-link small">🌍 Import</a></li>
+                                @unlessrole('adminUSA')
                                 <li><a href="{{ url('/recibirimports') }}" class="nav-link small">📥 Recepción de Import</a></li>
                                 <li><a href="{{ url('/adminfolios') }}" class="nav-link small">📚 Folios</a></li>
                                 <li><a href="{{ url('/bandejas') }}" class="nav-link small">📁 Bandejas</a></li>
                                 <li><a href="{{ url('/facexports') }}" class="nav-link small">↗️ Export</a></li>
                                 <li><a href="{{ url('/kardex') }}" class="nav-link small">💶 Kardex</a></li>
                                 <li><a href="{{ url('#') }}" class="nav-link small">🔌 API Go Aduanas</a></li>
+                                @endunlessrole
                             </ul>
                         </li>
-                    </ul>                
+                    </ul>
+                    @unlessrole('adminUSA')                
                     <ul class="navbar-nav pe-3">
                         <li class="nav-item custom-dropdown-item">
                             <a href="#" class="nav-link menu-trigger">🔗 Catálogos</a>
@@ -64,17 +67,18 @@
                                             <li><a href="{{ url('/sizes') }}" class="nav-link small">📏 Sizes</a></li>
                                             <li><a href="{{ url('/formas') }}" class="nav-link small">🔷 Formas</a></li>
                                             <li><a href="{{ url('/origens') }}" class="nav-link small">🌐 Orígenes</a></li>
+                                            <li><a href="{{ url('/permisos') }}" class="nav-link small">🔐 Permisos</a></li>
+                                            <li><a href="{{ url('/arancels') }}" class="nav-link small">💰 Aranceles</a></li>
                                         </ul>
                                     </li>
                                     <li class="nav-item">
                                         <a href="#" class="nav-link menu-trigger">🧱 Materiales</a>
                                         <ul class="submenu d-none list-unstyled ps-3 border-start">
-                                            <li><a href="{{ url('/permisos') }}" class="nav-link small">🔐 Permisos</a></li>
-                                            <li><a href="{{ url('/arancels') }}" class="nav-link small">💰 Aranceles</a></li>
                                             <li><a href="{{ url('/tipos') }}" class="nav-link small">🧩 Tipos</a></li>
                                             <li><a href="{{ url('/clases') }}" class="nav-link small">🗂️ Clases</a></li>
                                             <li><a href="{{ url('/materials') }}" class="nav-link small">🧱 Materiales</a></li>
                                             <li><a href="{{ url('/estilos') }}" class="nav-link small">🎨 Estilos</a></li>
+                                            <li><a href="{{ url('/fotosestilos') }}" class="nav-link small">📸 Fotos de Estilos</a></li>
                                         </ul>
                                     </li>                            
 
@@ -87,7 +91,8 @@
                                     </li>
                                 </ul>
                         </li>
-                    </ul>                              
+                    </ul>
+                    @endunlessrole
                 </div>
             @endauth
         </div>

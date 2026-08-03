@@ -8,7 +8,7 @@ class Orden extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'ordens';
-    protected $fillable = ['IdCliente','orden','estatus','fechaVen','alertas','adicionales'];
+    protected $fillable = ['IdCliente','orden','estatus','fechaVen','adicionales'];
     protected $casts = ['adicionales' => 'array'];
     public function cliente()
     {

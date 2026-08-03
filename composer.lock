@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2bbba32c985a90359520cdd48ffa9203",
+    "content-hash": "0692d31b50fa88d4a9a9eb0553cc581a",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -2269,6 +2269,59 @@
                 "source": "https://github.com/KnpLabs/snappy/tree/v1.6.0"
             },
             "time": "2026-02-13T12:50:40+00:00"
+        },
+        {
+            "name": "kwn/number-to-words",
+            "version": "3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kwn/number-to-words.git",
+                "reference": "d29174220281e9f80fda1e32c822cd2395f89974"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kwn/number-to-words/zipball/d29174220281e9f80fda1e32c822cd2395f89974",
+                "reference": "d29174220281e9f80fda1e32c822cd2395f89974",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.5.55",
+                "squizlabs/php_codesniffer": "^3.7.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "NumberToWords\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Karol Wnuk",
+                    "email": "k.wnuk@ascetic.pl"
+                }
+            ],
+            "description": "Multi language standalone PHP number to words converter. Fully tested, open for extensions and new languages.",
+            "keywords": [
+                "currency",
+                "money",
+                "number",
+                "numbers",
+                "string",
+                "to",
+                "words"
+            ],
+            "support": {
+                "issues": "https://github.com/kwn/number-to-words/issues",
+                "source": "https://github.com/kwn/number-to-words/tree/3.0.1"
+            },
+            "time": "2026-07-13T19:20:14+00:00"
         },
         {
             "name": "laravel-lang/actions",

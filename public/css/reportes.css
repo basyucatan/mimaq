@@ -20,18 +20,16 @@ table {
     width: 100%;
     border-collapse: collapse;
     font-family: sans-serif;
-    font-size: 10px;
+    font-size: 12px;
 }
 th {
     background: #001060;
     color: #ffffff;
     padding: 6px 5px;
-    font-size: 10pt;
     border: none;
     font-weight: bold;
 }
 tr.sub-cabecera th {
-    font-size: 11px;
     border-bottom: 1px solid #000;
 }
 td {
@@ -43,7 +41,6 @@ tr.separadora td {
     border-bottom: 1px solid #000;
     padding-top: 6px;
     padding-bottom: 4px;
-    font-size: 10px;
     background-color: #f8f9fa;
 }
 tr.detalle td {

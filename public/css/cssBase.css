@@ -2,7 +2,7 @@
     --primarioO: #00329e;
     --primarioC: #63befa;
 }
-html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color: black;}
+html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(231, 236, 239);color: black;}
 
 .cardPrin, .cardSec {
     display: flex;
@@ -55,6 +55,12 @@ html, body {height: 100%; overflow: hidden;background: rgb(231, 236, 239);color:
     background:linear-gradient(0deg, var(--primarioC),#fff);
     border-top:1px solid #e5e7eb;
     font-size:0.9rem;
+}
+.headerAmplio > :nth-child(2){flex: 1;min-width: 180px;}
+@media (max-width: 768px){
+    .headerAmplio{flex-wrap: wrap;}
+    .headerAmplio > :nth-child(3){width: 100%;display: flex;justify-content: flex-end;order: 3;}
+    .headerAmplio > :nth-child(2){order: 2;}
 }
 /* formularios */
 .inpSolo, .etiBase, .inpBase, .etiLectura {font-size: 1rem; }

@@ -13,7 +13,7 @@ class Lote extends Model
 
     protected $table = 'lotes';
 
-    protected $fillable = ['lote','IdOrden','alertas','adicionales'];
+    protected $fillable = ['lote','IdOrden','adicionales'];
     protected $casts = [
         'lote' => 'integer',
         'adicionales' => 'array'

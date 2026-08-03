@@ -4,7 +4,7 @@
   ],
 
   "Parametros":[
-    {"id":1,"factorIva":0.16,"cantBandeja":"10","valorAgOro":"10","valorAgPlata":"5"}
+    {"id":1,"factorIva":0.16,"tipoCambio":18.05,"limiteFactura":100000,"cantBandeja":"10","valorAgOro":"10","valorAgPlata":"5"}
   ],
 
   "kts":[

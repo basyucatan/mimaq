@@ -7,24 +7,24 @@
         </div>
         <div class="cardSec-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">
             <div class="row gx-1">
-                <div class="col-12 col-md-3 col-lg-2">
-                    <label class="etiChico">Customer</label>
-                    <select wire:model="IdCliente" wire:change="$refresh" class="inpBase inpChico">
-                        <option value=""></option>
-                        @foreach ($clientes as $key => $value)
-                            <option value="{{ $key }}">{{ $value }}</option>
-                        @endforeach
-                    </select>
-                    @error('IdCliente') <span class="text-danger">{{ $message }}</span> @enderror
-                </div>
+<div class="col-12 col-md-3 col-lg-2">
+    <label class="etiChico">Customer</label>
+    <select wire:model="IdCliente" wire:change="ultimoConsecutivo" class="inpBase inpChico">
+        <option value=""></option>
+        @foreach ($clientes as $key => $value)
+            <option value="{{ $key }}">{{ $value }}</option>
+        @endforeach
+    </select>
+    @error('IdCliente') <span class="text-danger">{{ $message }}</span> @enderror
+</div>
                 <div class="col-12 col-md-3 col-lg-2">
                     <label class="etiChico">Order</label>
-                    <input wire:model="orden" type="text" class="inpBase inpChico"  onfocus="this.select()">
+                    <input wire:model="orden" class="inpBase inpChico" tabindex="{{ $consecutivoAuto ? -1 : 0 }}">
                     @error('orden') <span class="error text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-12 col-md-3 col-lg-2">
                     <label class="etiChico">Lot</label>
-                    <input wire:model="lote" type="text" class="inpBase inpChico"  onfocus="this.select()">
+                    <input wire:model="lote" class="inpBase inpChico" tabindex="{{ $consecutivoAuto ? -1 : 0 }}">
                     @error('lote') <span class="error text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-12 col-md-3 col-lg-2">

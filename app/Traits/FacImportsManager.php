@@ -2,6 +2,7 @@
 namespace App\Traits;
 use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
+use NumberToWords\NumberToWords;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\{Facimportsdet, Factura, Material, Util, Folio};
 use Illuminate\Support\Facades\DB; 
@@ -25,13 +26,16 @@ trait FacImportsManager
             ->pluck('materialI', 'id')
             ->toArray();
     }
-    public function cambiarTipo(){$this->IdMaterial = null;}
+    public function cambiarTipo(){
+        $this->IdMaterial = null;
+        }
     public function getArrays()
     {
         $this->factura = Factura::find($this->IdFactura);
         $this->origens = Util::getArray('origens');
         $this->materials = Util::getArray('materials','materialI');
         $this->sizes = Util::getArray('sizes');
+        $this->aros = Util::getArray('aros');
         $this->tipos = Util::getArray('tipos','tipoI');
         $this->formas = Util::getArray('formas');
         $this->estilos = Util::getArray('estilos');
@@ -68,12 +72,15 @@ public function actualizarDatosFolio()
         $this->unidadP = $importDet->Material?->UnidadP?->unidad;
         $this->cargarMateriales();
         $this->kt = $this->adicionales['kt'] ?? null;
+        $this->aro = $this->adicionales['aro'] ?? null;
         $this->color = $this->adicionales['color'] ?? null;
+        $this->infoProduccion = isset($this->adicionales['produccion']) || isset($this->adicionales['ordenInfo']);
         $this->actualizarDatosFolio();
         $this->verModalFacimportsdet = true;
     }
     public function create()
     {
+        if($this->montoExcedido()) return;
         $this->resetInput();
         $this->selected_id = null;
         $this->verModalFacimportsdet = true;
@@ -99,6 +106,7 @@ public function actualizarDatosFolio()
             (array)$this->adicionales,
             [
                 'kt' => $this->kt,
+                'aro' => $this->aro,
                 'color' => $this->color
             ]
         );
@@ -141,7 +149,7 @@ private function getFactura()
     ])->findOrFail($this->IdFactura);
     $itemsAgrupados = $factura->facimportsdets
         ->groupBy(function ($item) {
-            $nombreMaterial = $item->material->material ?? 'N/A';
+            $nombreMaterial = $item->material->materialI ?? 'N/A';
             $propiedades = strip_tags($item->propiedades);
             return $nombreMaterial . ($propiedades ? ' ' . $propiedades : '');
         })
@@ -161,8 +169,18 @@ public function imprimirFactura()
 {
     [$factura, $itemsAgrupados] = $this->getFactura();
     $montoTotal = $factura->facimportsdets->sum(fn($i) => $i->cantidad * $i->precioU);
-    $formateador = new NumeroALetras();
-    $totalEnLetras = $formateador->toMoney($montoTotal, 2, 'DÓLARES', 'CENTAVOS');
+    // $formateador = new NumeroALetras();
+    // $totalEnLetras = $formateador->toMoney($montoTotal, 2, 'USD', 'CENTS');
+    $numberToWords = new NumberToWords();
+    $transformer = $numberToWords->getNumberTransformer('en');
+    $entero = floor($montoTotal);
+    $centavos = round(($montoTotal - $entero) * 100);
+    $totalEnLetras = strtoupper(
+        $transformer->toWords($entero)
+        . ' USD '
+        . str_pad($centavos, 2, '0', STR_PAD_LEFT)
+        . ' CENTS'
+    );
     $htmlFactura = view('livewire.facimportsdets.facturaPDF', compact('itemsAgrupados', 'factura', 'totalEnLetras'))->render();
     $instanciaDompdf = PDF::loadHTML($htmlFactura);
     $instanciaDompdf->setPaper('letter', 'portrait');
@@ -230,14 +248,16 @@ public function imprimirPLProduccion()
     public function resetInput()
     {
         $this->resetexcept('keyWord', 'selected_id', 'IdFactura', 'factura', 'folios', 'tipos',
-            'kts','colors','origens', 'clientes', 'materials', 'sizes', 'formas', 'estilos');
+            'kts','aros','colors','origens', 'clientes', 'materials', 'sizes', 'formas', 'estilos');
     }
     public function cancel()
     {
         $this->resetInput();
+        $this->materials = Util::getArray('materials','materialI');
         $this->verModalFacimportsdet = false;
         $this->verPrecaptura = false;
         $this->verModalImpresiones = false;
+        $this->verModalProduccion = false;
     }
     public function destroy($id)
     {

@@ -22,13 +22,13 @@
     <table style="margin-bottom: 5px; border: none;">
         <tr>
             <td width="50%" style="border: none; padding-right: 10px;">
-                <div class="linea-detalle">CONSIGNADO A:</div>
+                <div class="linea-detalle">SOLD TO:</div>
                 <strong style="font-size: 9pt;">EMA DE YUCATAN, S.A. DE C.V.</strong><br>
                 CALLE 64 #366-A X 39 Y 41 COL. CENTRO<br>
                 MERIDA, YUCATAN, MEXICO | RFC: EYU-030827-858
             </td>
             <td width="50%" style="border: none; padding-left: 10px;">
-                <div class="linea-detalle">ENVIADO A:</div>
+                <div class="linea-detalle">SHIPPED TO:</div>
                 <strong style="font-size: 9pt;">EMA DE YUCATAN, S.A. DE C.V.</strong><br>
                 CALLE 64 #366-A X 39 Y 41 COL. CENTRO<br>
                 MERIDA, YUCATAN, MEXICO | RFC: EYU-030827-858
@@ -38,12 +38,12 @@
 <table style="margin-bottom: 5px; border: none; table-layout: fixed; width: 100%;">
         <tr>
             <td width="25%" style="border: none; vertical-align: top;">
-                <span class="negrita">FACTURA:</span> {{ $factura->factura }}<br>
-                <span class="negrita">FECHA:</span> {{ Util::formatFecha($factura->fecha,'MM/DD/YY') }}
+                <span class="negrita">INVOICE:</span> {{ $factura->factura }}<br>
+                <span class="negrita">DATE:</span> {{ Util::formatFecha($factura->fecha,'MM/DD/YY') }}
             </td>
             <td width="20%" style="border: none;"></td>
             <td width="55%" style="border: none; vertical-align: top;" class="derecha">
-                <span class="negrita">Via:</span> {{ $factura->adicionales['viadE'] ?? '' }}<br>
+                <span class="negrita">CARRIER:</span> {{ $factura->adicionales['viadE'] ?? '' }}<br>
                 @php
                     $arregloGuias = $factura->guias;
                     if (is_string($arregloGuias)) {
@@ -51,20 +51,20 @@
                     }
                 @endphp
                 @if(!empty($arregloGuias) && is_array($arregloGuias))
-                    <span class="negrita">Guia(s):</span> {{ implode(', ', $arregloGuias) }}<br>
+                    <span class="negrita">AWB:</span> {{ implode(', ', $arregloGuias) }}<br>
                 @endif
-                <span class="negrita"># Paq:</span> {{ $factura->adicionales['nPaq'] ?? '' }}
+                <span class="negrita">PACKAGES:</span> {{ $factura->adicionales['nPaq'] ?? '' }}
             </td>
         </tr>
     </table>   
     <table>
         <thead>
             <tr>
-                <th width="12%" class="centro">Cantidad</th>
-                <th width="10%" class="centro">Unidad</th>
-                <th width="48%">Descripción</th>
-                <th width="15%" class="derecha">Peso (g)</th>
-                <th width="15%" class="derecha">Importe</th>
+                <th width="12%" class="centro">QTY</th>
+                <th width="10%" class="centro">UNIT</th>
+                <th width="48%">DESCRIPTION</th>
+                <th width="15%" class="derecha">WGT. GR</th>
+                <th width="15%" class="derecha">AMOUNT</th>
             </tr>
         </thead>
         <tbody>
@@ -90,7 +90,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="3" class="derecha negrita" style="border-bottom: none;">TOTALES:</td>
+                <td colspan="3" class="derecha negrita" style="border-bottom: none;">TOTAL:</td>
                 <td class="derecha negrita" style="background: #f8f9fa;">{{ number_format($totalGralPeso, 3) }}</td>
                 <td class="derecha negrita" style="background: #f8f9fa;">{{ number_format($totalGralImp, 2) }}</td>
             </tr>
@@ -99,7 +99,6 @@
     <table style="margin-top: 10px; border: none;">
         <tr>
             <td width="70%" style="border: none; vertical-align: top;">
-                <div class="linea-detalle">CANTIDAD EN LETRAS:</div>
                 <div class="negrita" style="text-transform: uppercase; font-size: 8.5pt;">{{ $totalEnLetras }}</div>
             </td>
             <td width="30%" style="border: none;">
@@ -115,7 +114,7 @@
         </tr>
     </table>
     <div style="position: fixed; bottom: 0; width: 100%; font-size: 7pt;" class="derecha">
-        Página <span class="pagina"></span>
+        Page <span class="pagina"></span>
     </div>
 </body>
 </html>

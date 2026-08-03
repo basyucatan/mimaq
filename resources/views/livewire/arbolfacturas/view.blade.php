@@ -11,8 +11,8 @@
             @endif
         </div>
         <div class="d-flex gap-1">
-            <a class="bot botBlanco botChico" title="Replegar todo" wire:click="replegarTodo">📁</a>
-            <button wire:click="nuevoPedimento" class="bot botBlanco botChico" title="Nuevo Pedimento">➕</button>
+            <a wire:click="replegarTodo" class="bot botBlanco botChico" title="Collapse">📁</a>
+            <button wire:click="nuevoPedimento" class="bot botBlanco botChico" title="New Shipper Declaration">➕</button>
         </div>
     </div>
     @include('livewire.arbolfacturas.modals')

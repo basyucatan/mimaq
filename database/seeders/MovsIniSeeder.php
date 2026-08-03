@@ -29,8 +29,8 @@ $pedimentos = array(
 );
 DB::table('pedimentos')->insert($pedimentos);
 $facturas = array(
-  array('id' => '5','factura' => '150','IdPedimento' => '3','fecha' => '2026-05-20','estatus' => 'abierto','guias' => NULL,'adicionales' => '{"viadE":"FEDEX","guiaA":"","nPaq":1}','created_at' => '2026-05-21 00:23:48','updated_at' => '2026-05-21 00:23:48'),
-  array('id' => '7','factura' => '1953','IdPedimento' => '6','fecha' => '2026-05-11','estatus' => 'cerrado','guias' => '["55-626546256","66-5656421"]','adicionales' => '{"viadE":"FEDEX","guiaA":"483975964716","nPaq":1}','created_at' => '2026-05-29 16:22:00','updated_at' => '2026-07-13 23:20:57')
+  array('id' => '5','serie' => 'A','factura' => '150','IdPedimento' => '3','fecha' => '2026-05-20','estatus' => 'abierto','guias' => NULL,'adicionales' => '{"viadE":"FEDEX","guiaA":"","nPaq":1}','created_at' => '2026-05-21 00:23:48','updated_at' => '2026-05-21 00:23:48'),
+  array('id' => '7','serie' => 'A','factura' => '1953','IdPedimento' => '6','fecha' => '2026-05-11','estatus' => 'cerrado','guias' => '["55-626546256","66-5656421"]','adicionales' => '{"viadE":"FEDEX","guiaA":"483975964716","nPaq":1}','created_at' => '2026-05-29 16:22:00','updated_at' => '2026-07-13 23:20:57')
 );
 DB::table('facturas')->insert($facturas);
 

@@ -13,11 +13,12 @@ class User extends Authenticatable
 	use HasApiTokens, HasFactory, Notifiable, HasRoles;
 	
     public $timestamps = false;
-
     protected $table = 'users';
-
-    protected $fillable = ['name','telefono','IdBodega','IdDepto','email','password'];   
-     
+    protected $fillable = ['name','telefono','IdBodega','IdDepto','email','password'];
+    public function getNivelMinimoAttribute()
+    {
+        return $this->roles->min('nivel') ?? 99;
+    }
     public function Depto()
     {
         return $this->hasOne('App\Models\Depto', 'id', 'IdDepto');

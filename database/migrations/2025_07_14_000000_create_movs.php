@@ -41,8 +41,8 @@ return new class extends Migration {
         });
         Schema::create('pedimentos', function (Blueprint $table) {
             $table->id();
-            $table->string('pedimento', 25)->unique();
-            $table->enum('regimen', ['IN', 'RT', 'AF']); // IN=Import, RT=Export
+            $table->string('pedimento', 25)->nullable()->unique();
+            $table->enum('regimen', ['IN', 'RT', 'AF']);
             $table->date('fecha');
             $table->decimal('tipoCambio', 12, 4);
             $table->json('adicionales')->nullable();
@@ -50,13 +50,15 @@ return new class extends Migration {
         });
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            $table->string('factura', 20);
+            $table->char('serie', 1)->default('A');
+            $table->unsignedInteger('factura');
             $table->foreignId('IdPedimento')->nullable()->constrained('pedimentos')->nullOnDelete();
             $table->date('fecha');
             $table->enum('estatus', ['abierto', 'recibido', 'cerrado'])->default('abierto');
             $table->json('guias')->nullable();
             $table->json('adicionales')->nullable();
             $table->timestamps();
+            $table->unique(['serie', 'factura']);
             $table->index(['factura', 'IdPedimento']);
         });
         Schema::create('facImportsDets', function (Blueprint $table) {

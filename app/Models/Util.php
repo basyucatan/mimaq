@@ -155,7 +155,6 @@ class Util
             $campo = Str::singular($tabla);
         }
         $columna = DB::select("SHOW COLUMNS FROM {$tabla} LIKE '{$campo}'")[0] ?? null;
-
         if (!$columna) {
             throw new \InvalidArgumentException("El campo '{$campo}' no existe en la tabla '{$tabla}'");
         }
@@ -185,7 +184,12 @@ class Util
         }
         return $coleccion->keyBy('id')->toArray();
     }
-
+    public static function getParametro($campo, $default = null)
+    {
+        $parametros = self::getArrayJS('Parametros');
+        $parametros = reset($parametros);
+        return $parametros[$campo] ?? $default;
+    }
     public static function guardarArchivo($file, $nombreBase, $carpeta)
     {
         if (!$file || !$carpeta) return null;

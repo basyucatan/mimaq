@@ -161,13 +161,13 @@ trait FolioManager
     }
     public function limpiar()
     {
+       if (!$this->IdFolio) return;
         $folio = Folio::with(['foliosmats', 'bandejas'])->find($this->IdFolio);
         $yaProcesado = $folio->foliosmats()->where('integrado', true)->exists() && $folio->bandejas()->exists();
-         if ($yaProcesado && !$this->confirmadoExceso) {
+         if ($yaProcesado) {
             $this->alerta("⚠️ Este folio ya ha sido procesado anteriormente.", 'error', 3000);
             return;
         }       
-       if (!$this->IdFolio) return;
         Foliosmat::where('IdFolio', $this->IdFolio)->delete();
         $this->alerta('🗑️ Registros eliminados', 'success', 1000);
         $this->dispatch('refreshFolios');

@@ -23,6 +23,10 @@ return new class extends Migration
             $table->id();
             $table->string('size',20)->unique();
         });
+        Schema::create('aros', function (Blueprint $table) {
+            $table->id();
+            $table->float('aro');
+        });
         Schema::create('formas', function (Blueprint $table) {
             $table->id();
             $table->string('forma',20)->unique();
@@ -89,6 +93,7 @@ return new class extends Migration
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             $table->string('cliente',50);
+            $table->boolean('consecutivoOrden')->default(false);
             $table->json('adicionales')->nullable();
         });                              
         Schema::create('empleados', function (Blueprint $table) {

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Livewire;
-
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Material;
@@ -108,4 +109,29 @@ class Materials extends Component
             Material::where('id', $id)->delete();
         }
     }
+public function imprimir()
+{
+    $materiales = Material::with(['clase.tipo', 'clase.arancel', 'unidad', 'unidadP'])
+        ->get()
+        ->sortBy([
+            fn($a, $b) => ($a->clase->tipo->tipo ?? '') <=> ($b->clase->tipo->tipo ?? ''),
+            fn($a, $b) => ($a->clase->clase ?? '') <=> ($b->clase->clase ?? ''),
+            fn($a, $b) => $a->material <=> $b->material,
+        ]);
+    $itemsAgrupados = $materiales->groupBy([
+        fn($item) => $item->clase->tipo->tipo ?? 'Sin Tipo',
+        fn($item) => $item->clase->clase ?? 'Sin Clase',
+    ]);
+    $html = view('livewire.materials.materialsPDF', compact('itemsAgrupados'))->render();
+    $dompdf = PDF::loadHTML($html);
+    $dompdf->setPaper('letter', 'portrait');
+    $contenidoPdf = $dompdf->output();
+    $rutaArchivo = 'materials.pdf';
+    Storage::disk('public')->put($rutaArchivo, $contenidoPdf);
+    $rutaFisica = storage_path('app/public/' . $rutaArchivo);
+    return response()->file($rutaFisica, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="materials.pdf"'
+    ]);
+}
 }
