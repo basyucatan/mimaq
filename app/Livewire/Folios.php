@@ -5,10 +5,10 @@ use Livewire\Attributes\{Computed, On};
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Folio;
-use App\Traits\{Utilfun, FolioManager};
+use App\Traits\{Utilfun};
 class Folios extends Component
 {
-    use WithPagination, Utilfun, FolioManager;
+    use WithPagination, Utilfun;
     protected $paginationTheme = 'bootstrap';
     public $verModalFolio=false, $selected_id, $keyWord, $IdLote, $IdFolio, $folio,
         $IdEstilo, $jobStyle, $cantidad, $totalBandejas, $precioU, $fechaVen, $estatus;

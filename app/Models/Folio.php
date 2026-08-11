@@ -22,7 +22,7 @@ class Folio extends Model
     protected static function booted()
     {
         static::creating(function ($folio) {
-            $folio->periodo = now()->format('ym');
+            $folio->periodo = now()->tz('America/Mexico_City')->format('ym');
             $ultimoConsecutivo = static::where('periodo', $folio->periodo)->max('consecutivoMensual');
             $folio->consecutivoMensual = $ultimoConsecutivo ? $ultimoConsecutivo + 1 : 1;
         });

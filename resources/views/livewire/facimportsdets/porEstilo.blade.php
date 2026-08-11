@@ -7,16 +7,16 @@
         </div>
         <div class="cardSec-body" style="padding: 10px; max-height: 400px; overflow-y: auto;">
             <div class="row gx-1">
-<div class="col-12 col-md-3 col-lg-2">
-    <label class="etiChico">Customer</label>
-    <select wire:model="IdCliente" wire:change="ultimoConsecutivo" class="inpBase inpChico">
-        <option value=""></option>
-        @foreach ($clientes as $key => $value)
-            <option value="{{ $key }}">{{ $value }}</option>
-        @endforeach
-    </select>
-    @error('IdCliente') <span class="text-danger">{{ $message }}</span> @enderror
-</div>
+                <div class="col-12 col-md-3 col-lg-2">
+                    <label class="etiChico">Customer</label>
+                    <select wire:model="IdCliente" wire:change="ultimoConsecutivo" class="inpBase inpChico">
+                        <option value=""></option>
+                        @foreach ($clientes as $key => $value)
+                            <option value="{{ $key }}">{{ $value }}</option>
+                        @endforeach
+                    </select>
+                    @error('IdCliente') <span class="text-danger">{{ $message }}</span> @enderror
+                </div>
                 <div class="col-12 col-md-3 col-lg-2">
                     <label class="etiChico">Order</label>
                     <input wire:model="orden" class="inpBase inpChico" tabindex="{{ $consecutivoAuto ? -1 : 0 }}">
@@ -44,14 +44,10 @@
                 </div>
                 <div class="col-12 col-md-3 col-lg-2 text-end">
                     <button
-                        type="button"
-                        class="bot botVerde"
-                        onclick="
-                            if ({{ !empty($precaptura) ? 'true' : 'false' }}) {
-                                if (!confirm('¿Deseas borrar la info actual?')) return;
-                            }
-                            @this.call('generarConEstilo');
-                        ">
+                        type="button" class="bot botVerde"
+                        onclick="if ({{ !empty($precaptura) ? 'true' : 'false' }}) 
+                            {if (!confirm('¿Deseas borrar la info actual?')) return;}
+                            @this.call('generarConEstilo');">
                         Generate
                     </button>
                     <button type="button" class="bot botAzul" wire:click="nuevoComponente" title="Agregar material">

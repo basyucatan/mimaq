@@ -18,7 +18,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="cardPrin-body">
+                <div class="cardPrin-body" style="max-height: 60vh">
                     <div class="d-flex justify-content-end mb-2">
                         {{ $referenciasmovs->links() }}
                     </div>
@@ -43,20 +43,21 @@
                                             {{ $row->Referencia->propsTot }}
                                             @if($row->Referencia->ordenInfo)
                                                 <br><small class="text-muted">{{ $row->Referencia->ordenInfo }}</small>
-                                            @endif                                            
+                                            @endif
+                                            @if ($row->Referencia->ordenInfo)
+                                                <br><small class="text-muted">{{ $row->ordenInfo }}</small>
+                                            @endif
                                         </td>
                                         <td>{{ $row->cantidad }}</td>
                                         <td>{{ $row->pesoG }}</td>
                                         <td>{{ $row->difsFormat }}</td>
                                         <td width="60">
-                                            @if($row->estatus == 'abierto')
                                             <div class="d-flex justify-content-around align-items-center gap-1">
                                                 <button wire:click="edit({{ $row->id }})" class="bot botNaranja botChico"
                                                     title="Editar">
                                                     <i class="bi-pencil-square"></i>
                                                 </button>
                                             </div>
-                                            @endif
                                         </td>
                                     </tr>
                                 @empty

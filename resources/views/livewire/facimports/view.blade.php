@@ -1,5 +1,5 @@
 @section('title', __('import'))
-<div class="container-fluid p-2">
+<div class="container-fluid p-2" style="max-height:90vh;">
     <div class="cardPrin">
         <div class="card-header bg-success text-white fs-5 ps-2">
             Import Invoices

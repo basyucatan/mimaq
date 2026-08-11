@@ -1,18 +1,20 @@
 <nav class="navbar bg-body-tertiary fixed-top">
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-2 flex-shrink-0">
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             @if(auth()->check() && !auth()->user()->hasRole('adminUSA'))
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <a class="bot botNegro" href="{{ url('/adminfolios') }}" title="Folios" style="font-size: 20px;">📚</a>
                 <a class="bot botNegro" href="{{ url('/bandejas') }}" title="Bandejas" style="font-size: 20px;">📁</a>
             @endif
         </div>
         <div class="mx-auto">
+            @if(auth()->check())
             <a href="{{ url('/home') }}">
                 <img src="{{ asset('img/logo.png') }}" style="width:40px; height:auto;" alt="Logo">
             </a>
+            @endif
         </div>
         <div class="d-flex align-items-center gap-2 flex-shrink-0">
             @guest

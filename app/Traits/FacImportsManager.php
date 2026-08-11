@@ -97,7 +97,7 @@ public function actualizarDatosFolio()
         $arancel = $material->Clase->Arancel->arancel;
         $this->pesoG = $material ? $material->getPesoG($this->pesoEnUMat) : 0;
         if (!$this->selected_id) {
-            $this->IdEntradaMex = $this->factura->getNextIdEntradaMex();
+            $this->IdEntradaMex = $this->factura->getNextIdEntradaMex(1)[0];
         }
         $facDet = $this->selected_id ? Facimportsdet::find($this->selected_id) : null;
         $adActual = $facDet?->adicionales ?? [];
@@ -261,6 +261,27 @@ public function imprimirPLProduccion()
     }
     public function destroy($id)
     {
-        if ($id) Facimportsdet::where('id', $id)->delete();
-    }    
+        if (!$id) return;
+        $registro = Facimportsdet::find($id);
+        if (!$registro) return;
+        $info = $registro->adicionales['ordenInfo'] ?? [];
+        $esPivote = !empty($info['esProduccion']);
+        if ($esPivote && !empty($info['orden']) && !empty($info['lote'])) {
+            $idCliente = $info['IdCliente'] ?? '0';
+            $orden = $info['orden'];
+            $lote = $info['lote'];
+            $idsAEliminar = Facimportsdet::where('IdFactura', $registro->IdFactura)
+                ->get()
+                ->filter(function ($item) use ($idCliente, $orden, $lote) {
+                    $itemInfo = $item->adicionales['ordenInfo'] ?? [];
+                    return ($itemInfo['IdCliente'] ?? '0') == $idCliente
+                        && ($itemInfo['orden'] ?? '') == $orden
+                        && ($itemInfo['lote'] ?? '') == $lote;
+                })
+                ->pluck('id');
+            Facimportsdet::whereIn('id', $idsAEliminar)->delete();
+        } else {
+            $registro->delete();
+        }
+    }  
 }

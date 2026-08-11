@@ -208,7 +208,7 @@ public function cambiarMaterial($index, $value)
 public function agregar()
 {
     if (empty($this->precaptura)) return;
-    $idEntradaMex = $this->factura->getNextIdEntradaMex();
+    $idsEntradaMex = $this->factura->getNextIdEntradaMex(count($this->precaptura));
     $clienteNombre = $this->IdCliente ? (Cliente::find($this->IdCliente)?->cliente ?? '') : '';
     $indiceConTipoUno = null;
     foreach ($this->precaptura as $index => $linea) {
@@ -239,7 +239,7 @@ public function agregar()
         }
         Facimportsdet::create([
             'IdFactura' => $this->IdFactura,
-            'IdEntradaMex' => $idEntradaMex++,
+            'IdEntradaMex' => $idsEntradaMex[$index],
             'IdOrigen' => $linea['IdOrigen'],
             'IdMaterial' => $linea['IdMaterial'],
             'IdFolio' => null,

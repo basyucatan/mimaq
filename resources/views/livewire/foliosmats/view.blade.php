@@ -32,7 +32,7 @@
                                 <tr>
                                     <th>Referencia</th>
                                     <th>Material</th>
-                                    <th>Rol</th>
+                                    {{-- <th>Rol</th> --}}
                                     <th>Cantidad</th>
                                     <th>Peso(g)</th>
                                     <th>Acciones</th>
@@ -54,19 +54,17 @@
                                                 </div>
                                             @endif
                                         </td>
-                                        <td>{{ $row->tipo->tipo }}</td>
+                                        {{-- <td>{{ $row->tipo->tipo }}</td> --}}
                                         <td>{{ Util::Miles($row->cantidad, 0) }}</td>
                                         <td>{{ Util::Miles($row->pesoG, 4) }}</td>
                                         <td width="60">
                                             <div class="d-flex justify-content-around align-items-center gap-1">
-                                                <button wire:click="edit({{ $row->id }})"
-                                                    class="bot botChico {{ $row->integrado ? 'botGris' : 'botNaranja' }}"
-                                                    title="Editar" @if ($row->integrado) disabled @endif>
+                                                <button wire:click="edit({{ $row->id }})" 
+                                                    class="bot botChico botNaranja" title="Editar">
                                                     <i class="bi-pencil-square"></i>
                                                 </button>
                                                 <button wire:click="destroy({{ $row->id }})"
-                                                    class="bot botChico {{ $row->integrado ? 'botGris' : 'botRojo' }}"
-                                                    title="Eliminar" @if ($row->integrado) disabled @endif
+                                                    class="bot botChico botRojo }}" title="Eliminar"
                                                     onclick="confirm('¿Estás seguro de eliminar este registro?') || event.stopImmediatePropagation()">
                                                     <i class="bi-trash3-fill"></i>
                                                 </button>

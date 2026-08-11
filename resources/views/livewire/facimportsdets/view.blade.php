@@ -8,7 +8,7 @@
                             {{ Util::dinero($factura?->total, 2) }}</span></span>
                     <div class="me-2 position-relative" style="display:inline-block;">
                         <input wire:model.lazy="keyWord" class="inpSolo" wire:keydown.escape="$set('keyWord','')"
-                            onfocus="this.select()" placeholder="Buscar...">
+                            onfocus="this.select()" placeholder="Search...">
                         @if ($keyWord)
                             <span wire:click="$set('keyWord','')" class="bot botNegro botChico"
                                 style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer;">
@@ -24,7 +24,7 @@
                             <button class="bot botAzul botChico" wire:click="create" title="New Material">
                                 <i class="bi bi-file-earmark-plus"></i>
                             </button>
-                            @role('SuperAdmin')
+                            @role('superAdmin')
                             <button class="bot botNegro botChico" wire:click="migrar"
                                 wire:loading.attr="disabled" wire:target="migrar" title="Migrar">
                                 <span wire:loading.remove wire:target="migrar"><i
@@ -53,7 +53,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="cardPrin-body">
+                <div class="cardPrin-body" style="max-height:60vh;">
                     @include('livewire.facimportsdets.porEstilo')
                     <div class="d-flex justify-content-end mb-2">
                         {{ $facimportsdets->links() }}

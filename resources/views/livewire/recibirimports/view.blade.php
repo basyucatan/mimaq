@@ -1,10 +1,10 @@
 @section('title', __('Recibir Import'))
-<div class="container-fluid p-2">
-    <div class="cardPrin shadow-sm border-0">
-        <div class="card-header bg-primary text-white fs-5 ps-3 py-2 d-flex align-items-center">
-            <span class="me-2">📦</span> Recepción de Imports
+<div class="container-fluid p-2" style="max-height:90vh;">
+    <div class="cardPrin">
+        <div class="card-header bg-success text-white fs-5 ps-2">
+            <span>📦</span> Recepción de Import
         </div>
-        <div class="cardPrin-body p-3">
+        <div class="cardPrin-body">
             <div class="row g-3">
                 <div class="col-12 col-md-3 border-end">
                     <div class="p-1" style="max-height: 80vh; overflow-y: auto;">
@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-md-9">
-                    @if($selected_id && $factura)
+                    @if($selected_id && $objFactura)
                         <div class="d-flex justify-content-between align-items-center bg-light border rounded p-2 mb-3 shadow-sm">
                             <div class="btn-toolbar" role="toolbar">
                                 <div class="btn-group me-2 shadow-sm">
@@ -36,7 +36,7 @@
                                     <button type="button" class="bot botBlanco botChico" wire:click="confirmarIngreso" wire:loading.attr="disabled" title="Procesar ingreso a almacén de seguridad">
                                         <span wire:loading.remove wire:target="confirmarIngreso">
                                             <span class="text-success">🔐</span> 
-                                            <small class="fw-bold">Operar entradas a bóveda</small>
+                                            <small class="fw-bold">Ingresar a bóveda</small>
                                         </span>
                                         <span wire:loading wire:target="confirmarIngreso">
                                             <span class="spinner-border spinner-border-sm text-success" role="status"></span>
@@ -44,10 +44,22 @@
                                         </span>
                                     </button>
                                 </div>
+                                <div class="btn-group me-2 shadow-sm">
+                                    <button type="button" class="bot botBlanco botChico" wire:click="generarFolios" wire:loading.attr="disabled" title="Procesar ingreso a almacén de seguridad">
+                                        <span wire:loading.remove wire:target="generarFolios">
+                                            <span class="text-success">📚</span> 
+                                            <small class="fw-bold">Generar Folios</small>
+                                        </span>
+                                        <span wire:loading wire:target="generarFolios">
+                                            <span class="spinner-border spinner-border-sm text-success" role="status"></span>
+                                            <small>Generando...</small>
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
                             <div class="d-none d-lg-block">
                                 <span class="badge bg-warning text-black fs-5 fw-bold">
-                                    Factura: <strong>#{{ $factura->factura }}</strong>
+                                    Factura: <strong>#{{ $objFactura->factura }}</strong>
                                 </span>
                             </div>
                         </div>

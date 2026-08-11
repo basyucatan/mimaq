@@ -20,6 +20,7 @@ public/oc/
 !/storage/logs/.gitignore
 /storage/framework/testing
 /storage/app/public
+/storage/app/livewire-tmp/
 
 .env
 .env.*

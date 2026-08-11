@@ -13,7 +13,7 @@ class Bandejasmov extends Model
 
     protected $table = 'bandejasmovs';
 
-    protected $fillable = ['IdBandeja','IdProceso','IdUser','IdEmpleado','IdRegistrador','pesoEntrada',
+    protected $fillable = ['IdBandeja','IdProceso','IdProcesoSig','IdUser','IdEmpleado','IdRegistrador','pesoEntrada',
         'pesoSalida','fechaHEntrada','fechaHSalida'];
     
 	

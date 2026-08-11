@@ -1,17 +1,36 @@
 <div class="cardSec shadow-sm">
-    <div class="cardSec-header d-flex justify-content-between align-items-center p-2">
-        <div class="flex-grow-1 me-2 position-relative">
-            <input wire:model.live="keyWord" class="inpSolo" 
-                wire:keydown.escape="$set('keyWord','')"
-                onfocus="this.select()" placeholder="Buscar Orden/Lote/Estilo">
-            @if($keyWord)
-                <span wire:click="$set('keyWord','')" class="bot botNegro botChico" 
-                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">X</span>
-            @endif
-        </div>
-        <div class="d-flex gap-1">
-            <a class="bot botBlanco botChico" title="Replegar todo" wire:click="replegarTodo">📁</a>
-            <button wire:click="nuevaOrden" class="bot botBlanco botChico" title="Nueva Orden">➕</button>
+    <div class="cardSec-header p-2">
+        <div class="row g-2 align-items-center">
+            <div class="col-12 col-sm-4">
+                <div class="position-relative">
+                    <select wire:model="IdFactura" wire:change="$refresh" class="inpChico w-100">
+                        <option value="">-- Factura --</option>
+                        @foreach ($facturas as $key => $value)
+                            <option value="{{ $key }}">{{ $value }}</option>
+                        @endforeach
+                    </select>
+                    @error('IdFactura') <span class="text-danger small d-block">{{ $message }}</span> @enderror
+                </div>
+            </div>
+            <div class="col-8 col-sm-5">
+                <div class="position-relative">
+                    <input wire:model.lazy="keyWord" class="inpChico w-100 pe-4" 
+                        wire:keydown.escape="$set('keyWord','')"
+                        onfocus="this.select()" placeholder="Buscar Orden/Lote/Estilo">
+                    @if($keyWord)
+                        <span wire:click="$set('keyWord','')" class="bot botNegro botChico" 
+                            style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); cursor: pointer;">X</span>
+                    @endif
+                </div>
+            </div>
+            <div class="col-4 col-sm-3 d-flex justify-content-end gap-1">
+                <button type="button" class="bot botAzul botChico" wire:click="imprimirFolios" 
+                    wire:loading.attr="disabled" wire:target="imprimirFolios" title="Imprimir Folios">
+                    <span wire:loading.remove wire:target="imprimirFolios"><i class="bi bi-printer"></i></span>
+                    <span wire:loading wire:target="imprimirFolios">⏳</span>
+                </button>
+                <button wire:click="nuevaOrden" class="bot botBlanco botChico" title="Nueva Orden">➕</button>
+            </div>
         </div>
     </div>
     @include('livewire.arbolfolios.modals')

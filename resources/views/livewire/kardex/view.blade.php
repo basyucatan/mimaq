@@ -21,11 +21,18 @@
                     <option value="folio">Producción</option>
                     <option value="export">Export</option>
                 </select>
-
-                <div class="position-relative">
-                    <input type="text" wire:model.live="buscar" class="inpSolo" placeholder="Buscar movimiento..."
-                        style="width: 200px;">
-                </div>
+                <div class="me-2 position-relative" style="display:inline-block;">
+                    <input wire:model.lazy="buscar" class="inpSolo" 
+                    wire:keydown.escape="$set('buscar','')"
+                    onfocus="this.select()" placeholder="Buscar...">
+                    @if($buscar)
+                        <span wire:click="$set('buscar','')" 
+                            class="bot botNegro botChico"
+                            style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                            X
+                        </span>
+                    @endif
+                </div> 
             </div>
         </div>
         <div class="cardSec-body">
@@ -36,8 +43,8 @@
                 <table class="table tabBase ch align-middle">
                     <thead>
                         <tr>
-                            <th class="ps-3" style="width: 120px;">Fecha / Ref</th>
-                            <th>Material Recibido</th>
+                            <th class="ps-3" style="width: 120px;">Ref/Fecha</th>
+                            <th>Material</th>
                             <th class="text-center" style="width: 180px;">Ruta Depto.</th>
                             <th class="text-center" style="width: 100px;">Operación</th>
                             <th class="text-end" style="width: 110px;">Entrada</th>
@@ -49,15 +56,17 @@
                         @foreach ($this->movimientos as $mov)
                             <tr>
                                 <td class="ps-3">
-                                    <div class="fw-bold text-dark">{{ $mov->created_at->format('d/m/y H:i') }}</div>
-                                    <div class="text-muted small">{{ $mov->Referencia->IdEntradaMex ?? 'S/R' }}</div>
+                                    <div class="fw-bold text-dark">{{ $mov->Referencia->IdEntradaMex ?? 'S/R' }}</div>
+                                    <div class="text-muted small">{{ $mov->created_at->format('d/m/y H:i') }}</div>
                                 </td>
                                 <td>
-                                    <div class="fw-bold text-primary">{{ $mov->Material->material ?? 'S/N' }}</div>
-                                    @if ($mov->glosa)
-                                        <div class="text-muted x-small italic text-truncate" style="max-width: 250px;">
-                                            {{ $mov->glosa }}</div>
-                                    @endif
+                                    <div class="fw-bold text-primary">
+                                        {{ $mov->Material->material ?? '' }}
+                                        <span class="text-muted">
+                                            {{ $mov->Referencia->propsTot }}
+                                        </span>
+                                    </div>
+                                    <div class="text-muted x-small">{{ $mov->Referencia->ordenInfo ?? '' }}</div>
                                     @if ($mov->Referencia && $mov->Referencia->diferencias)
                                         <div class="mt-1 px-2 py-1 rounded bg-warning-subtle border-start border-3 border-warning"
                                             style="font-size: 0.7rem;">

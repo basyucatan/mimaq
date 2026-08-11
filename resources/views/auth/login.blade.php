@@ -1,51 +1,35 @@
 @extends('layouts.app')
 
+@section('title', 'Log in')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-12 col-md-6">
             <div class="cardPrin">
-                <div class="cardPrin-header" style="cursor: move;">{{ __('Login') }}</div>
+                <div class="cardPrin-header">Acceso</div>
                 <div class="cardPrin-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <label for="telefono" class="etiBase">Teléfono</label>
-                                <input id="telefono" type="telefono" class="inpBase @error('telefono') is-invalid @enderror" name="telefono" value="{{ old('telefono') }}" required autocomplete="telefono" autofocus>
-                                @error('telefono')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                        <div class="mb-2">
+                            <label for="telefono" class="etiBase">Teléfono</label>
+                            <input id="telefono" type="tel" name="telefono" class="inpBase" value="{{ old('telefono') }}" required autofocus>
+                            @error('telefono')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <label for="password" class="etiBase">{{ __('Password') }}</label>
-                                <div class="position-relative">
-                                    <input id="password" type="password"
-                                        class="inpBase pe-5 @error('password') is-invalid @enderror"
-                                        name="password" required autocomplete="current-password">
-                                    <button type="button"
-                                            class="bot botAzul position-absolute top-0 end-0 h-100 px-2"
-                                            onclick="togglePassword()">👁
-                                    </button>
-                                </div>
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div class="mb-3">
+                            <label for="password" class="etiBase">Contraseña</label>
+                            <div class="position-relative">
+                                <input id="password" type="password" name="password" class="inpBase pe-5" required>
+                                <button type="button" class="bot botAzul position-absolute top-0 end-0 h-100 px-2" onclick="togglePassword()">👁</button>
                             </div>
+                            @error('password')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-0">
-                            <button type="submit" class="bot botAzul">
-                                {{ __('Login') }}
-                            </button>
-                            {{-- <a class="nav-link p-0" href="{{ url('/registro') }}">
-                                📝 Registro
-                            </a> --}}
+                        <div class="cardPrin-footer" style="border-radius: 0 0 10px 10px;">
+                            <button type="submit" class="bot botAzul">Iniciar Sesión</button>
                         </div>
                     </form>
                 </div>

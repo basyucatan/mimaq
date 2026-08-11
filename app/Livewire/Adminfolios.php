@@ -39,7 +39,7 @@ class Adminfolios extends Component
                 'orden' => $this->orden,
                 'lote' => $this->lote,
                 'estatus' => 'produccion',
-                'fechaCreacion' => now()
+                'fechaCreacion' => now()->tz('America/Mexico_City')->format('Y-m-d')
             ]);
             foreach ($this->materialesSeleccionados as $idDet => $datos) {
                 Foliosmat::create([

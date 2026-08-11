@@ -13,12 +13,12 @@ class UserSeeder extends Seeder
     {
         $IdDeptoAdmin = \App\Models\Depto::where('depto','Admin')->value('id');
         if (!$IdDeptoAdmin) {
-            throw new \Exception('No existe el depto Admin');
+            throw new \Exception('No existe el depto admin');
         }
-        $this->crear(['Basilio'],'SuperAdmin',1,9991,$IdDeptoAdmin);
-        $this->crear(['Reyna','Victor','Control'],'Admin',100,99910,$IdDeptoAdmin);
-        $this->crear(['Eugene'],'AdminUSA',103,99913,$IdDeptoAdmin);
-        $this->crear(['Javier','Gabriel','Jaime'],'Director',200,99920,$IdDeptoAdmin);
+        $this->crear(['Basilio'],'superAdmin',1,9991,$IdDeptoAdmin);
+        $this->crear(['Reyna','Victor','Control'],'admin',100,99910,$IdDeptoAdmin);
+        $this->crear(['Eugene'],'adminUSA',103,99913,$IdDeptoAdmin);
+        $this->crear(['Javier','Gabriel','Jaime'],'director',200,99920,$IdDeptoAdmin);
     }
     private function crear($users, $rol, $IdIni, $telIni, $IdDepto)
     {

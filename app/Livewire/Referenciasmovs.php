@@ -26,28 +26,32 @@ class Referenciasmovs extends Component
 		$this->resetPage();
 	}
     #[Computed]
-    public function filteredReferenciasmovs()
-    {
-        $keyWord = '%' . $this->keyWord . '%';
-        return Referenciasmov::where('IdDoc', $this->IdDoc)
-            ->where('tipoDoc', $this->tipoDoc)
-            ->where(function ($query) use ($keyWord) {
-                $query->where('IdDoc', 'LIKE', $keyWord)
-                    ->orWhereHas('Referencia', function ($q) use ($keyWord) {
-                        $q->where('IdEntradaMex', 'LIKE', $keyWord)
-                            ->orWhere('estiloY', 'LIKE', $keyWord)
-                            ->orWhere('adicionales->orden', 'LIKE', $keyWord)
-                            ->orWhere('adicionales->lote', 'LIKE', $keyWord)
-                            ->orWhereHas('material', fn($sq) => $sq->where('material', 'LIKE', $keyWord))
-                            ->orWhereHas('Estilo', fn($sq) => $sq->where('estilo', 'LIKE', $keyWord))
-                            ->orWhereHas('forma', fn($sq) => $sq->where('forma', 'LIKE', $keyWord))
-                            ->orWhereHas('origen', fn($sq) => $sq->where('origen', 'LIKE', $keyWord))
-                            ->orWhereHas('size', fn($sq) => $sq->where('size', 'LIKE', $keyWord));
-                    });
-            })
-            ->orderBy('id', 'desc')
-            ->paginate(10);
-    }
+public function filteredReferenciasmovs()
+{
+    $keyWord = '%' . $this->keyWord . '%';
+
+return Referenciasmov::where('IdDoc', $this->IdDoc)
+    ->where('tipoDoc', $this->tipoDoc)
+    ->where(function ($query) use ($keyWord) {
+        $query->where('IdDoc', 'LIKE', $keyWord)
+            ->orWhereHas('Referencia', function ($q) use ($keyWord) {
+                $q->where('IdEntradaMex', 'LIKE', $keyWord)
+                    ->orWhere('estiloY', 'LIKE', $keyWord)
+                    ->orWhere('adicionales->ordenInfo->orden', 'LIKE', $keyWord)
+                    ->orWhere('adicionales->ordenInfo->lote', 'LIKE', $keyWord)
+                    ->orWhere('adicionales->ordenInfo->cliente', 'LIKE', $keyWord)
+                    ->orWhere('adicionales->kt', 'LIKE', $keyWord)
+                    ->orWhere('adicionales->color', 'LIKE', $keyWord)
+                    ->orWhereHas('material', fn($sq) => $sq->where('material', 'LIKE', $keyWord))
+                    ->orWhereHas('Estilo', fn($sq) => $sq->where('estilo', 'LIKE', $keyWord))
+                    ->orWhereHas('forma', fn($sq) => $sq->where('forma', 'LIKE', $keyWord))
+                    ->orWhereHas('origen', fn($sq) => $sq->where('origen', 'LIKE', $keyWord))
+                    ->orWhereHas('size', fn($sq) => $sq->where('size', 'LIKE', $keyWord));
+            });
+    })
+    ->orderByDesc('id')
+    ->paginate(10);
+}
 	public function render()
 	{
 		return view('livewire.referenciasmovs.view', [

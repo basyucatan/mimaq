@@ -265,8 +265,8 @@ class Bandejas extends Component
                     'IdEmpleado' => null,
                     'pesoEntrada' => $origen->castingFin,
                     'pesoSalida' => $origen->castingFin,
-                    'fechaHEntrada' => now(),
-                    'fechaHSalida' => now()
+                    'fechaHEntrada' => now()->tz('America/Mexico_City'),
+                    'fechaHSalida' => now()->tz('America/Mexico_City')
                 ]);
                 Bandejasmov::create([
                     'IdBandeja' => $nuevaBandeja->id,
@@ -275,8 +275,8 @@ class Bandejas extends Component
                     'IdEmpleado' => null,
                     'pesoEntrada' => $nuevaBandeja->castingFin,
                     'pesoSalida' => $nuevaBandeja->castingFin,
-                    'fechaHEntrada' => now(),
-                    'fechaHSalida' => now()
+                    'fechaHEntrada' => now()->tz('America/Mexico_City'),
+                    'fechaHSalida' => now()->tz('America/Mexico_City')
                 ]);
             }
         });
@@ -322,8 +322,8 @@ class Bandejas extends Component
                     'IdEmpleado' => null,
                     'pesoEntrada' => $destino->castingFin,
                     'pesoSalida' => $destino->castingFin,
-                    'fechaHEntrada' => now(),
-                    'fechaHSalida' => now()
+                    'fechaHEntrada' => now()->tz('America/Mexico_City'),,
+                    'fechaHSalida' => now()->tz('America/Mexico_City'),
                 ]);
             }
             $origen->delete();

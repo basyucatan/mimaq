@@ -14,11 +14,10 @@ html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(231
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-.cardSec-body {
-    min-height: 10%;
-    max-height: 75vh;
-    overflow-y: auto;
-    padding: 5px;
+.cardPrin-body,
+.cardSec-body{
+    overflow-y:auto;
+    padding:5px;
 }
 .cardPrin-header,
 .cardPrin-footer,

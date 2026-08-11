@@ -30,20 +30,24 @@ class Factura extends Model
             ->where('pedimentos.regimen', $regimen)
             ->max('facturas.factura') + 1;
     }
-    public function getNextIdEntradaMex()
+    public function getNextIdEntradaMex($cantidad)
     {
         $prefijo = $this->factura . '-';
-        $ultimoRegistro = $this->facimportsdets()
+        $registros = $this->facimportsdets()
             ->where('IdEntradaMex', 'LIKE', $prefijo . '%')
-            ->orderByRaw('CAST(SUBSTRING_INDEX(IdEntradaMex, "-", -1) AS UNSIGNED) DESC')
-            ->first();
-        if ($ultimoRegistro && strpos($ultimoRegistro->IdEntradaMex, '-') !== false) {
-            $partes = explode('-', $ultimoRegistro->IdEntradaMex);
-            $consecutivo = (int) end($partes) + 1;
-        } else {
-            $consecutivo = 1;
+            ->pluck('IdEntradaMex');
+        $usados = $registros->map(function ($valor) use ($prefijo) {
+            return (int) substr($valor, strlen($prefijo));
+        })->sort()->values();
+        $ids = [];
+        $consecutivo = 1;
+        while (count($ids) < $cantidad) {
+            if (!$usados->contains($consecutivo)) {
+                $ids[] = $prefijo . $consecutivo;
+            }
+            $consecutivo++;
         }
-        return $prefijo . $consecutivo;
+        return $ids;
     }	
 public function getTotalAttribute()
 {
