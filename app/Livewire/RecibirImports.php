@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Recibirimports extends Component
 {
     use Utilfun;
-    public $selected_id, $objFactura, $difs;
+    public $selected_id, $objFactura = null, $difs;
     public $edicionFisica = [];
     #[On('IdFacturaElecta')]
     public function elegirFactura($id)
