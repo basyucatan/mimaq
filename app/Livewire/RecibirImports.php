@@ -46,7 +46,7 @@ public function generarFolios()
         ->where('cantidad', '>', 0)
         ->pluck('cantidad', 'IdFacImportsDet');
     if ($existenciasMap->isEmpty()) {
-        $this->alerta('⛔ Aún no se ha confirmado el ingreso a Bóveda', 'warning', 3000);
+        $this->alerta('⛔ Aún no se ha efectuado el ingreso a Bóveda', 'warning', 3000);
         return;
     }
     $controlEmpleado = Empleado::where('numero', 999)->first();
