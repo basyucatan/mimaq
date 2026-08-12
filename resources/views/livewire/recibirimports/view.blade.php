@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-md-9">
-                    @if(isset($objFactura) && $selected_id && $objFactura)
+                    @if($selected_id && $objFactura)
                         <div class="d-flex justify-content-between align-items-center bg-light border rounded p-2 mb-3 shadow-sm">
                             <div class="btn-toolbar" role="toolbar">
                                 <div class="btn-group me-2 shadow-sm">
@@ -59,9 +59,7 @@
                             </div>
                             <div class="d-none d-lg-block">
                                 <span class="badge bg-warning text-black fs-5 fw-bold">
-                                    @if(isset($objFactura) && $objFactura)
-                                        Factura: <strong>#{{ $objFactura->factura }}</strong>
-                                    @endif
+                                    Factura: <strong>#{{ $objFactura->factura }}</strong>
                                 </span>
                             </div>
                         </div>

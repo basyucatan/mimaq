@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Recibirimports extends Component
 {
     use Utilfun;
-    public $selected_id, $objFactura = null, $difs;
+    public $selected_id, $objFactura, $difs;
     public $edicionFisica = [];
     #[On('IdFacturaElecta')]
     public function elegirFactura($id)
@@ -46,7 +46,7 @@ public function generarFolios()
         ->where('cantidad', '>', 0)
         ->pluck('cantidad', 'IdFacImportsDet');
     if ($existenciasMap->isEmpty()) {
-        $this->alerta('⛔ Los materiales aún no han confirmado su ingreso a Bóveda', 'warning', 3000);
+        $this->alerta('⛔ Aún no se ha confirmado el ingreso a Bóveda', 'warning', 3000);
         return;
     }
     $controlEmpleado = Empleado::where('numero', 999)->first();
