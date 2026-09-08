@@ -7,14 +7,14 @@ use App\Models\{Folio, Foliosmat, Referenciasmov};
 use Illuminate\Support\Facades\DB;
 class Adminfolios extends Component
 {
-    public $orden, $lote, $IdFolio;
+    public $orden, $lote, $IdFolio, $objFolio;
     public $materialesSeleccionados = []; 
     public $idFacturaBusqueda;
-
     #[On('IdFolioElecto')]
     public function elegirFolio($id)
     {
         $this->IdFolio = $id;
+        $this->objFolio = Folio::find($id);
     }
     public function getMaterialesDisponiblesProperty()
     {

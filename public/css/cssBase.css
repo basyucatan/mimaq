@@ -1,8 +1,11 @@
 :root {
     --primarioO: #00329e;
     --primarioC: #63befa;
+    --fondo: #f3f6f9;
+    --radio: 0.5rem;
+    --sombra: 0 4px 14px rgba(0, 50, 158, .08);
 }
-html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(231, 236, 239);color: black;}
+html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(208, 234, 250);color: black;}
 
 .cardPrin, .cardSec {
     display: flex;
@@ -10,7 +13,7 @@ html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(231
     width: 100%;
     background: #f0f0f0;
     border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 0.5rem;
+    border-radius: var(--radio);
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
@@ -71,7 +74,7 @@ html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(231
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
 }
-.inpSolo {border-radius: 5px;}
+.inpSolo {border-radius: var(--radio);}
 .etiBase { background: linear-gradient(to right, var(--primarioC), #fff); color: #000;}
 .etiChico { background: linear-gradient(to right, #000, var(--primarioC)); color: #fff;}
 .etiLectura { background: linear-gradient(to right, #000, var(--primarioO)); color: #fff;}
@@ -88,7 +91,7 @@ html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(231
     font-size: 1rem;
     font-weight: bold;
     color: white;
-    border-radius: .375rem;
+    border-radius: var(--radio);
     cursor: pointer;
     user-select: none;
     text-decoration: none;
@@ -154,7 +157,7 @@ html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(231
 .tabBase thead th {position: sticky;top: 0;z-index: 10;}
 .tabBase td {background: white;}
 .tabBase tr:nth-child(even) td {background:lightcyan;}
-.tabBase tr:hover td {background: yellow;cursor: pointer;}
+.tabBase tr:hover td {background: yellow;}
 @media (max-width: 767.98px) {
     .tabBase.ch td,
     .tabBase.ch th {font-size: 11px !important;padding: 2px 1px;}
@@ -193,5 +196,61 @@ html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(231
     margin-left:0;
     margin-right:0;
 }
+/* tabs */
+.ficha {
+    min-height: 200px;
+    overflow: hidden;
+    background: var(--fondo);
+    border: 1px solid gray;
+    border-radius: var(--radio);
+    box-shadow: 0 4px 14px rgba(0, 50, 158, .08);
+}
+.ficha-headers {
+    display: flex;
+    padding: 4px;
+    gap: 3px;
+    background: linear-gradient(135deg, var(--primarioO), var(--primarioC));
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+.ficha-boton {
+    flex: 1;
+    border-radius: var(--radio);
+    background: transparent;
+    color: rgba(255, 255, 255, .75);
+    font-size: .88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .18s ease;
+}
+.ficha-boton:hover {
+    background: rgba(255, 255, 255, .1);
+    color: #fff;
+}
 
+.ficha-boton.active {
+    background: #fff;
+    color: var(--primarioO);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
+}
 
+.ficha-body {
+    display: none;
+    padding: 12px;
+    animation: aparecer .18s ease;
+}
+
+.ficha-body.active {
+    display: block;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

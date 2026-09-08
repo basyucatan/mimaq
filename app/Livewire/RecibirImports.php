@@ -49,8 +49,6 @@ public function generarFolios()
         $this->alerta('⛔ Aún no se ha efectuado el ingreso a Bóveda', 'warning', 3000);
         return;
     }
-    $controlEmpleado = Empleado::where('numero', 999)->first();
-    $controlEmpleadoId = $controlEmpleado->id ?? null;
     $config = json_decode(file_get_contents(base_path('settings.json')), true);
     $cantMaxBandeja = $config['Parametros'][0]['cantBandeja'] ?? 10;
     $gruposLote = $pendientesProcesar->groupBy(function ($item) {
@@ -134,7 +132,7 @@ public function generarFolios()
                     'integrado' => false,
                 ]);
             }
-            $this->generaMov1($folioModel, $idDeptoBoveda, $controlEmpleadoId, $cantMaxBandeja);
+            $this->generaMov1($folioModel, $cantMaxBandeja);
             $foliosGenerados++;
         }
     }
@@ -146,99 +144,11 @@ public function generarFolios()
     $this->dispatch('refreshRefsMovs');
     $this->dispatch('refreshFolios');
 }
-private function generaMov1($folio, $idDeptoBoveda, $controlEmpleadoId, $cantMaxBandeja)
+private function generaMov1($folio, $cantMaxBandeja)
 {
-    $idProcesoDistribucion = DB::table('procesos')->where('proceso', '00 DISTRIBUCION')->value('id');
-    $idProcesoValidacion = DB::table('procesos')->where('proceso', '05 VALIDACION')->value('id');
-    $piezasTotales = $folio->cantidad;
-    if ($folio->totalBandejas <= 0) {
-        $nBandejasActual = (int)ceil($piezasTotales / $cantMaxBandeja);
-        $folio->update(['totalBandejas' => $nBandejasActual]);
-    } else {
-        $nBandejasActual = (int)$folio->totalBandejas;
-    }
-    $materialesSurtir = $folio->foliosmats()->whereNotNull('IdFacImportsDet')->where('integrado', false)->get();
-    foreach ($materialesSurtir as $item) {
-        $existencia = Existencia::where('IdFacImportsDet', $item->IdFacImportsDet)->where('IdDepto', $idDeptoBoveda)->first();
-        if ($existencia && $existencia->cantidad >= $item->cantidad) {
-            $existencia->decrement('cantidad', $item->cantidad);
-            $existencia->decrement('pesoG', $item->pesoG);
-            Referenciasmov::create([
-                'IdFacImportsDet' => $item->IdFacImportsDet,
-                'IdMaterial' => $item->IdMaterial,
-                'IdDeptoOri' => $idDeptoBoveda,
-                'IdDeptoDes' => 2,
-                'tipo' => 'salida',
-                'cantidad' => $item->cantidad,
-                'pesoG' => $item->pesoG,
-                'tipoDoc' => 'folio',
-                'IdDoc' => $folio->id,
-                'glosa' => "Salida a Folio #{$folio->id}",
-                'estatus' => 'cerrado'
-            ]);
-            $item->update(['integrado' => true]);
-        }
-    }
-    $salidasEfectivas = Referenciasmov::with('Material.Clase.Tipo')
-        ->where('tipoDoc', 'folio')
-        ->where('IdDoc', $folio->id)
-        ->where('tipo', 'salida')
-        ->get();
-    $pesoMetal = 0; $pesoPiedras = 0; $pesoDiamantes = 0; $pesoMisc = 0;
-    foreach ($salidasEfectivas as $mov) {
-        $tipo = $mov->Material->Clase->IdTipo ?? null;
-        if ($tipo == 1) {
-            $pesoMetal += $mov->pesoG;
-        } elseif ($tipo == 2) {
-            $pesoDiamantes += $mov->pesoG;
-        } elseif ($tipo == 7) {
-            $pesoPiedras += $mov->pesoG;
-        } elseif ($tipo == 6) {
-            $pesoMisc += $mov->pesoG;
-        }
-    }
-    $pesoTotalMateriales = $pesoMetal + $pesoPiedras + $pesoDiamantes + $pesoMisc;
-    if ($pesoTotalMateriales > 0 && $nBandejasActual > 0) {
-        $piezasRestantes = $piezasTotales;
-        $piezasPorBandejaBase = (int)intdiv($piezasTotales, $nBandejasActual);
-        $bandejasExistentes = $folio->bandejas;
-        $ahora = now()->tz('America/Mexico_City');
-        for ($i = 1; $i <= $nBandejasActual; $i++) {
-            $piezasBandeja = ($i === $nBandejasActual) ? $piezasRestantes : $piezasPorBandejaBase;
-            $factor = $piezasBandeja / $piezasTotales;
-            $bandeja = Bandeja::updateOrCreate(
-                ['IdFolio' => $folio->id, 'id' => $bandejasExistentes[$i - 1]->id ?? null],
-                [
-                    'cantidad' => $piezasBandeja,
-                    'castingIni' => round($pesoMetal * $factor, 4),
-                    'castingFin' => round($pesoMetal * $factor, 4),
-                    'piedrasG' => round($pesoPiedras * $factor, 4),
-                    'diamantesG' => round($pesoDiamantes * $factor, 4),
-                    'miscG' => round($pesoMisc * $factor, 4),
-                    'IdProcesoActual' => $idProcesoDistribucion,
-                    'enBoveda' => false,
-                    'habilitada' => true,
-                    'estatus' => 'proceso'
-                ]
-            );
-            $pesoCalculado = round($pesoTotalMateriales * $factor, 4);
-            Bandejasmov::create([
-                'IdBandeja' => $bandeja->id,
-                'IdProceso' => $idProcesoDistribucion,
-                'IdProcesoSig' => $idProcesoValidacion,
-                'IdUser' => auth()->user()->id,
-                'IdEmpleado' => $controlEmpleadoId,
-                'IdRegistrador' => $controlEmpleadoId,
-                'pesoEntrada' => $pesoCalculado,
-                'pesoSalida' => $pesoCalculado,
-                'fechaHEntrada' => $ahora,
-                'fechaHSalida' => $ahora
-            ]);
-            $piezasRestantes -= $piezasBandeja;
-        }
-    }
+    $folio->crearBandejasIniciales($cantMaxBandeja);
+    $folio->reprocesarEstructuraMovimientos();
 }
-
 public function confirmarIngreso() 
 {
     if (!$this->objFactura) return;

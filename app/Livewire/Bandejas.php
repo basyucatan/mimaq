@@ -322,7 +322,7 @@ class Bandejas extends Component
                     'IdEmpleado' => null,
                     'pesoEntrada' => $destino->castingFin,
                     'pesoSalida' => $destino->castingFin,
-                    'fechaHEntrada' => now()->tz('America/Mexico_City'),,
+                    'fechaHEntrada' => now()->tz('America/Mexico_City'),
                     'fechaHSalida' => now()->tz('America/Mexico_City'),
                 ]);
             }

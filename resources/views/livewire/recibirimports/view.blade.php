@@ -45,7 +45,7 @@
                                     </button>
                                 </div>
                                 <div class="btn-group me-2 shadow-sm">
-                                    <button type="button" class="bot botBlanco botChico" wire:click="generarFolios" wire:loading.attr="disabled" title="Procesar ingreso a almacén de seguridad">
+                                    <button type="button" class="bot botBlanco botChico" wire:click="generarFolios" wire:loading.attr="disabled">
                                         <span wire:loading.remove wire:target="generarFolios">
                                             <span class="text-success">📚</span> 
                                             <small class="fw-bold">Generar Folios</small>

@@ -173,7 +173,6 @@ public function save()
         $this->tipos = Util::getArray('tipos'); 
         $this->materials = Util::getArray('materials'); 
     }
-    public function render() { return view('livewire.foliosmats.view', ['foliosmats' => $this->filteredFoliosmats]); }
     public function destroy($id){if ($id) {Foliosmat::where('id', $id)->delete();}}
     #[Computed]
     public function filteredFoliosmats()
@@ -186,4 +185,5 @@ public function save()
             ->where('foliosmats.cantidad', 'LIKE', '%'.$this->keyWord.'%')
             ->paginate(12);
     }
+    public function render() { return view('livewire.foliosmats.view', ['foliosmats' => $this->filteredFoliosmats]); }
 }
