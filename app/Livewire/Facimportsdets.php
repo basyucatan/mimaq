@@ -256,7 +256,7 @@ public function agregar()
         ]);
     }
     $this->clientes = Util::getArray('clientes');
-    $this->alerta('Detalles agregados correctamente', 'success');
+    $this->alerta('Details added successfully', 'success');
     $this->cancel();
 }
 public function editProduccion($id)

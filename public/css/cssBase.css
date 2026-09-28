@@ -5,7 +5,12 @@
     --radio: 0.5rem;
     --sombra: 0 4px 14px rgba(0, 50, 158, .08);
 }
-html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(208, 234, 250);color: black;}
+html, body {
+    height: 100%; 
+    padding-top: 5px; 
+    overflow: hidden;
+    color: black;
+}
 
 .cardPrin, .cardSec {
     display: flex;
@@ -20,6 +25,7 @@ html, body {height: 100%; padding-top: 5px; overflow: hidden;background: rgb(208
 .cardPrin-body,
 .cardSec-body{
     overflow-y:auto;
+    overflow-x: hidden;
     padding:5px;
 }
 .cardPrin-header,

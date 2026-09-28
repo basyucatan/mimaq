@@ -137,7 +137,7 @@ return new class extends Migration {
             $table->foreignId('IdProcesoActual')->nullable()->constrained('procesos');
             $table->boolean('enBoveda')->default(false);
             $table->boolean('habilitada')->default(false);
-            $table->enum('estatus', ['pendiente', 'proceso', 'terminado', 'exportado'])->default('pendiente');
+            $table->enum('estatus', ['pendiente', 'boveda', 'proceso', 'terminado', 'exportado'])->default('pendiente');
             $table->json('adicionales')->nullable();
             $table->timestamps();
             $table->index(['IdFolio', 'estatus']);

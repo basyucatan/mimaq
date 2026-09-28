@@ -1,12 +1,14 @@
 <nav class="navbar bg-body-tertiary fixed-top">
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-2 flex-shrink-0">
-            @if(auth()->check() && !auth()->user()->hasRole('adminUSA'))
+            @if(auth()->check())
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                @if(!auth()->user()->hasRole('adminUSA'))
                 <a class="bot botNegro" href="{{ url('/adminfolios') }}" title="Folios" style="font-size: 20px;">📚</a>
                 <a class="bot botNegro" href="{{ url('/bandejas') }}" title="Bandejas" style="font-size: 20px;">📁</a>
+                @endif
             @endif
         </div>
         <div class="mx-auto">

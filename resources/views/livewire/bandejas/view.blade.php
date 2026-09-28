@@ -5,7 +5,7 @@
             <div class="cardPrin">
                 <div
                     class="cardPrin-header d-flex flex-column flex-md-row justify-content-between align-items-stretch align-items-md-center gap-2 p-2">
-                    <span class="fs-5 fw-bold text-nowrap align-self-center">Flujo de Bandejas</span>
+                    <span class="fs-5 fw-bold text-nowrap align-self-center">Movimiento de Bandejas</span>
                     <div
                         class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 flex-grow-1 justify-content-end">
                         <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-md-center gap-2">

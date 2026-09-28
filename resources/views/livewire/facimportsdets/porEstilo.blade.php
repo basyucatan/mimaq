@@ -46,7 +46,7 @@
                     <button
                         type="button" class="bot botVerde"
                         onclick="if ({{ !empty($precaptura) ? 'true' : 'false' }}) 
-                            {if (!confirm('¿Deseas borrar la info actual?')) return;}
+                            {if (!confirm('Do you want to discard the current information?')) return;}
                             @this.call('generarConEstilo');">
                         Generate
                     </button>

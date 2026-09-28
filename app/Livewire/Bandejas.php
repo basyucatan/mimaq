@@ -4,7 +4,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\DB;
-use App\Models\{Util, Bandeja, Bandejasmov};
+use App\Models\{Util, Bandeja, Folio, Bandejasmov};
 use App\Traits\{TraspasoManager, Utilfun};
 class Bandejas extends Component
 {
@@ -46,56 +46,70 @@ class Bandejas extends Component
         $this->resetPage();
     }
     #[Computed]
-    public function filteredBandejas()
-    {
-        $query = Bandeja::with(['ultimoMovimiento.proceso.depto', 'folio.lote.orden.cliente', 'folio.estilo']);
-        if (!empty($this->keyWord)) {
-            $partes = explode('-', $this->keyWord);
-            $totalPartes = count($partes);
-            if ($totalPartes >= 1 && strlen($partes[0]) === 4 && is_numeric($partes[0])) {
-                $query->whereHas('folio', function ($q) use ($partes, $totalPartes) {
-                    $q->where('periodo', $partes[0]);
-                    if ($totalPartes >= 2 && !empty($partes[1])) {
-                        $q->where('consecutivoMensual', $partes[1]);
-                    }
-                });
-                if ($totalPartes >= 3 && !empty($partes[2])) {
-                    $query->where('numeroBandeja', $partes[2]);
+public function filteredBandejas()
+{
+    $query = Bandeja::with([
+            'ultimoMovimiento.proceso.depto',
+            'folio.lote.orden.cliente',
+            'folio.estilo'
+        ])
+        ->where('estatus', '!=', 'exportado');
+    if (!empty($this->keyWord)) {
+        $partes = explode('-', $this->keyWord);
+        if (strlen($partes[0]) === 4 && is_numeric($partes[0])) {
+            $query->whereHas('folio', function ($q) use ($partes) {
+                $q->where('periodo', $partes[0]);
+                if (!empty($partes[1])) {
+                    $q->where('consecutivoMensual', $partes[1]);
                 }
-            } else {
-                $buscarParcial = '%' . $this->keyWord . '%';
-                $query->where(function ($q) use ($buscarParcial) {
-                    $q->whereHas('folio', function ($sub) use ($buscarParcial) {
-                        $sub->where('consecutivoMensual', 'LIKE', $buscarParcial)
-                            ->orWhere('jobStyle', 'LIKE', $buscarParcial)
-                            ->orWhere('productoFinal', 'LIKE', $buscarParcial)
-                            ->orWhere('abreviatura', 'LIKE', $buscarParcial)
-                            ->orWhereHas('estilo', function ($qE) use ($buscarParcial) {
-                                $qE->where('estilo', 'LIKE', $buscarParcial);
-                            })
-                            ->orWhereHas('lote', function ($qL) use ($buscarParcial) {
-                                $qL->where('lote', 'LIKE', $buscarParcial)
-                                    ->orWhereHas('orden', function ($qO) use ($buscarParcial) {
-                                        $qO->where('orden', 'LIKE', $buscarParcial)
-                                            ->orWhereHas('cliente', function ($qC) use ($buscarParcial) {
-                                                $qC->where('cliente', 'LIKE', $buscarParcial);
-                                            });
-                                    });
-                            });
-                    })
-                    ->orWhere('id', 'LIKE', $buscarParcial)
-                    ->orWhere('estatus', 'LIKE', $buscarParcial)
-                    ->orWhereHas('ultimoMovimiento.proceso', function ($qP) use ($buscarParcial) {
-                        $qP->where('proceso', 'LIKE', $buscarParcial)
-                            ->orWhereHas('depto', function ($qD) use ($buscarParcial) {
-                                $qD->where('depto', 'LIKE', $buscarParcial);
-                            });
-                    });
-                });
+            });
+            if (!empty($partes[2])) {
+                $query->where('numeroBandeja', $partes[2]);
             }
+        } else {
+            $keyWord = '%' . $this->keyWord . '%';
+
+            $query->where(function ($q) use ($keyWord) {
+                $q->whereHas('folio', function ($qF) use ($keyWord) {
+                    $qF->where('consecutivoMensual', 'LIKE', $keyWord)
+                        ->orWhere('jobStyle', 'LIKE', $keyWord)
+                        ->orWhere('productoFinal', 'LIKE', $keyWord)
+                        ->orWhere('abreviatura', 'LIKE', $keyWord)
+                        ->orWhereHas('estilo', function ($qE) use ($keyWord) {
+                            $qE->where('estilo', 'LIKE', $keyWord);
+                        })
+                        ->orWhereHas('lote', function ($qL) use ($keyWord) {
+                            $qL->where('lote', 'LIKE', $keyWord)
+                                ->orWhereHas('orden', function ($qO) use ($keyWord) {
+                                    $qO->where('orden', 'LIKE', $keyWord)
+                                        ->orWhereHas('cliente', function ($qC) use ($keyWord) {
+                                            $qC->where('cliente', 'LIKE', $keyWord);
+                                        });
+                                });
+                        });
+                })
+                ->orWhere('bandejas.id', 'LIKE', $keyWord)
+                ->orWhere('bandejas.estatus', 'LIKE', $keyWord)
+                ->orWhereHas('ultimoMovimiento.proceso', function ($qP) use ($keyWord) {
+                    $qP->where('proceso', 'LIKE', $keyWord)
+                        ->orWhereHas('depto', function ($qD) use ($keyWord) {
+                            $qD->where('depto', 'LIKE', $keyWord);
+                        });
+                });
+            });
         }
-        return $query->latest()->paginate(12);
     }
+    return $query
+        ->orderBy(
+            Folio::select('lotes.lote')
+                ->join('lotes', 'lotes.id', '=', 'folios.IdLote')
+                ->whereColumn('folios.id', 'bandejas.IdFolio')
+                ->limit(1)
+        )
+        ->orderBy('IdFolio')
+        ->orderBy('numeroBandeja')
+        ->paginate(12);
+}
     public function render()
     {
         return view('livewire.bandejas.view', [

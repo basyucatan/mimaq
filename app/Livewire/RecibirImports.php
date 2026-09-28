@@ -152,20 +152,20 @@ private function generaMov1($folio, $cantMaxBandeja)
 public function confirmarIngreso() 
 {
     if (!$this->objFactura) return;
-    $movimientosAbiertos = Referenciasmov::where('IdDoc', $this->objFactura->id)
+    $movimientos = Referenciasmov::where('IdDoc', $this->objFactura->id)
         ->where('tipoDoc', 'import')
         ->where('estatus', 'abierto')
         ->get();
-    if ($movimientosAbiertos->isEmpty()) {
+    if ($movimientos->isEmpty()) {
         $this->alerta('⚠️ No hay movimientos abiertos para confirmar', 'warning', 1500);
         return;
     }
-    $idDeptoBoveda = DB::table('deptos')->where('depto', '0 BOVEDA')->value('id');
+    $idDeptoBoveda = DB::table('deptos')->where('depto', 'LIKE', '%BOVEDA%')->value('id');
     if (!$idDeptoBoveda) {
-        $this->alerta('❌ Error: El departamento "0 BOVEDA" no existe en el sistema', 'error', 3000);
+        $this->alerta('❌ Error: Falta el depto "BOVEDA"', 'error', 3000);
         return;
     }
-    foreach ($movimientosAbiertos as $movimiento) {
+    foreach ($movimientos as $movimiento) {
         $existencia = Existencia::where('IdFacImportsDet', $movimiento->IdFacImportsDet)
             ->where('IdDepto', $idDeptoBoveda)
             ->first();
